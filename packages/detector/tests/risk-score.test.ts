@@ -32,6 +32,16 @@ describe("analyzeMessage", () => {
     expect(result.claimedBrand).toBeNull();
   });
 
+  it("does not warn when a friend only mentions a brand in the subject", () => {
+    const result = analyzeMessage({
+      from: "\"A friend\" <friend@example.com>",
+      subject: "your YouTube is really great"
+    });
+
+    expect(result.riskLevel).toBe("safe");
+    expect(result.claimedBrand).toBeNull();
+  });
+
   it("returns limited evidence when the sender cannot be parsed", () => {
     const result = analyzeMessage({
       from: "not a mailbox",

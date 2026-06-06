@@ -38,7 +38,7 @@ export function analyzeMessage(
     ));
   }
 
-  const brandSearchText = `${parsedFrom.displayName} ${message.subject ?? ""}`.trim();
+  const brandSearchText = parsedFrom.displayName.trim();
   const claimedBrand = findClaimedBrand(brandSearchText, rules);
 
   if (!claimedBrand) {

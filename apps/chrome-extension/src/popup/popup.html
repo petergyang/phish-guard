@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gmail Phish Guard</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      }
+
+      body {
+        margin: 0;
+        width: 330px;
+        background: #ffffff;
+        color: #202124;
+      }
+
+      .shell {
+        padding: 18px;
+      }
+
+      .brand {
+        align-items: center;
+        display: flex;
+        gap: 10px;
+        margin-bottom: 14px;
+      }
+
+      .mark {
+        align-items: center;
+        background: #e8f0fe;
+        border-radius: 8px;
+        color: #1967d2;
+        display: inline-flex;
+        font-size: 20px;
+        height: 36px;
+        justify-content: center;
+        width: 36px;
+      }
+
+      h1 {
+        font-size: 18px;
+        line-height: 1.2;
+        margin: 0;
+      }
+
+      p {
+        color: #3f454b;
+        font-size: 13px;
+        line-height: 1.45;
+        margin: 10px 0;
+      }
+
+      ul {
+        color: #3f454b;
+        font-size: 13px;
+        line-height: 1.45;
+        margin: 12px 0;
+        padding-left: 20px;
+      }
+
+      button {
+        background: #1967d2;
+        border: 0;
+        border-radius: 6px;
+        color: #ffffff;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 700;
+        margin-top: 10px;
+        min-height: 40px;
+        padding: 0 14px;
+        width: 100%;
+      }
+
+      button:disabled {
+        cursor: default;
+        opacity: 0.68;
+      }
+
+      .status {
+        border-radius: 6px;
+        font-size: 13px;
+        line-height: 1.4;
+        margin-top: 12px;
+        padding: 10px;
+      }
+
+      .status[data-state="ready"] {
+        background: #e6f4ea;
+        color: #137333;
+      }
+
+      .status[data-state="needs-permission"],
+      .status[data-state="denied"] {
+        background: #fef7e0;
+        color: #8a4b00;
+      }
+
+      .note {
+        border-top: 1px solid #dadce0;
+        color: #5f6368;
+        font-size: 12px;
+        margin-top: 14px;
+        padding-top: 12px;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: #202124;
+          color: #f1f3f4;
+        }
+
+        p,
+        ul {
+          color: #d9dce0;
+        }
+
+        .mark {
+          background: #243b63;
+          color: #8ab4f8;
+        }
+
+        .note {
+          border-color: #3c4043;
+          color: #bdc1c6;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="shell">
+      <div class="brand">
+        <span class="mark" aria-hidden="true">!</span>
+        <h1>Gmail Phish Guard</h1>
+      </div>
+      <p>Shows a warning inside Gmail when a sender looks like it may be pretending to be a trusted brand.</p>
+      <ul>
+        <li>Looks at the sender row only.</li>
+        <li>Does not read message bodies, links, or attachments.</li>
+        <li>Does not upload email data.</li>
+      </ul>
+      <button id="enable-gmail" type="button">Protect Gmail</button>
+      <div id="status" class="status" data-state="needs-permission">Gmail access is off. Turn it on to show warnings inside opened emails.</div>
+      <p class="note">Chrome will ask for access to mail.google.com because the warning has to appear inside Gmail.</p>
+    </main>
+    <script type="module" src="./popup.js"></script>
+  </body>
+</html>

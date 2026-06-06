@@ -1,0 +1,60 @@
+.gmail-phish-guard-banner {
+  align-items: flex-start;
+  background: #fef7e0;
+  border: 1px solid #f6c453;
+  border-left: 5px solid #f29900;
+  border-radius: 8px;
+  box-sizing: border-box;
+  color: #2f2f2f;
+  display: flex;
+  font-family: Google Sans, Roboto, Arial, sans-serif;
+  gap: 12px;
+  margin: 12px 0;
+  max-width: 100%;
+  padding: 12px 14px;
+}
+
+.gmail-phish-guard-banner__icon {
+  align-items: center;
+  background: #d93025;
+  border-radius: 999px;
+  color: #ffffff;
+  display: inline-flex;
+  flex: 0 0 auto;
+  font-size: 16px;
+  font-weight: 800;
+  height: 26px;
+  justify-content: center;
+  line-height: 1;
+  width: 26px;
+}
+
+.gmail-phish-guard-banner__content {
+  min-width: 0;
+}
+
+.gmail-phish-guard-banner__title {
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.35;
+  margin: 0 0 5px;
+}
+
+.gmail-phish-guard-banner ul {
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 0;
+  padding-left: 18px;
+}
+
+.gmail-phish-guard-banner li {
+  margin: 2px 0;
+}
+
+@media (prefers-color-scheme: dark) {
+  .gmail-phish-guard-banner {
+    background: #3b2f18;
+    border-color: #f6c453;
+    color: #f1f3f4;
+  }
+}

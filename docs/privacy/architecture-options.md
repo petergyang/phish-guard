@@ -2,23 +2,23 @@
 
 ## Recommendation
 
-Start with a Gmail add-on using current-message metadata. It gives the product a warning surface inside Gmail while keeping access narrower than a Chrome content script or backend Gmail API scanner.
+Use a Chrome extension for the consumer MVP. It can place the warning inline in the Gmail message view, which is the moment a normal user needs help.
 
-For consumer distribution, the Gmail add-on path requires Google Workspace Marketplace publication and OAuth verification before normal users should install it. An unverified test deployment can show a frightening Google warning, even with narrow current-message metadata access.
+The Gmail add-on remains a strong long-term path after Google Workspace Marketplace publication and OAuth verification, but it is not the right first consumer surface because the warning lives in the right rail and test deployments show a frightening unverified-app warning.
 
 ## Option Comparison
 
 | Option | Use When | Why Not First |
 |---|---|---|
-| Gmail add-on | The product needs current-message warnings with narrow Gmail access and can go through Marketplace/OAuth verification. | Side-panel UI may be less visible than an inline banner, and unverified test deployments are not normie-friendly. |
-| Chrome extension | Inline Gmail placement or simpler consumer install becomes necessary after the detector proves useful. | DOM access can expose rendered message content and feels less privacy-safe. |
+| Chrome extension | Normal users need an inline warning and a no-OAuth install path. | DOM access can expose rendered message content, so implementation must constrain itself to the sender row. |
+| Gmail add-on | The product needs a Google-native verified add-on with narrow current-message access. | Side-panel UI is easy to miss, and unverified test deployments are not normie-friendly. |
 | Gmail API/backend scanner | The product needs labels, background scans, or org-level workflows. | Broader scopes, server data handling, and restricted-scope review add heavy trust burden. |
 | Enterprise gateway | Selling to organizations that control mail routing. | Wrong shape for a consumer Gmail MVP. |
 | Hybrid add-on plus extension | Add-on privacy boundary is proven but inline UX is required. | Two surfaces create more complexity and consent work. |
 
-## Decision Trigger For Chrome
+## Decision Trigger For Gmail Add-On
 
-Prototype a Chrome extension if users miss or ignore the Gmail add-on card during real usage testing, or if Marketplace/OAuth verification becomes too slow for consumer validation.
+Return to the Gmail add-on as a primary surface only after Workspace Marketplace/OAuth verification is complete or when customers explicitly prefer a Google-native add-on despite the side-panel placement.
 
 ## Decision Trigger For Backend Scanning
 

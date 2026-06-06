@@ -8,8 +8,10 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "npm run typecheck && npm run build:gmail-addon",
+    "build": "npm run typecheck && npm run build:gmail-addon && npm run build:chrome-extension",
     "build:gmail-addon": "node scripts/build-gmail-addon.mjs",
+    "build:chrome-extension": "node scripts/build-chrome-extension.mjs",
+    "build:all": "npm run build",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -20,6 +22,7 @@
   "devDependencies": {
     "@types/node": "^22.10.2",
     "esbuild": "^0.28.0",
+    "happy-dom": "^20.10.2",
     "typescript": "^5.7.2",
     "vitest": "^4.1.8"
   }

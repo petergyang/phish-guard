@@ -2,7 +2,7 @@
 
 ## Privacy Promise
 
-The MVP checks sender metadata for the currently opened Gmail message. It does not inspect message bodies, attachments, links, images, or the rest of the inbox.
+The MVP checks the sender row for the currently opened Gmail message. It does not inspect message bodies, attachments, links, images, or the rest of the inbox, and it does not upload email data.
 
 ## Protected Data
 
@@ -16,13 +16,15 @@ The MVP checks sender metadata for the currently opened Gmail message. It does n
 
 - `From`
 - `Reply-To`
-- `Subject`
+- `Subject` for the Gmail add-on test path only
+- visible Gmail sender row text and attributes
 - selected authentication headers when the Gmail add-on surface exposes them
 - derived values such as sender domain, claimed brand, risk level, and explanation text
 
 ## Primary Risks
 
-- **Overcollection:** The add-on accidentally forwards body-like fields into the detector.
+- **Overcollection:** An adapter accidentally forwards body-like fields into the detector.
+- **DOM overreach:** The Chrome extension can technically see more Gmail page content than the product needs.
 - **Permission drift:** A future feature asks for broader Gmail or Chrome access without a new consent review.
 - **Server exfiltration:** A future backend receives sender metadata or email content by default.
 - **False certainty:** The UI says a message is phishing when the evidence only supports "suspicious."
@@ -32,6 +34,7 @@ The MVP checks sender metadata for the currently opened Gmail message. It does n
 
 - Keep the detector pure and local.
 - Test that body-like fields are ignored at the Gmail adapter boundary.
+- Test that the Chrome extension DOM adapter ignores body, link, and attachment nodes.
 - Document every requested permission before public testing.
 - Use evidence-based warning copy.
 - Keep brand rules data-first and covered by domain-matching tests.
