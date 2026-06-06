@@ -1,0 +1,5 @@
+{
+  "from": "\"PayPal Security\" <notice@paypal-email.example>",
+  "replyTo": "support@paypal.com",
+  "subject": "Security notice"
+}

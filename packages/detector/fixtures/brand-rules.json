@@ -1,0 +1,14 @@
+[
+  {
+    "id": "youtube",
+    "brandName": "YouTube",
+    "displayNames": ["youtube", "youtube account", "youtube recovery", "youtube support"],
+    "trustedDomains": ["youtube.com", "google.com", "accounts.google.com"]
+  },
+  {
+    "id": "paypal",
+    "brandName": "PayPal",
+    "displayNames": ["paypal", "paypal support", "paypal security"],
+    "trustedDomains": ["paypal.com"]
+  }
+]

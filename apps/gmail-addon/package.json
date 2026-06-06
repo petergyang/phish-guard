@@ -1,0 +1,9 @@
+{
+  "name": "@anti-phishing/gmail-addon",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@anti-phishing/detector": "0.1.0"
+  }
+}
