@@ -9,6 +9,9 @@
     "common": {
       "name": "Gmail Phish Guard",
       "logoUrl": "https://www.gstatic.com/images/icons/material/system/2x/security_black_48dp.png",
+      "homepageTrigger": {
+        "runFunction": "onHomepage"
+      },
       "useLocaleFromApp": true
     },
     "gmail": {

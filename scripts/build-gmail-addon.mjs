@@ -17,7 +17,10 @@ await build({
   target: "es2020",
   globalName: "GmailPhishGuard",
   footer: {
-    js: "function onGmailMessage(e) { return GmailPhishGuard.onGmailMessage(e); }"
+    js: [
+      "function onGmailMessage(e) { return GmailPhishGuard.onGmailMessage(e); }",
+      "function onHomepage(e) { return GmailPhishGuard.onHomepage(e); }"
+    ].join("\n")
   },
   logLevel: "silent"
 });

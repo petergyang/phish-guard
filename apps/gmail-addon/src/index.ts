@@ -1,5 +1,5 @@
 import { analyzeMessage } from "@anti-phishing/detector";
-import { renderCardServiceCard, type CardServiceLike } from "./cards/card-service-renderer.js";
+import { renderCardServiceCard, renderHomepageCard, type CardServiceLike } from "./cards/card-service-renderer.js";
 import { buildErrorCard, buildWarningCard, type WarningCardModel } from "./cards/warning-card.js";
 import {
   createAppsScriptGmailSource,
@@ -37,4 +37,12 @@ export function onGmailMessage(
 
   const model = handleGmailMessage(event, createAppsScriptGmailSource(globals.GmailApp));
   return renderCardServiceCard(model, globals.CardService);
+}
+
+export function onHomepage(globals: AppsScriptGlobals = globalThis as unknown as AppsScriptGlobals): unknown {
+  if (!globals.CardService) {
+    return buildErrorCard();
+  }
+
+  return renderHomepageCard(globals.CardService);
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { onGmailMessage } from "../src/index.js";
+import { onGmailMessage, onHomepage } from "../src/index.js";
 import type {
   CardServiceCardBuilder,
   CardServiceCardHeader,
@@ -32,6 +32,18 @@ describe("Apps Script entrypoint", () => {
     });
     expect(JSON.stringify(rendered)).toContain("random@gmail.com");
     expect(JSON.stringify(rendered)).toContain("does not inspect the message body");
+  });
+
+  it("renders a homepage card for test deployment installability", () => {
+    const rendered = onHomepage({ CardService: createFakeCardService() });
+
+    expect(rendered).toMatchObject({
+      header: {
+        title: "Gmail Phish Guard",
+        subtitle: "Open an email to check the sender"
+      }
+    });
+    expect(JSON.stringify(rendered)).toContain("sender metadata only");
   });
 });
 

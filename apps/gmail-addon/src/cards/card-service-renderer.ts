@@ -63,3 +63,25 @@ export function renderCardServiceCard(model: WarningCardModel, cardService: Card
     .addSection(section)
     .build();
 }
+
+export function renderHomepageCard(cardService: CardServiceLike): unknown {
+  const header = cardService
+    .newCardHeader()
+    .setTitle("Gmail Phish Guard")
+    .setSubtitle("Open an email to check the sender");
+
+  const section = cardService
+    .newCardSection()
+    .addWidget(cardService.newTextParagraph().setText(
+      "Open a Gmail message, then run Gmail Phish Guard to check whether the sender name matches the actual email address."
+    ))
+    .addWidget(cardService.newTextParagraph().setText(
+      "This test add-on uses sender metadata only. It does not inspect message bodies, attachments, or links."
+    ));
+
+  return cardService
+    .newCardBuilder()
+    .setHeader(header)
+    .addSection(section)
+    .build();
+}
