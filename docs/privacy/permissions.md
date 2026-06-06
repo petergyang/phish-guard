@@ -26,10 +26,14 @@ The MVP needs to warn at read time without scanning the mailbox. Current-message
 - Chrome `<all_urls>`
 - background Gmail API history access
 
+## Verification Requirement
+
+Even this narrow add-on shape can trigger Google's unverified-app warning during development because it requests Gmail-related OAuth scopes. For normal users, Gmail Phish Guard needs a verified OAuth consent screen and Google Workspace Marketplace listing before distribution.
+
 ## Permission Escalation Rule
 
 Any new feature that needs broader Gmail API scopes, Chrome content-script access, backend scoring, body analysis, link analysis, attachment analysis, or telemetry requires a new design review and an update to this document before implementation.
 
 ## User-Facing Permission Copy
 
-Sender Check looks only at sender metadata for the Gmail message you are viewing. It does not read message bodies, attachments, links, or your inbox history.
+Gmail Phish Guard looks only at sender metadata for the Gmail message you are viewing. It does not read message bodies, attachments, links, or your inbox history.

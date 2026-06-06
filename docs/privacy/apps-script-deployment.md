@@ -36,6 +36,19 @@ In Apps Script:
 4. Install it in a test Gmail account.
 5. Open a synthetic test email and run Gmail Phish Guard from the add-on panel.
 
+Test deployments can show Google's "unverified app" warning because the app has not completed OAuth verification. That is expected during development, but it is not an acceptable consumer install experience.
+
+## Production Distribution
+
+Before asking normal users to install the add-on:
+
+- Configure the OAuth consent screen with the app name, logo, support email, homepage, privacy policy, and exact scopes.
+- Publish through Google Workspace Marketplace.
+- Complete Google's OAuth verification for the Gmail add-on scopes.
+- Re-test the install flow from a fresh Google account.
+
+Do not send consumers through the Apps Script test deployment flow.
+
 ## Privacy Check
 
 The deployed manifest requests only:

@@ -22,6 +22,8 @@ npm run build
 
 The Gmail add-on runs in Apps Script, so the TypeScript source is bundled into `dist/gmail-addon/Code.js`.
 
+Test deployments are for development only. A normal user should install Gmail Phish Guard from a verified Google Workspace Marketplace listing; otherwise Google can show a scary "unverified app" OAuth warning before the add-on opens.
+
 1. Log in to clasp:
 
    ```bash
@@ -51,6 +53,16 @@ The Gmail add-on runs in Apps Script, so the TypeScript source is bundled into `
 5. In the Apps Script project, create a test deployment for the Gmail add-on and install it in a test Gmail account.
 
 Use only synthetic emails or a test mailbox while validating the warning UI.
+
+## Consumer Distribution
+
+The shippable consumer path is:
+
+- Publish a Google Workspace Marketplace listing.
+- Complete Google OAuth app verification for the requested Gmail add-on scopes.
+- Keep the scope list narrow so the consent screen matches the privacy promise.
+
+Until that verification is complete, this repo is suitable for private testing, not normie installation.
 
 ## Privacy Boundary
 
