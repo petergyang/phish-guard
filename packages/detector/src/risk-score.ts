@@ -15,6 +15,7 @@ export interface MessageMetadata {
 export interface DetectionResult {
   riskLevel: RiskLevel;
   claimedBrand: string | null;
+  senderDisplayName: string;
   senderAddress: string;
   senderDomain: string | null;
   evidence: EvidenceItem[];
@@ -44,6 +45,7 @@ export function analyzeMessage(
     return {
       riskLevel: parsedFrom.domain ? "safe" : "limited_evidence",
       claimedBrand: null,
+      senderDisplayName: parsedFrom.displayName,
       senderAddress: parsedFrom.address,
       senderDomain: parsedFrom.domain,
       evidence: parsedFrom.domain ? evidenceItems : [
@@ -64,6 +66,7 @@ export function analyzeMessage(
     return {
       riskLevel: "limited_evidence",
       claimedBrand: claimedBrand.brandName,
+      senderDisplayName: parsedFrom.displayName,
       senderAddress: parsedFrom.address,
       senderDomain: parsedFrom.domain,
       evidence: [
@@ -85,8 +88,8 @@ export function analyzeMessage(
     evidenceItems.push(evidence(
       "brand_domain_mismatch",
       "error",
-      `This says ${claimedBrand.brandName}, but it was sent from ${parsedFrom.domain}.`,
-      { brand: claimedBrand.brandName, senderDomain: parsedFrom.domain }
+      `The sender name claims ${claimedBrand.brandName}, but the actual email is ${parsedFrom.address}.`,
+      { brand: claimedBrand.brandName, senderAddress: parsedFrom.address, senderDomain: parsedFrom.domain }
     ));
 
     if (publicMailboxDomains.has(parsedFrom.domain)) {
@@ -111,6 +114,7 @@ export function analyzeMessage(
   return {
     riskLevel: trusted ? "safe" : "suspicious",
     claimedBrand: claimedBrand.brandName,
+    senderDisplayName: parsedFrom.displayName,
     senderAddress: parsedFrom.address,
     senderDomain: parsedFrom.domain,
     evidence: evidenceItems

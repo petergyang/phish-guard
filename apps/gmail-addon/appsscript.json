@@ -7,7 +7,7 @@
   ],
   "addOns": {
     "common": {
-      "name": "Sender Check",
+      "name": "Gmail Phish Guard",
       "logoUrl": "https://www.gstatic.com/images/icons/material/system/2x/security_black_48dp.png",
       "useLocaleFromApp": true
     },

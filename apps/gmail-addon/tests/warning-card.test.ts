@@ -14,9 +14,12 @@ describe("warning card", () => {
     );
 
     expect(card.state).toBe("suspicious");
-    expect(card.title).toBe("Check this sender");
-    expect(card.summary).toContain("YouTube");
-    expect(card.summary).toContain("gmail.com");
+    expect(card.title).toBe("⚠️ Heads up: this might not be YouTube");
+    expect(card.details).toEqual([
+      { label: "It calls itself", value: "YouTube Account Recovery" },
+      { label: "But it's from", value: "random-person@gmail.com" },
+      { label: "Best move", value: "Don't click anything yet. Mark as spam or delete it if it feels off." }
+    ]);
     expect(card.privacyNote).toContain("does not inspect the message body");
   });
 

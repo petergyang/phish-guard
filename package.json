@@ -1,5 +1,5 @@
 {
-  "name": "anti-phishing",
+  "name": "gmail-phish-guard",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -8,12 +8,18 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "tsc --noEmit",
+    "build": "npm run typecheck && npm run build:gmail-addon",
+    "build:gmail-addon": "node scripts/build-gmail-addon.mjs",
+    "typecheck": "tsc --noEmit",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "clasp:login": "npx @google/clasp@3.3.0 login",
+    "clasp:create:gmail-addon": "npm run build:gmail-addon && npx @google/clasp@3.3.0 create --title \"Gmail Phish Guard\" --type standalone --rootDir dist/gmail-addon",
+    "deploy:gmail-addon": "npm run build:gmail-addon && npx @google/clasp@3.3.0 push --force"
   },
   "devDependencies": {
     "@types/node": "^22.10.2",
+    "esbuild": "^0.28.0",
     "typescript": "^5.7.2",
     "vitest": "^4.1.8"
   }

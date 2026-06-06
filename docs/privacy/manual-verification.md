@@ -4,11 +4,26 @@
 
 Use a test Gmail account and synthetic messages. Do not use Peter's real inbox for screenshots or demos.
 
+## Build And Deploy
+
+Run these commands from the repo root:
+
+```bash
+npm install
+npm test
+npm run build
+npm run clasp:login
+npm run clasp:create:gmail-addon
+npm run deploy:gmail-addon
+```
+
+After the push, open the linked Apps Script project and create a test deployment for the Gmail add-on.
+
 ## Checklist
 
 - Install the add-on with only current-message metadata scope.
 - Open a synthetic message from `"YouTube Account Recovery" <random-person@gmail.com>`.
-- Confirm the card says to check the sender.
+- Confirm the card says `⚠️ Heads up: this might not be YouTube`.
 - Confirm the card explains that the message says YouTube but came from `gmail.com`.
 - Open a synthetic message from `"YouTube" <alerts@youtube.com>`.
 - Confirm the card stays quiet or safe.

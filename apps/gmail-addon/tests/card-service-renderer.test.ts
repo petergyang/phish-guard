@@ -26,11 +26,11 @@ describe("Apps Script entrypoint", () => {
 
     expect(rendered).toMatchObject({
       header: {
-        title: "Check this sender",
+        title: "⚠️ Heads up: this might not be YouTube",
         subtitle: "suspicious"
       }
     });
-    expect(JSON.stringify(rendered)).toContain("gmail.com");
+    expect(JSON.stringify(rendered)).toContain("random@gmail.com");
     expect(JSON.stringify(rendered)).toContain("does not inspect the message body");
   });
 });
@@ -64,6 +64,21 @@ function createFakeCardService(): CardServiceLike {
         }
       };
       return paragraph as CardServiceTextParagraph;
+    },
+    newDecoratedText: () => {
+      const decorated = {
+        topLabel: "",
+        text: "",
+        setTopLabel(label: string) {
+          this.topLabel = label;
+          return this;
+        },
+        setText(text: string) {
+          this.text = text;
+          return this;
+        }
+      };
+      return decorated;
     },
     newCardSection: () => {
       const section = {

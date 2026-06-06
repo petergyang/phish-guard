@@ -4,6 +4,11 @@ export interface CardServiceTextParagraph {
   setText(text: string): CardServiceTextParagraph;
 }
 
+export interface CardServiceDecoratedText {
+  setTopLabel(label: string): CardServiceDecoratedText;
+  setText(text: string): CardServiceDecoratedText;
+}
+
 export interface CardServiceSection {
   addWidget(widget: unknown): CardServiceSection;
 }
@@ -23,6 +28,7 @@ export interface CardServiceLike {
   newCardBuilder(): CardServiceCardBuilder;
   newCardHeader(): CardServiceCardHeader;
   newCardSection(): CardServiceSection;
+  newDecoratedText(): CardServiceDecoratedText;
   newTextParagraph(): CardServiceTextParagraph;
 }
 
@@ -35,6 +41,15 @@ export function renderCardServiceCard(model: WarningCardModel, cardService: Card
   const section = cardService
     .newCardSection()
     .addWidget(cardService.newTextParagraph().setText(model.summary));
+
+  for (const detail of model.details) {
+    section.addWidget(
+      cardService
+        .newDecoratedText()
+        .setTopLabel(detail.label)
+        .setText(detail.value)
+    );
+  }
 
   for (const item of model.evidence) {
     section.addWidget(cardService.newTextParagraph().setText(item.message));
