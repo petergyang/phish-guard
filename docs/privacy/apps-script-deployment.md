@@ -41,7 +41,17 @@ In Apps Script:
 The deployed manifest requests only:
 
 ```text
+https://www.googleapis.com/auth/script.locale
+https://www.googleapis.com/auth/gmail.addons.execute
 https://www.googleapis.com/auth/gmail.addons.current.message.metadata
 ```
 
 Do not add broader Gmail API scopes during test deployment.
+
+The add-on uses Google's public blue shield-with-exclamation icon:
+
+```text
+https://www.gstatic.com/images/icons/material/system/2x/gpp_maybe_googblue_48dp.png
+```
+
+Keep the icon high-contrast so it remains visible in Gmail dark mode.

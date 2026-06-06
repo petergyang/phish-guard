@@ -10,7 +10,7 @@
 
 ## Required Manual Checks
 
-- The add-on can be installed with only current-message metadata scope.
+- The add-on can be installed with only Workspace add-on runtime scopes and current-message metadata scope.
 - Opening a Gmail message can render the add-on card.
 - A warning can be demonstrated with synthetic or test-account messages.
 - Screenshots used for demos do not reveal real private inbox content.

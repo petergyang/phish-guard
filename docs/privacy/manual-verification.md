@@ -21,7 +21,7 @@ After the push, open the linked Apps Script project and create a test deployment
 
 ## Checklist
 
-- Install the add-on with only current-message metadata scope.
+- Install the add-on with only Workspace add-on runtime scopes and current-message metadata scope.
 - Open a synthetic message from `"YouTube Account Recovery" <random-person@gmail.com>`.
 - Confirm the card says `⚠️ Heads up: this might not be YouTube`.
 - Confirm the card explains that the message says YouTube but came from `gmail.com`.
