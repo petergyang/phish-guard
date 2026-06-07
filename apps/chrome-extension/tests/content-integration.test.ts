@@ -38,6 +38,30 @@ describe("Gmail content integration", () => {
     expect(document.querySelector(`#${warningBannerId}`)).toBeNull();
   });
 
+  it("removes an old warning when Gmail navigates to a safe message", () => {
+    document.body.innerHTML = `
+      <main id="message-root">
+        <h2 class="hP">Security alert</h2>
+        <div class="adn ads">
+          <span class="gD" email="random@gmail.com" name="YouTube Account Recovery">YouTube Account Recovery</span>
+        </div>
+      </main>
+    `;
+
+    checkOpenGmailMessage(document);
+    expect(document.querySelector(`#${warningBannerId}`)).not.toBeNull();
+
+    document.querySelector("#message-root")!.innerHTML = `
+      <h2 class="hP">Your YouTube edit looks great</h2>
+      <div class="adn ads">
+        <span class="gD" email="alex@example.com" name="Alex Chen">Alex Chen</span>
+      </div>
+    `;
+
+    checkOpenGmailMessage(document);
+    expect(document.querySelector(`#${warningBannerId}`)).toBeNull();
+  });
+
   it("warns for a Costco rewards sender in Gmail spam", () => {
     document.body.innerHTML = `
       <h2 class="hP">TODAY'S WINNER!</h2>

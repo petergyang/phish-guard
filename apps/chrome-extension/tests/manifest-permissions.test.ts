@@ -7,6 +7,19 @@ describe("Chrome extension manifest permissions", () => {
     expect(manifest.permissions).toEqual(expect.arrayContaining(["activeTab", "scripting", "storage"]));
   });
 
+  it("declares store-ready extension icons", () => {
+    expect(manifest.icons).toEqual({
+      "16": "assets/icon-16.png",
+      "32": "assets/icon-32.png",
+      "48": "assets/icon-48.png",
+      "128": "assets/icon-128.png"
+    });
+    expect(manifest.action.default_icon).toEqual({
+      "16": "assets/icon-16.png",
+      "32": "assets/icon-32.png"
+    });
+  });
+
   it("does not request scary broad or unrelated permissions", () => {
     const manifestText = JSON.stringify(manifest);
 

@@ -12,7 +12,7 @@ If an email says it is from Costco, YouTube, PayPal, or another recognizable org
 2. Phish Guard reads the visible sender row, such as `Costco Rewards <random@hotmail.com>`.
 3. If the sender name claims a brand that does not match the email address, Phish Guard shows a warning above the message header.
 
-Phish Guard runs locally in your browser. It does not upload email data.
+Phish Guard runs locally in your browser and does not upload email data.
 
 ## What It Checks
 
@@ -24,7 +24,7 @@ Phish Guard runs locally in your browser. It does not upload email data.
 
 It does not warn because a friend mentions a brand in the subject or body. The check is based on who the email claims to be from.
 
-## What The Warning Says
+## Warning Copy
 
 ```text
 Phish Guard warning: This is likely not from Costco.
@@ -32,6 +32,12 @@ Sender email: random@hotmail.com. Avoid links. Use Gmail's Report spam button or
 ```
 
 The warning is intentionally plain. It tells you what looks wrong and what to do next.
+
+## Install
+
+Phish Guard is being prepared for Chrome Web Store review. The public install link will live here after the unlisted listing is approved.
+
+For local development and private testing, see [docs/development/local-install.md](docs/development/local-install.md).
 
 ## Privacy
 
@@ -51,56 +57,6 @@ Chrome may say Phish Guard can "read and change" data on Gmail. The "read" part 
 
 Read the full policy in [PRIVACY.md](PRIVACY.md).
 
-## Install The Alpha
-
-Phish Guard is not in the Chrome Web Store yet. For now, install it from a GitHub release.
-
-1. Download `phish-guard-chrome-extension.zip` from the [latest release](https://github.com/petergyang/phish-guard/releases).
-2. Unzip the file.
-3. Open Chrome and go to `chrome://extensions`.
-4. Turn on **Developer mode**.
-5. Click **Load unpacked**.
-6. Select the unzipped extension folder.
-7. Open Gmail.
-8. Click the Phish Guard extension icon.
-9. Click **Turn on Gmail warnings**.
-
-Chrome will ask for Gmail access so Phish Guard can read the sender row and add the warning inside Gmail.
-
-## Build From Source
-
-```bash
-npm install
-npm test
-npm run build:chrome-extension
-```
-
-Then load `dist/chrome-extension` from `chrome://extensions`.
-
-To create a ZIP:
-
-```bash
-npm run package:chrome-extension
-```
-
-The ZIP is created at:
-
-```text
-dist/phish-guard-chrome-extension.zip
-```
-
-## Test It
-
-Use a test Gmail account if possible.
-
-1. Open a suspicious email where the sender name claims a brand, but the email address is unrelated.
-2. Example: `Costco Rewards Connection <random@hotmail.com>`.
-3. Confirm a Phish Guard warning appears above the sender row.
-4. Open a normal email from a person.
-5. Confirm no warning appears just because the message mentions a brand.
-
-If Chrome shows extension errors, open `chrome://extensions`, click **Errors** on Phish Guard, clear stale errors, reload the extension, and refresh Gmail.
-
 ## Development
 
 ```bash
@@ -115,14 +71,9 @@ Project layout:
 - `apps/chrome-extension`: Consumer-facing Chrome extension
 - `packages/detector`: Local sender-risk detector
 - `apps/gmail-addon`: Earlier Gmail add-on experiment
+- `docs/development`: Local development and private testing notes
 - `docs/privacy`: Privacy and permission notes
 - `docs/store`: Chrome Web Store and release-readiness notes
-
-## Status
-
-Phish Guard is an alpha focused on Gmail sender impersonation. The next step is a Chrome Web Store submission with a public privacy-policy URL, screenshots, icons, and review disclosures.
-
-Future versions may add link checks, DM warnings, and suspicious-login-page warnings while keeping the same privacy rule: Do as much as possible locally, and ask clearly before any broader access.
 
 ## Reporting Issues
 

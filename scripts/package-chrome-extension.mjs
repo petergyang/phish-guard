@@ -9,6 +9,7 @@ const zipPath = path.join(repoRoot, "dist", "phish-guard-chrome-extension.zip");
 await rm(zipPath, { force: true });
 await run("npm", ["run", "build:chrome-extension"]);
 await run("zip", ["-r", zipPath, "."], { cwd: extensionDir });
+await run("npm", ["run", "inspect:chrome-extension-package"]);
 
 console.log(`Packaged ${path.relative(repoRoot, zipPath)}`);
 

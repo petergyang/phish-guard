@@ -39,11 +39,11 @@ function fakeChrome(granted: boolean): ExtensionChromeApi {
 }
 
 describe("permission-first onboarding", () => {
-  it("explains Chrome's scary wording before requesting Gmail access", () => {
+  it("keeps the pre-permission state calm and explicit", () => {
     expect(popupViewForState("needs-permission")).toMatchObject({
       buttonLabel: "Turn on Gmail warnings",
       buttonDisabled: false,
-      statusText: "Chrome will ask for Gmail access. It says \"change\" because this adds a warning banner, not because it edits your email."
+      statusText: "Gmail warnings are off until you allow Gmail access."
     });
   });
 

@@ -1,6 +1,6 @@
 # Chrome Web Store Submission Packet
 
-Status: prepared for review, not submitted.
+Status: release materials in progress, not submitted.
 
 This document is the working packet for a future Chrome Web Store submission. It is grounded in Chrome's official extension policy areas: single purpose, least privilege, accurate privacy disclosures, Limited Use, and review consistency.
 
@@ -54,6 +54,28 @@ Least privilege posture:
 - No background inbox scanning
 - No backend upload
 
+## Public URLs
+
+Repository URL after public release:
+
+```text
+https://github.com/petergyang/phish-guard
+```
+
+Privacy policy URL after public release:
+
+```text
+https://github.com/petergyang/phish-guard/blob/main/PRIVACY.md
+```
+
+Support URL after public release:
+
+```text
+https://github.com/petergyang/phish-guard/issues
+```
+
+Keep the repo private until the Chrome Web Store submission package is ready.
+
 ## Privacy Policy Requirements
 
 Use `PRIVACY.md` as the source of truth. Before submitting to the store, publish it at a stable public URL and ensure the Chrome Web Store developer dashboard disclosures match it exactly.
@@ -80,16 +102,15 @@ Recommended dashboard posture for the current MVP:
 
 If the dashboard treats local page processing as "website content" access, explain that it is used only for the user-facing sender warning and is not transmitted or stored.
 
-## Screenshots Needed
+## Screenshot Assets
 
-Required before submission:
+Prepared assets:
 
-- Extension popup before Gmail access is enabled.
-- Chrome permission prompt for Gmail access.
-- Gmail warning banner on a safe fake/test phishing email.
-- Gmail normal message with no warning.
+- `docs/assets/store/popup-before-permission.png`
+- `docs/assets/store/gmail-warning.png`
+- `docs/assets/store/gmail-normal-message.png`
 
-Screenshots must use test accounts and fake messages only. Do not include real private email.
+Any additional screenshots must use test accounts and fake messages only. Do not include real private email.
 
 ## Review Risks
 
@@ -111,3 +132,5 @@ Screenshots must use test accounts and fake messages only. Do not include real p
 - Permission justification matches `docs/privacy/permissions.md`.
 - Screenshots use fake/test emails only.
 - Extension ZIP has been loaded unpacked and tested in Gmail.
+- Chrome Web Store dashboard answers have been copied from `docs/store/dashboard-answers.md`.
+- Reviewer notes have been copied from `docs/store/review-notes.md`.

@@ -9,7 +9,19 @@ const requiredDocs = [
   "docs/privacy/manual-verification.md",
   "docs/privacy/test-cases.md",
   "docs/store/chrome-web-store-submission.md",
-  "docs/store/release-checklist.md"
+  "docs/store/release-checklist.md",
+  "docs/store/dashboard-answers.md",
+  "docs/store/review-notes.md"
+];
+
+const requiredAssets = [
+  "apps/chrome-extension/assets/icon-16.png",
+  "apps/chrome-extension/assets/icon-32.png",
+  "apps/chrome-extension/assets/icon-48.png",
+  "apps/chrome-extension/assets/icon-128.png",
+  "docs/assets/store/gmail-warning.png",
+  "docs/assets/store/popup-before-permission.png",
+  "docs/assets/store/gmail-normal-message.png"
 ];
 
 function readLowercase(path: string): string {
@@ -43,6 +55,8 @@ describe("Chrome extension store readiness", () => {
     expect(storePacket).toContain("least privilege");
     expect(storePacket).toContain("privacy policy");
     expect(storePacket).toContain("package zip");
+    expect(storePacket).toContain("dashboard-answers.md");
+    expect(storePacket).toContain("review-notes.md");
     expect(securityPolicy).toContain("do not post private email");
   });
 
@@ -51,7 +65,33 @@ describe("Chrome extension store readiness", () => {
     const screenshotPath = "docs/assets/phish-guard-gmail-warning.svg";
 
     expect(readme).toContain(screenshotPath);
+    expect(readme.indexOf(screenshotPath)).toBeLessThan(readme.indexOf("Phish Guard is a Chrome extension"));
     expect(existsSync(screenshotPath), `${screenshotPath} should exist`).toBe(true);
+  });
+
+  it("keeps public README free of developer-install friction", () => {
+    const readme = readFileSync("README.md", "utf8");
+
+    expect(readme).not.toContain("Install The Alpha");
+    expect(readme).not.toContain("Developer mode");
+    expect(readme).not.toContain("Load unpacked");
+    expect(readme).toContain("Chrome Web Store");
+    expect(readme).toContain("docs/development/local-install.md");
+  });
+
+  it("keeps store and extension image assets available", () => {
+    for (const path of requiredAssets) {
+      expect(existsSync(path), `${path} should exist`).toBe(true);
+    }
+  });
+
+  it("keeps popup privacy copy aligned with the README", () => {
+    const popupHtml = readLowercase("apps/chrome-extension/src/popup/popup.html");
+
+    expect(popupHtml).toContain("sender row");
+    expect(popupHtml).toContain("no message bodies");
+    expect(popupHtml).toContain("email upload");
+    expect(popupHtml).toContain("does not edit, delete, send, or report emails");
   });
 
   it("keeps tester issue templates privacy-safe", () => {
@@ -72,6 +112,7 @@ describe("Chrome extension store readiness", () => {
     expect(workflow).toContain("npm run build");
     expect(workflow).toContain("npm audit --audit-level=moderate");
     expect(workflow).toContain("npm run package:chrome-extension");
+    expect(workflow).toContain("npm run inspect:chrome-extension-package");
     expect(workflow).toContain("dist/phish-guard-chrome-extension.zip");
   });
 });

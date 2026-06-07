@@ -22,7 +22,7 @@ export function popupViewForState(state: PopupState): PopupView {
     return {
       buttonLabel: "Gmail warnings are on",
       buttonDisabled: true,
-      statusText: "Ready. Suspicious senders will show a warning inside Gmail.",
+      statusText: "Ready. Suspicious sender rows will show a warning inside Gmail.",
       statusState: "ready"
     };
   }
@@ -31,7 +31,7 @@ export function popupViewForState(state: PopupState): PopupView {
     return {
       buttonLabel: "Turning on...",
       buttonDisabled: true,
-      statusText: "Asking Chrome for Gmail access.",
+      statusText: "Opening Chrome's Gmail access prompt.",
       statusState: "needs-permission"
     };
   }
@@ -40,7 +40,7 @@ export function popupViewForState(state: PopupState): PopupView {
     return {
       buttonLabel: "Try again",
       buttonDisabled: false,
-      statusText: "Gmail warnings are still off. You can turn them on whenever you want.",
+      statusText: "Gmail warnings are off. Nothing changes until you allow Gmail access.",
       statusState: "denied"
     };
   }
@@ -48,7 +48,7 @@ export function popupViewForState(state: PopupState): PopupView {
   return {
     buttonLabel: "Turn on Gmail warnings",
     buttonDisabled: false,
-    statusText: "Chrome will ask for Gmail access. It says \"change\" because this adds a warning banner, not because it edits your email.",
+    statusText: "Gmail warnings are off until you allow Gmail access.",
     statusState: "needs-permission"
   };
 }
