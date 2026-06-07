@@ -1,8 +1,18 @@
 <svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect width="128" height="128" rx="26" fill="#155EEF"/>
-  <path d="M64 17L101 31V57C101 82 86 103 64 113C42 103 27 82 27 57V31L64 17Z" fill="#FFFFFF"/>
-  <path d="M64 29L88 38V58C88 75 78 90 64 98C50 90 40 75 40 58V38L64 29Z" fill="#FEF7E0"/>
-  <path d="M64 40L83 78H45L64 40Z" fill="#D93025"/>
-  <rect x="61" y="54" width="6" height="20" rx="3" fill="#FFFFFF"/>
-  <rect x="61" y="79" width="6" height="6" rx="3" fill="#FFFFFF"/>
+  <defs>
+    <linearGradient id="shield" x1="40" y1="20" x2="92" y2="112" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563EB"/>
+      <stop offset="0.58" stop-color="#155EEF"/>
+      <stop offset="1" stop-color="#0F3EA8"/>
+    </linearGradient>
+    <filter id="shadow" x="20" y="12" width="88" height="108" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feDropShadow dx="0" dy="5" stdDeviation="5" flood-color="#0B1B42" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+  <rect width="128" height="128" rx="28" fill="#F8FAFC"/>
+  <g filter="url(#shadow)">
+    <path d="M64 17L99 31V58C99 83 85 102 64 113C43 102 29 83 29 58V31L64 17Z" fill="url(#shield)"/>
+  </g>
+  <path d="M64 29L87 38V58C87 75 78 88 64 97C50 88 41 75 41 58V38L64 29Z" fill="#FFFFFF" fill-opacity="0.18"/>
+  <path d="M64 17L99 31V58C99 83 85 102 64 113C43 102 29 83 29 58V31L64 17Z" stroke="#0B3AA5" stroke-opacity="0.18" stroke-width="2"/>
 </svg>
