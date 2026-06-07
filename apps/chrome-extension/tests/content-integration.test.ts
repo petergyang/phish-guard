@@ -42,16 +42,24 @@ describe("Gmail content integration", () => {
     document.body.innerHTML = `
       <h2 class="hP">TODAY'S WINNER!</h2>
       <div class="adn ads">
-        <span class="gD" email="heidmaureen@example.net" name="Costco Rewards Connection">Costco Rewards Connection</span>
-        <div class="a3s">Congratulations reward body text should not be inspected.</div>
+        <div class="aju"></div>
+        <div class="gs">
+          <div class="gE iv gt">
+            <span class="gD" email="heidmaureen@example.net" name="Costco Rewards Connection">Costco Rewards Connection</span>
+          </div>
+          <div class="a3s">Congratulations reward body text should not be inspected.</div>
+        </div>
       </div>
     `;
 
     checkOpenGmailMessage(document);
 
+    const banner = document.querySelector(`#${warningBannerId}`)!;
     const warning = document.querySelector(`#${warningBannerId}`)?.textContent ?? "";
     expect(warning).toContain("Warning: this might not be Costco");
     expect(warning).toContain("heidmaureen@example.net");
     expect(warning).not.toContain("Congratulations reward body text");
+    expect(banner.parentElement?.className).toBe("gs");
+    expect(banner.nextElementSibling?.className).toContain("gE");
   });
 });

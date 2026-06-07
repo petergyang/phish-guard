@@ -28,13 +28,15 @@ export function extractVisibleGmailMetadata(root: ParentNode = document): GmailD
   const senderAddress = readAttribute(senderElement, "email") ?? readAttribute(senderElement, "data-hovercard-id") ?? "";
   const senderDisplayName = readAttribute(senderElement, "name") ?? senderElement.textContent?.trim() ?? "";
   const header = senderElement.closest(messageHeaderSelectors.join(","));
+  const messageContent = header?.matches(".gs") ? header : header?.querySelector(".gs");
+  const topOfMessageContent = messageContent?.firstElementChild;
 
   return {
     metadata: {
       from: formatFrom(senderDisplayName, senderAddress),
       provider: "gmail-chrome-extension"
     },
-    anchor: header ?? senderElement
+    anchor: topOfMessageContent ?? header ?? senderElement
   };
 }
 

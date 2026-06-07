@@ -1,17 +1,18 @@
 .gmail-phish-guard-banner {
-  align-items: flex-start;
+  align-items: center;
   background: #fef7e0;
-  border: 1px solid #f6c453;
-  border-left: 5px solid #f29900;
+  border: 1px solid #f6c453 !important;
+  border-left: 6px solid #f29900 !important;
   border-radius: 8px;
   box-sizing: border-box;
   color: #2f2f2f;
   display: flex;
   font-family: Google Sans, Roboto, Arial, sans-serif;
   gap: 12px;
-  margin: 12px 0;
+  margin: 0 0 12px;
   max-width: 100%;
-  padding: 12px 14px;
+  padding: 10px 14px;
+  width: 100%;
 }
 
 .gmail-phish-guard-banner__icon {
@@ -30,6 +31,10 @@
 }
 
 .gmail-phish-guard-banner__content {
+  align-items: baseline;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 10px;
   min-width: 0;
 }
 
@@ -37,24 +42,56 @@
   font-size: 15px;
   font-weight: 800;
   line-height: 1.35;
-  margin: 0 0 5px;
+  margin: 0;
 }
 
 .gmail-phish-guard-banner ul {
+  display: flex;
+  flex-wrap: wrap;
   font-size: 13px;
   line-height: 1.45;
   margin: 0;
-  padding-left: 18px;
+  padding: 0;
 }
 
 .gmail-phish-guard-banner li {
-  margin: 2px 0;
+  list-style: none;
+  margin: 0 12px 0 0;
+}
+
+.gmail-phish-guard-banner li::before {
+  content: "•";
+  font-weight: 700;
+  margin-right: 6px;
 }
 
 @media (prefers-color-scheme: dark) {
   .gmail-phish-guard-banner {
-    background: #3b2f18;
-    border-color: #f6c453;
-    color: #f1f3f4;
+    background: #fef7e0;
+    border-color: #f6c453 !important;
+    box-shadow: none;
+    color: #2f2f2f;
+  }
+}
+
+@media (max-width: 720px) {
+  .gmail-phish-guard-banner {
+    align-items: flex-start;
+  }
+
+  .gmail-phish-guard-banner__content,
+  .gmail-phish-guard-banner ul {
+    display: block;
+  }
+
+  .gmail-phish-guard-banner li {
+    margin-top: 2px;
+  }
+}
+
+@media (forced-colors: active) {
+  .gmail-phish-guard-banner {
+    border: 2px solid CanvasText !important;
+    color: CanvasText;
   }
 }
