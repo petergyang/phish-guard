@@ -9,7 +9,7 @@
   ],
   "addOns": {
     "common": {
-      "name": "Gmail Phish Guard",
+      "name": "Phish Guard",
       "logoUrl": "https://www.gstatic.com/images/icons/material/system/2x/gpp_maybe_googblue_48dp.png",
       "homepageTrigger": {
         "runFunction": "onHomepage"

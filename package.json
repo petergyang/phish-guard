@@ -1,5 +1,5 @@
 {
-  "name": "gmail-phish-guard",
+  "name": "phish-guard",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -16,7 +16,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "clasp:login": "npx @google/clasp@3.3.0 login",
-    "clasp:create:gmail-addon": "npm run build:gmail-addon && npx @google/clasp@3.3.0 create --title \"Gmail Phish Guard\" --type standalone --rootDir dist/gmail-addon",
+    "clasp:create:gmail-addon": "npm run build:gmail-addon && npx @google/clasp@3.3.0 create --title \"Phish Guard\" --type standalone --rootDir dist/gmail-addon",
     "deploy:gmail-addon": "npm run build:gmail-addon && npx @google/clasp@3.3.0 push --force"
   },
   "devDependencies": {

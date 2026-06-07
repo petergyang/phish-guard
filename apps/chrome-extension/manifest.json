@@ -1,10 +1,10 @@
 {
   "manifest_version": 3,
-  "name": "Gmail Phish Guard",
+  "name": "Phish Guard",
   "version": "0.1.0",
-  "description": "Shows local sender warnings inside Gmail when a message may be impersonating a trusted brand.",
+  "description": "Shows local phishing warnings in Gmail when a sender may be impersonating a brand.",
   "action": {
-    "default_title": "Gmail Phish Guard",
+    "default_title": "Phish Guard",
     "default_popup": "popup/popup.html"
   },
   "background": {

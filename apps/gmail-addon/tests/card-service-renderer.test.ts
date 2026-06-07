@@ -39,7 +39,7 @@ describe("Apps Script entrypoint", () => {
 
     expect(rendered).toMatchObject({
       header: {
-        title: "Gmail Phish Guard",
+        title: "Phish Guard",
         subtitle: "Open an email to check the sender"
       }
     });
