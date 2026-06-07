@@ -30,18 +30,19 @@ function fakeChrome(granted: boolean): ExtensionChromeApi {
 }
 
 describe("permission-first onboarding", () => {
-  it("explains the disabled state without sounding broken", () => {
+  it("explains Chrome's scary wording before requesting Gmail access", () => {
     expect(popupViewForState("needs-permission")).toMatchObject({
-      buttonLabel: "Protect Gmail",
+      buttonLabel: "Turn on Gmail warnings",
       buttonDisabled: false,
-      statusText: "Gmail access is off. Turn it on to show warnings inside opened emails."
+      statusText: "Chrome will ask for Gmail access. It says \"change\" because this adds a warning banner, not because it edits your email."
     });
   });
 
-  it("registers Gmail protection only after permission is granted", async () => {
+  it("registers always-on Gmail protection only after permission is granted", async () => {
     const api = fakeChrome(true);
 
     await expect(enableGmailProtection(api)).resolves.toBe("ready");
+    expect(api.permissions.request).toHaveBeenCalledTimes(1);
     expect(api.scripting.registerContentScripts).toHaveBeenCalledTimes(1);
     expect(api.scripting.executeScript).toHaveBeenCalledTimes(1);
   });

@@ -22,13 +22,14 @@ npm run build
 4. Load `dist/chrome-extension` as an unpacked extension.
 5. Open the extension popup.
 6. Confirm the popup says it uses the sender row only, does not read message bodies, and does not upload email.
-7. Click `Protect Gmail`.
-8. Confirm Chrome asks for access only to `mail.google.com`.
-9. Open a synthetic suspicious Gmail message.
-10. Confirm the inline warning appears without opening Gmail's right rail.
-11. Open a safe sender message.
-12. Confirm the warning disappears.
-13. Deny Gmail permission in a fresh profile and confirm the popup shows a non-scary retry state.
+7. Confirm the popup explains that Chrome says "change" because the extension adds a warning banner, not because it edits email.
+8. Click `Turn on Gmail warnings`.
+9. Confirm Chrome asks for access only to `mail.google.com`.
+10. Open a synthetic suspicious Gmail message.
+11. Confirm the inline warning appears near the sender row.
+12. Open a safe sender message.
+13. Confirm the warning disappears.
+14. Deny Gmail permission in a fresh profile and confirm the popup shows a non-scary retry state.
 
 ## Gmail Add-On Checks
 

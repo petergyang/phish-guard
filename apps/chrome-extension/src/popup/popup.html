@@ -93,6 +93,11 @@
         color: #137333;
       }
 
+      .status[data-state="ready"] {
+        background: #e6f4ea;
+        color: #137333;
+      }
+
       .status[data-state="needs-permission"],
       .status[data-state="denied"] {
         background: #fef7e0;
@@ -142,9 +147,9 @@
         <li>Does not read message bodies, links, or attachments.</li>
         <li>Does not upload email data.</li>
       </ul>
-      <button id="enable-gmail" type="button">Protect Gmail</button>
-      <div id="status" class="status" data-state="needs-permission">Gmail access is off. Turn it on to show warnings inside opened emails.</div>
-      <p class="note">Chrome will ask for access to mail.google.com because the warning has to appear inside Gmail.</p>
+      <button id="enable-gmail" type="button">Turn on Gmail warnings</button>
+      <div id="status" class="status" data-state="needs-permission">Chrome will ask for Gmail access. It says "change" because this adds a warning banner, not because it edits your email.</div>
+      <p class="note">Chrome says "change" because the extension adds a warning banner to Gmail. It does not edit, delete, send, or report emails.</p>
     </main>
     <script type="module" src="./popup.js"></script>
   </body>

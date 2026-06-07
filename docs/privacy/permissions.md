@@ -6,6 +6,8 @@
 
 This optional Chrome host permission lets Gmail Phish Guard place a warning inside Gmail and read the sender row of an opened message. The extension uses this permission locally. It does not read message bodies, links, or attachments by default, and it does not upload email data.
 
+Chrome says "read and change" because the extension adds a warning banner to the Gmail page. Gmail Phish Guard does not edit, delete, send, or report emails.
+
 The extension must not request `<all_urls>`, `cookies`, `webRequest`, Gmail API OAuth scopes, or background mailbox access for the MVP.
 
 ## Gmail Add-On Test Permission

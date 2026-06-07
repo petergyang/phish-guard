@@ -8,6 +8,8 @@ Gmail Phish Guard shows sender warnings inside Gmail when an opened message appe
 
 Gmail Phish Guard asks for access to `https://mail.google.com/*` so it can read the sender row of the Gmail message you are viewing and place a warning beside that message.
 
+Chrome may describe this as permission to "read and change" data on Gmail. The extension needs the "change" part only to add the warning banner. It does not edit, delete, send, or report emails.
+
 ## Privacy Promise
 
 - Runs sender checks locally in your browser.
