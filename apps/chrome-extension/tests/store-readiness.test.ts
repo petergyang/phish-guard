@@ -46,6 +46,14 @@ describe("Chrome extension store readiness", () => {
     expect(securityPolicy).toContain("do not post private email");
   });
 
+  it("keeps the README product screenshot available", () => {
+    const readme = readFileSync("README.md", "utf8");
+    const screenshotPath = "docs/assets/phish-guard-gmail-warning.svg";
+
+    expect(readme).toContain(screenshotPath);
+    expect(existsSync(screenshotPath), `${screenshotPath} should exist`).toBe(true);
+  });
+
   it("keeps tester issue templates privacy-safe", () => {
     const bugTemplate = readLowercase(".github/ISSUE_TEMPLATE/bug_report.yml");
     const falsePositiveTemplate = readLowercase(".github/ISSUE_TEMPLATE/false_positive.yml");
