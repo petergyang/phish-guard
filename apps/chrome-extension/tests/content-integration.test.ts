@@ -13,7 +13,7 @@ describe("Gmail content integration", () => {
     `;
 
     checkOpenGmailMessage(document);
-    expect(document.querySelector(`#${warningBannerId}`)?.textContent).toContain("Warning: this might not be YouTube");
+    expect(document.querySelector(`#${warningBannerId}`)?.textContent).toContain("Phish Guard warning: This is likely not from YouTube.");
 
     document.body.innerHTML = `
       <h2 class="hP">Channel update</h2>
@@ -56,9 +56,11 @@ describe("Gmail content integration", () => {
 
     const banner = document.querySelector(`#${warningBannerId}`)!;
     const warning = document.querySelector(`#${warningBannerId}`)?.textContent ?? "";
-    expect(warning).toContain("Warning: this might not be Costco");
+    expect(warning).toContain("Phish Guard warning: This is likely not from Costco.");
     expect(warning).toContain("heidmaureen@example.net");
+    expect(warning).toContain("Avoid links. Use Gmail's Report spam button or delete the email.");
     expect(warning).not.toContain("Congratulations reward body text");
+    expect(banner.querySelector("ul")).toBeNull();
     expect(banner.parentElement?.className).toBe("gs");
     expect(banner.nextElementSibling?.className).toContain("gE");
   });

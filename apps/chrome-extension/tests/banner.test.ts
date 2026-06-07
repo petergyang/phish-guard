@@ -11,12 +11,8 @@ describe("inline warning banner", () => {
 
     expect(buildInlineWarningModel(result)).toEqual({
       state: "warning",
-      title: "Warning: this might not be YouTube",
-      bullets: [
-        "It says YouTube, but the sender is random@gmail.com.",
-        "Do not click links yet.",
-        "Use Gmail's Report spam or delete it if it feels off."
-      ]
+      title: "Phish Guard warning: This is likely not from YouTube.",
+      subtitle: "Sender email: random@gmail.com. Avoid links. Use Gmail's Report spam button or delete the email."
     });
   });
 
@@ -44,7 +40,8 @@ describe("inline warning banner", () => {
     renderInlineWarning(header, suspicious);
 
     expect(document.querySelectorAll(`#${warningBannerId}`)).toHaveLength(1);
-    expect(document.querySelector(`#${warningBannerId}`)?.textContent).toContain("Use Gmail's Report spam");
+    expect(document.querySelector(`#${warningBannerId}`)?.textContent).toContain("Use Gmail's Report spam button or delete the email");
+    expect(document.querySelector(`#${warningBannerId} ul`)).toBeNull();
   });
 
   it("does not rebuild the banner when the same warning is already in place", () => {

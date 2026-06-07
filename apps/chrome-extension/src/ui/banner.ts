@@ -4,7 +4,7 @@ export const warningBannerId = "gmail-phish-guard-warning";
 
 export interface InlineWarningModel {
   title: string;
-  bullets: string[];
+  subtitle: string;
   state: "warning";
 }
 
@@ -18,12 +18,8 @@ export function buildInlineWarningModel(result: DetectionResult): InlineWarningM
 
   return {
     state: "warning",
-    title: `Warning: this might not be ${brand}`,
-    bullets: [
-      `It says ${brand}, but the sender is ${sender}.`,
-      "Do not click links yet.",
-      "Use Gmail's Report spam or delete it if it feels off."
-    ]
+    title: `Phish Guard warning: This is likely not from ${brand}.`,
+    subtitle: `Sender email: ${sender}. Avoid links. Use Gmail's Report spam button or delete the email.`
   };
 }
 
@@ -68,13 +64,10 @@ export function renderInlineWarning(anchor: Element, result: DetectionResult): v
   title.textContent = model.title;
   content.appendChild(title);
 
-  const list = doc.createElement("ul");
-  for (const bullet of model.bullets) {
-    const item = doc.createElement("li");
-    item.textContent = bullet;
-    list.appendChild(item);
-  }
-  content.appendChild(list);
+  const subtitle = doc.createElement("div");
+  subtitle.className = "gmail-phish-guard-banner__subtitle";
+  subtitle.textContent = model.subtitle;
+  content.appendChild(subtitle);
   banner.appendChild(content);
 
   host.insertBefore(banner, anchor);
@@ -89,5 +82,5 @@ function findExistingWarning(doc: Document): HTMLElement | null {
 }
 
 function warningSignature(model: InlineWarningModel): string {
-  return JSON.stringify([model.title, model.bullets]);
+  return JSON.stringify([model.title, model.subtitle]);
 }
