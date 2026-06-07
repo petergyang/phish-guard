@@ -46,4 +46,24 @@ describe("inline warning banner", () => {
     expect(document.querySelectorAll(`#${warningBannerId}`)).toHaveLength(1);
     expect(document.querySelector(`#${warningBannerId}`)?.textContent).toContain("Use Gmail's Report spam");
   });
+
+  it("does not rebuild the banner when the same warning is already in place", () => {
+    document.body.innerHTML = `
+      <div id="host">
+        <div id="header"></div>
+      </div>
+    `;
+
+    const header = document.querySelector("#header")!;
+    const suspicious = analyzeMessage({
+      from: "\"Costco Rewards Connection\" <heidmaureen9558@hotmail.com>"
+    });
+
+    renderInlineWarning(header, suspicious);
+    const firstBanner = document.querySelector(`#${warningBannerId}`);
+    renderInlineWarning(header, suspicious);
+
+    expect(document.querySelector(`#${warningBannerId}`)).toBe(firstBanner);
+    expect(document.querySelectorAll(`#${warningBannerId}`)).toHaveLength(1);
+  });
 });

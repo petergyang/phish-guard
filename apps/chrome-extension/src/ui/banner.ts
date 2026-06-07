@@ -30,14 +30,28 @@ export function buildInlineWarningModel(result: DetectionResult): InlineWarningM
 export function renderInlineWarning(anchor: Element, result: DetectionResult): void {
   const model = buildInlineWarningModel(result);
   const host = anchor.parentElement ?? anchor;
-  removeInlineWarning(host);
+  const existing = findExistingWarning(anchor.ownerDocument);
 
-  if (!model) return;
+  if (!model) {
+    existing?.remove();
+    return;
+  }
 
   const doc = anchor.ownerDocument;
-  const banner = doc.createElement("section");
+  const signature = warningSignature(model);
+  if (
+    existing?.parentElement === host
+    && existing.nextElementSibling === anchor
+    && existing.dataset.signature === signature
+  ) {
+    return;
+  }
+
+  const banner = existing ?? doc.createElement("section");
+  banner.replaceChildren();
   banner.id = warningBannerId;
   banner.className = "gmail-phish-guard-banner";
+  banner.dataset.signature = signature;
   banner.setAttribute("role", "alert");
   banner.setAttribute("aria-live", "polite");
 
@@ -68,4 +82,12 @@ export function renderInlineWarning(anchor: Element, result: DetectionResult): v
 
 export function removeInlineWarning(root: ParentNode): void {
   root.querySelector?.(`#${warningBannerId}`)?.remove();
+}
+
+function findExistingWarning(doc: Document): HTMLElement | null {
+  return doc.getElementById(warningBannerId);
+}
+
+function warningSignature(model: InlineWarningModel): string {
+  return JSON.stringify([model.title, model.bullets]);
 }
