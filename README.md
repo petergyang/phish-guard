@@ -60,6 +60,8 @@ Out of scope for the current prototype:
 
 Chrome may say the extension can "read and change" data on Gmail. The "change" part is needed only to add the warning banner to the Gmail page. Phish Guard does not edit, delete, send, or report emails.
 
+Read the full policy in [`PRIVACY.md`](PRIVACY.md). Security and privacy reports should follow [`SECURITY.md`](SECURITY.md) so private email details are not posted publicly.
+
 ## Install For Testing
 
 ### Option A: If Someone Gives You A Built Folder
@@ -110,6 +112,8 @@ That creates:
 dist/phish-guard-chrome-extension.zip
 ```
 
+GitHub prereleases can attach this ZIP so testers do not need Node.js.
+
 ## How To Test It
 
 Use a test Gmail account if possible.
@@ -135,6 +139,7 @@ If the extension behaves weirdly:
 npm test
 npm run build
 npm audit --audit-level=moderate
+npm run package:chrome-extension
 ```
 
 Project layout:
@@ -143,6 +148,7 @@ Project layout:
 - `packages/detector` contains the local sender-risk detector.
 - `apps/gmail-addon` contains an older Gmail add-on experiment.
 - `docs/privacy` documents permissions, privacy boundaries, and verification notes.
+- `docs/store` contains Chrome Web Store and release-readiness notes.
 
 ## Current Status
 
@@ -150,7 +156,13 @@ This is a prototype, not a polished consumer product.
 
 The Gmail extension path is the current focus because it can show warnings where users actually need them: inside the opened email. The Gmail add-on path is kept for reference, but it produced scary Google OAuth warnings during testing and required users to open a side panel.
 
-The next big product job is trust. A phishing-protection tool has to feel obviously safer than the thing it is warning about. That means clearer onboarding, a cleaner install path, screenshots, a privacy policy, and more real-world Gmail layout testing.
+The next big product job is trust. A phishing-protection tool has to feel obviously safer than the thing it is warning about. That means clearer onboarding, a cleaner install path, screenshots, more real-world Gmail layout testing, and eventually a Chrome Web Store listing.
+
+Chrome Web Store planning lives in [`docs/store/chrome-web-store-submission.md`](docs/store/chrome-web-store-submission.md). The current recommendation is to use GitHub releases for alpha testers, then move toward an unlisted or public Chrome Web Store listing once the privacy policy URL, screenshots, icons, support path, and review disclosures are ready.
+
+## Reporting Issues
+
+Use the GitHub issue templates for bugs and false positives. Please do not post full email bodies, attachments, private links, or screenshots that reveal personal messages. Sender display names and sender domains are usually enough for detector feedback.
 
 ## Future Directions
 

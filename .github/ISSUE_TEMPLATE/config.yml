@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security or privacy report
+    url: https://github.com/petergyang/phish-guard/security
+    about: Please do not post private email details in a public issue.
