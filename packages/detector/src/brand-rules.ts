@@ -49,6 +49,12 @@ export const defaultBrandRules: BrandRule[] = [
     brandName: "Microsoft",
     displayNames: ["microsoft", "microsoft account", "microsoft security"],
     trustedDomains: ["microsoft.com", "account.microsoft.com"]
+  },
+  {
+    id: "costco",
+    brandName: "Costco",
+    displayNames: ["costco", "costco wholesale", "costco rewards", "costco rewards connection"],
+    trustedDomains: ["costco.com", "costco.ca"]
   }
 ];
 

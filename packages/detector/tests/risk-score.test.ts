@@ -15,6 +15,17 @@ describe("analyzeMessage", () => {
     expect(result.evidence.map((item) => item.kind)).toContain("public_mailbox_sender");
   });
 
+  it("flags a Costco rewards display name sent from an unrelated address", () => {
+    const result = analyzeMessage({
+      from: "\"Costco Rewards Connection\" <heidmaureen@example.net>"
+    });
+
+    expect(result.riskLevel).toBe("suspicious");
+    expect(result.claimedBrand).toBe("Costco");
+    expect(result.senderDomain).toBe("example.net");
+    expect(result.evidence.map((item) => item.kind)).toContain("brand_domain_mismatch");
+  });
+
   it("does not warn when a protected brand uses a trusted domain", () => {
     const result = analyzeMessage(legitYouTube);
 

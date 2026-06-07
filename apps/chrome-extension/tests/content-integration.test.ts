@@ -37,4 +37,21 @@ describe("Gmail content integration", () => {
     checkOpenGmailMessage(document);
     expect(document.querySelector(`#${warningBannerId}`)).toBeNull();
   });
+
+  it("warns for a Costco rewards sender in Gmail spam", () => {
+    document.body.innerHTML = `
+      <h2 class="hP">TODAY'S WINNER!</h2>
+      <div class="adn ads">
+        <span class="gD" email="heidmaureen@example.net" name="Costco Rewards Connection">Costco Rewards Connection</span>
+        <div class="a3s">Congratulations reward body text should not be inspected.</div>
+      </div>
+    `;
+
+    checkOpenGmailMessage(document);
+
+    const warning = document.querySelector(`#${warningBannerId}`)?.textContent ?? "";
+    expect(warning).toContain("Warning: this might not be Costco");
+    expect(warning).toContain("heidmaureen@example.net");
+    expect(warning).not.toContain("Congratulations reward body text");
+  });
 });
