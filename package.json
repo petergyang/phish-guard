@@ -12,6 +12,7 @@
     "build:gmail-addon": "node scripts/build-gmail-addon.mjs",
     "build:chrome-extension": "node scripts/build-chrome-extension.mjs",
     "build:all": "npm run build",
+    "package:chrome-extension": "node scripts/package-chrome-extension.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
