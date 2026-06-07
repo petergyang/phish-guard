@@ -7,6 +7,7 @@ const appDir = path.join(repoRoot, "apps", "chrome-extension");
 const outDir = path.join(repoRoot, "dist", "chrome-extension");
 
 await mkdir(outDir, { recursive: true });
+await mkdir(path.join(outDir, "assets"), { recursive: true });
 await mkdir(path.join(outDir, "popup"), { recursive: true });
 await mkdir(path.join(outDir, "ui"), { recursive: true });
 
@@ -48,6 +49,12 @@ await build({
 
 await cp(path.join(appDir, "src", "ui", "banner.css"), path.join(outDir, "ui", "banner.css"));
 await cp(path.join(appDir, "src", "popup", "popup.html"), path.join(outDir, "popup", "popup.html"));
+for (const size of [16, 32, 48, 128]) {
+  await cp(
+    path.join(appDir, "assets", `icon-${size}.png`),
+    path.join(outDir, "assets", `icon-${size}.png`)
+  );
+}
 
 const contentScript = await readFile(path.join(outDir, "content", "gmail-content.js"), "utf8");
 if (/(^|\n)\s*(import|export)\s/m.test(contentScript)) {

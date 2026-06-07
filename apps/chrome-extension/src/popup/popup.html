@@ -12,26 +12,26 @@
 
       body {
         margin: 0;
-        width: 330px;
+        width: 352px;
         background: #ffffff;
         color: #202124;
       }
 
       .shell {
-        padding: 18px;
+        padding: 20px;
       }
 
       .brand {
         align-items: center;
         display: flex;
         gap: 10px;
-        margin-bottom: 14px;
+        margin-bottom: 18px;
       }
 
       .mark {
         align-items: center;
         background: #e8f0fe;
-        border-radius: 8px;
+        border-radius: 10px;
         color: #1967d2;
         display: inline-flex;
         font-size: 20px;
@@ -53,12 +53,22 @@
         margin: 10px 0;
       }
 
-      ul {
+      .summary {
+        color: #202124;
+        font-size: 15px;
+        line-height: 1.45;
+        margin: 0 0 14px;
+      }
+
+      .privacy {
+        background: #f8fafc;
+        border: 1px solid #d8dee9;
+        border-radius: 8px;
         color: #3f454b;
         font-size: 13px;
         line-height: 1.45;
-        margin: 12px 0;
-        padding-left: 20px;
+        margin: 14px 0;
+        padding: 11px 12px;
       }
 
       button {
@@ -69,7 +79,7 @@
         cursor: pointer;
         font-size: 14px;
         font-weight: 700;
-        margin-top: 10px;
+        margin-top: 8px;
         min-height: 40px;
         padding: 0 14px;
         width: 100%;
@@ -86,11 +96,6 @@
         line-height: 1.4;
         margin-top: 12px;
         padding: 10px;
-      }
-
-      .status[data-state="ready"] {
-        background: #e6f4ea;
-        color: #137333;
       }
 
       .status[data-state="ready"] {
@@ -119,7 +124,13 @@
         }
 
         p,
-        ul {
+        .summary {
+          color: #d9dce0;
+        }
+
+        .privacy {
+          background: #171a20;
+          border-color: #3c4043;
           color: #d9dce0;
         }
 
@@ -141,15 +152,11 @@
         <span class="mark" aria-hidden="true">!</span>
         <h1>Phish Guard</h1>
       </div>
-      <p>Shows a warning inside Gmail when a sender looks like it may be pretending to be a brand.</p>
-      <ul>
-        <li>Looks at the sender row only.</li>
-        <li>Does not read message bodies, links, or attachments.</li>
-        <li>Does not upload email data.</li>
-      </ul>
+      <p class="summary">Warns you inside Gmail when a sender may be pretending to be a brand.</p>
+      <p class="privacy">Checks the visible sender row locally. No message bodies, attachments, inbox history, or email upload.</p>
       <button id="enable-gmail" type="button">Turn on Gmail warnings</button>
-      <div id="status" class="status" data-state="needs-permission">Chrome will ask for Gmail access. It says "change" because this adds a warning banner, not because it edits your email.</div>
-      <p class="note">Chrome says "change" because the extension adds a warning banner to Gmail. It does not edit, delete, send, or report emails.</p>
+      <div id="status" class="status" data-state="needs-permission">Gmail warnings are off until you allow Gmail access.</div>
+      <p class="note">Chrome asks for Gmail access so Phish Guard can add warnings to the Gmail page. It does not edit, delete, send, or report emails.</p>
     </main>
     <script type="module" src="./popup.js"></script>
   </body>

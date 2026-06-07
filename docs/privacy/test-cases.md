@@ -20,6 +20,10 @@
 - Chrome asks only for `mail.google.com` access.
 - Opening a suspicious Gmail message shows an inline warning near the sender row.
 - Opening a safe Gmail message does not show a warning.
+- Opening a suspicious message in the spam folder still shows the Phish Guard warning.
+- Navigating from a suspicious message to a safe message removes the old warning.
+- Refreshing Gmail or rechecking the same message does not create duplicate warning banners.
+- Long sender addresses wrap inside the warning without covering Gmail controls.
 - The add-on can be installed with only Workspace add-on runtime scopes and current-message metadata scope.
 - Opening a Gmail message can render the add-on card.
 - A warning can be demonstrated with synthetic or test-account messages.

@@ -13,6 +13,7 @@
     "build:chrome-extension": "node scripts/build-chrome-extension.mjs",
     "build:all": "npm run build",
     "package:chrome-extension": "node scripts/package-chrome-extension.mjs",
+    "inspect:chrome-extension-package": "node scripts/inspect-chrome-extension-package.mjs",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",

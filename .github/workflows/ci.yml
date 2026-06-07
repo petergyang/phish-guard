@@ -36,6 +36,9 @@ jobs:
       - name: Package Chrome extension
         run: npm run package:chrome-extension
 
+      - name: Inspect Chrome extension package
+        run: npm run inspect:chrome-extension-package
+
       - name: Upload Chrome extension ZIP
         uses: actions/upload-artifact@v4
         with:
