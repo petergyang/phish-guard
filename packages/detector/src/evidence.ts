@@ -5,6 +5,8 @@ export interface EvidenceItem {
     | "brand_claim"
     | "trusted_domain"
     | "brand_domain_mismatch"
+    | "display_name_address_mismatch"
+    | "display_name_matches_address"
     | "public_mailbox_sender"
     | "reply_to_mismatch"
     | "parse_issue"

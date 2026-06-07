@@ -3,10 +3,12 @@
 ## Required Automated Checks
 
 - A suspicious YouTube impersonation fixture produces a warning using sender metadata only.
+- A generic organization-style sender name, such as "Costco Rewards Connection", warns when the claimed name is absent from the sender address.
 - A legitimate YouTube sender fixture stays quiet.
 - A malformed sender produces limited evidence, not a safe result.
 - Body-like fields are ignored before metadata reaches the detector.
 - A friend mentioning a brand in the subject does not trigger a warning.
+- A normal personal display name does not warn just because it has multiple words.
 - The Chrome extension manifest uses optional `mail.google.com` access and no broad host permissions.
 - The Chrome extension DOM adapter ignores body, link, and attachment nodes.
 - Lookalike domains such as `youtube.com.attacker.example` do not match trusted-domain rules.

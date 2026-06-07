@@ -23,7 +23,56 @@ describe("analyzeMessage", () => {
     expect(result.riskLevel).toBe("suspicious");
     expect(result.claimedBrand).toBe("Costco");
     expect(result.senderDomain).toBe("example.net");
-    expect(result.evidence.map((item) => item.kind)).toContain("brand_domain_mismatch");
+    expect(result.evidence.map((item) => item.kind)).toContain("display_name_address_mismatch");
+  });
+
+  it("does not require a hardcoded brand rule to flag organization-name mismatch", () => {
+    const result = analyzeMessage({
+      from: "\"Acme Rewards Team\" <heidmaureen@example.net>"
+    });
+
+    expect(result.riskLevel).toBe("suspicious");
+    expect(result.claimedBrand).toBe("Acme");
+    expect(result.evidence.map((item) => item.kind)).toContain("display_name_address_mismatch");
+  });
+
+  it("flags a generic brand claim with organization wording", () => {
+    const result = analyzeMessage({
+      from: "\"Netflix Account Support\" <alerts@example.net>"
+    });
+
+    expect(result.riskLevel).toBe("suspicious");
+    expect(result.claimedBrand).toBe("Netflix");
+    expect(result.evidence.map((item) => item.kind)).toContain("display_name_address_mismatch");
+  });
+
+  it("does not warn when an organization-like display name appears in the sender address", () => {
+    const result = analyzeMessage({
+      from: "\"Acme Rewards Team\" <rewards@acme.example>"
+    });
+
+    expect(result.riskLevel).toBe("safe");
+    expect(result.claimedBrand).toBe("Acme");
+    expect(result.evidence.map((item) => item.kind)).toContain("display_name_matches_address");
+  });
+
+  it("does not treat normal personal display names as brand claims", () => {
+    const result = analyzeMessage({
+      from: "\"Rosalyn Yang\" <no-reply@strava.com>",
+      subject: "Rosalyn commented on Morning Run"
+    });
+
+    expect(result.riskLevel).toBe("safe");
+    expect(result.claimedBrand).toBeNull();
+  });
+
+  it("does not treat a three-word personal display name as a brand claim", () => {
+    const result = analyzeMessage({
+      from: "\"Rosalyn Yang Photography\" <hello@example.com>"
+    });
+
+    expect(result.riskLevel).toBe("safe");
+    expect(result.claimedBrand).toBeNull();
   });
 
   it("does not warn when a protected brand uses a trusted domain", () => {

@@ -2,7 +2,7 @@
 
 Privacy-safe Gmail sender warnings for brand impersonation.
 
-The consumer MVP is a Chrome extension that shows an inline warning inside Gmail when a sender looks like it may be impersonating a trusted brand. It checks the sender row locally. It does not scan the inbox, read message bodies, upload email content, or analyze attachments and links.
+The consumer MVP is a Chrome extension that shows an inline warning inside Gmail when a sender looks like it may be impersonating a brand or organization. It checks the sender row locally. It does not scan the inbox, read message bodies, upload email content, or analyze attachments and links.
 
 ## Current Shape
 
@@ -28,6 +28,8 @@ npm run build:chrome-extension
 ```
 
 Then load `dist/chrome-extension` in Chrome with Extensions > Developer mode > Load unpacked.
+
+The detector can flag generic organization-style sender names, such as "Costco Rewards Connection" or "Netflix Account Support", when the claimed brand does not appear in the actual sender address. Curated brand rules still exist for high-confidence domains like Google, YouTube, PayPal, Apple, and Microsoft.
 
 The extension installs without Google OAuth. The user turns on Gmail protection from the extension popup, which asks Chrome for access only to:
 

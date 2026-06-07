@@ -42,6 +42,66 @@ export function analyzeMessage(
   const claimedBrand = findClaimedBrand(brandSearchText, rules);
 
   if (!claimedBrand) {
+    const genericClaim = inferDisplayNameClaim(parsedFrom.displayName, parsedFrom.address, parsedFrom.domain);
+    if (genericClaim) {
+      evidenceItems.push(evidence(
+        "brand_claim",
+        "info",
+        `The sender name presents itself as ${genericClaim.claimName}.`,
+        { brand: genericClaim.claimName, source: "display_name" }
+      ));
+
+      if (!parsedFrom.domain) {
+        return {
+          riskLevel: "limited_evidence",
+          claimedBrand: genericClaim.claimName,
+          senderDisplayName: parsedFrom.displayName,
+          senderAddress: parsedFrom.address,
+          senderDomain: parsedFrom.domain,
+          evidence: [
+            ...evidenceItems,
+            evidence("limited_headers", "warning", "The sender domain is unavailable, so the sender name cannot be verified.")
+          ]
+        };
+      }
+
+      if (genericClaim.claimAppearsInAddress) {
+        return {
+          riskLevel: "safe",
+          claimedBrand: genericClaim.claimName,
+          senderDisplayName: parsedFrom.displayName,
+          senderAddress: parsedFrom.address,
+          senderDomain: parsedFrom.domain,
+          evidence: [
+            ...evidenceItems,
+            evidence(
+              "display_name_matches_address",
+              "info",
+              `The sender address includes ${genericClaim.claimName}.`,
+              { brand: genericClaim.claimName, senderAddress: parsedFrom.address, senderDomain: parsedFrom.domain }
+            )
+          ]
+        };
+      }
+
+      return {
+        riskLevel: "suspicious",
+        claimedBrand: genericClaim.claimName,
+        senderDisplayName: parsedFrom.displayName,
+        senderAddress: parsedFrom.address,
+        senderDomain: parsedFrom.domain,
+        evidence: [
+          ...evidenceItems,
+          evidence(
+            "display_name_address_mismatch",
+            "error",
+            `The sender name says ${genericClaim.claimName}, but the actual email is ${parsedFrom.address}.`,
+            { brand: genericClaim.claimName, senderAddress: parsedFrom.address, senderDomain: parsedFrom.domain }
+          )
+        ]
+      };
+    }
+
     return {
       riskLevel: parsedFrom.domain ? "safe" : "limited_evidence",
       claimedBrand: null,
@@ -119,4 +179,121 @@ export function analyzeMessage(
     senderDomain: parsedFrom.domain,
     evidence: evidenceItems
   };
+}
+
+interface DisplayNameClaim {
+  claimName: string;
+  claimAppearsInAddress: boolean;
+}
+
+const organizationSignalWords = new Set([
+  "account",
+  "accounts",
+  "alerts",
+  "billing",
+  "claim",
+  "connection",
+  "customer",
+  "delivery",
+  "deal",
+  "deals",
+  "gift",
+  "invoice",
+  "member",
+  "membership",
+  "notice",
+  "official",
+  "offer",
+  "offers",
+  "order",
+  "orders",
+  "prize",
+  "promo",
+  "promotion",
+  "recovery",
+  "reward",
+  "rewards",
+  "security",
+  "service",
+  "services",
+  "support",
+  "team",
+  "verification",
+  "verify",
+  "winner",
+  "wholesale"
+]);
+
+const nonIdentityWords = new Set([
+  "account",
+  "accounts",
+  "alert",
+  "alerts",
+  "billing",
+  "claim",
+  "connection",
+  "customer",
+  "delivery",
+  "deal",
+  "deals",
+  "email",
+  "gift",
+  "hello",
+  "invoice",
+  "mail",
+  "member",
+  "membership",
+  "notice",
+  "notification",
+  "notifications",
+  "official",
+  "offer",
+  "offers",
+  "order",
+  "orders",
+  "prize",
+  "promo",
+  "promotion",
+  "recovery",
+  "reward",
+  "rewards",
+  "security",
+  "service",
+  "services",
+  "support",
+  "team",
+  "verification",
+  "verify",
+  "winner",
+  "wholesale"
+]);
+
+function inferDisplayNameClaim(displayName: string, address: string, domain: string | null): DisplayNameClaim | null {
+  const words = displayName.match(/[a-z0-9]+/gi) ?? [];
+  const normalizedWords = words.map((word) => word.toLowerCase());
+  const hasOrganizationSignal = normalizedWords.some((word) => organizationSignalWords.has(word));
+
+  if (!hasOrganizationSignal) {
+    return null;
+  }
+
+  const claimIndex = normalizedWords.findIndex((word) => {
+    return word.length >= 3 && !nonIdentityWords.has(word);
+  });
+  if (claimIndex < 0) {
+    return null;
+  }
+
+  const claimToken = normalizedWords[claimIndex]!;
+  const claimName = words[claimIndex]!;
+  const addressText = normalizeForIdentityMatch(`${address} ${domain ?? ""}`);
+
+  return {
+    claimName,
+    claimAppearsInAddress: addressText.includes(claimToken)
+  };
+}
+
+function normalizeForIdentityMatch(value: string): string {
+  return value.toLowerCase().replace(/[^a-z0-9]+/g, "");
 }
