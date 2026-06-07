@@ -77,7 +77,12 @@ function render(view: PopupView): void {
 
 async function init(): Promise<void> {
   render(popupViewForState("busy"));
-  const initialState: PopupState = await hasGmailPermission(chrome.permissions) ? "ready" : "needs-permission";
+  const hasPermission = await hasGmailPermission(chrome.permissions);
+  if (hasPermission) {
+    await registerGmailProtection(chrome.scripting);
+    await activateCurrentGmailTab(chrome);
+  }
+  const initialState: PopupState = hasPermission ? "ready" : "needs-permission";
   render(popupViewForState(initialState));
 
   document.querySelector<HTMLButtonElement>("#enable-gmail")?.addEventListener("click", async () => {

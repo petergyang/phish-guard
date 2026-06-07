@@ -20,7 +20,7 @@ export interface ExtensionScriptingApi {
 }
 
 export interface ExtensionTabsApi {
-  query(queryInfo: { active: boolean; currentWindow: boolean }): Promise<Array<{ id?: number; url?: string }>>;
+  query(queryInfo: { active?: boolean; currentWindow?: boolean; url?: string | string[] }): Promise<Array<{ id?: number; url?: string }>>;
 }
 
 export interface ExtensionChromeApi {
@@ -57,9 +57,8 @@ export async function registerGmailProtection(api: ExtensionScriptingApi): Promi
   ]);
 }
 
-export async function activateCurrentGmailTab(api: Pick<ExtensionChromeApi, "scripting" | "tabs">): Promise<boolean> {
-  const [tab] = await api.tabs?.query({ active: true, currentWindow: true }) ?? [];
-  if (!tab?.id || !tab.url?.startsWith("https://mail.google.com/")) {
+export async function activateGmailTab(api: Pick<ExtensionChromeApi, "scripting">, tab: { id?: number; url?: string }): Promise<boolean> {
+  if (!tab.id || !tab.url?.startsWith("https://mail.google.com/")) {
     return false;
   }
 
@@ -72,4 +71,15 @@ export async function activateCurrentGmailTab(api: Pick<ExtensionChromeApi, "scr
     files: ["content/gmail-content.js"]
   });
   return true;
+}
+
+export async function activateCurrentGmailTab(api: Pick<ExtensionChromeApi, "scripting" | "tabs">): Promise<boolean> {
+  const [tab] = await api.tabs?.query({ active: true, currentWindow: true }) ?? [];
+  return tab ? activateGmailTab(api, tab) : false;
+}
+
+export async function activateOpenGmailTabs(api: Pick<ExtensionChromeApi, "scripting" | "tabs">): Promise<number> {
+  const tabs = await api.tabs?.query({ url: gmailHostPermission }) ?? [];
+  const results = await Promise.all(tabs.map((tab) => activateGmailTab(api, tab).catch(() => false)));
+  return results.filter(Boolean).length;
 }
