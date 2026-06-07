@@ -1,10 +1,10 @@
 # Phish Guard
 
+![Phish Guard warning inside Gmail](docs/assets/phish-guard-gmail-warning.svg)
+
 Phish Guard is a Chrome extension that warns you when a Gmail message looks like brand impersonation.
 
 If an email says it is from Costco, YouTube, PayPal, or another recognizable organization, but the sender address is unrelated, Phish Guard shows a warning inside the message before you click.
-
-![Phish Guard warning inside Gmail](docs/assets/phish-guard-gmail-warning.svg)
 
 ## How It Works
 
