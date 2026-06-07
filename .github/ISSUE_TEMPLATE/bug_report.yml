@@ -1,0 +1,60 @@
+name: Bug report
+description: Report something broken in Phish Guard.
+title: "Bug: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for testing Phish Guard. Do not paste full email bodies, attachments, private links, or screenshots that reveal personal messages.
+  - type: input
+    id: extension-version
+    attributes:
+      label: Extension version
+      description: "Example: v0.1.0-alpha or the commit SHA."
+    validations:
+      required: true
+  - type: input
+    id: chrome-version
+    attributes:
+      label: Chrome version
+      description: You can find this at chrome://version.
+    validations:
+      required: true
+  - type: dropdown
+    id: gmail-surface
+    attributes:
+      label: Where did it happen?
+      options:
+        - Gmail inbox message
+        - Gmail spam message
+        - Gmail search result message
+        - Extension popup
+        - Chrome extension install or permission prompt
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the behavior. Keep private email content out of the report.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect?
+    validations:
+      required: true
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshot
+      description: Optional. Redact names, email addresses, private messages, and links first.
+  - type: textarea
+    id: errors
+    attributes:
+      label: Chrome extension error text
+      description: If Chrome shows an error on the extension page, paste the error text only. Remove private email details.

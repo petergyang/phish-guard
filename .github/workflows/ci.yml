@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  test-build-package:
+    name: Test, build, audit, and package
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build all packages
+        run: npm run build
+
+      - name: Audit dependencies
+        run: npm audit --audit-level=moderate
+
+      - name: Package Chrome extension
+        run: npm run package:chrome-extension
+
+      - name: Upload Chrome extension ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: phish-guard-chrome-extension
+          path: dist/phish-guard-chrome-extension.zip
+          if-no-files-found: error

@@ -1,0 +1,43 @@
+name: False positive
+description: Report a warning that appeared on a message you believe is safe.
+title: "False positive: "
+labels:
+  - false-positive
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please do not paste full email bodies, attachments, private links, or screenshots that reveal personal messages. Sender display names and domains are usually enough.
+  - type: input
+    id: extension-version
+    attributes:
+      label: Extension version
+      description: "Example: v0.1.0-alpha or the commit SHA."
+    validations:
+      required: true
+  - type: input
+    id: sender-name
+    attributes:
+      label: Sender display name
+      description: "Example: Costco Rewards Connection."
+    validations:
+      required: true
+  - type: input
+    id: sender-domain
+    attributes:
+      label: Sender email domain
+      description: "Example: hotmail.com. You can redact the local part before the @ sign."
+    validations:
+      required: true
+  - type: textarea
+    id: why-safe
+    attributes:
+      label: Why do you think this message is safe?
+      description: Keep private message text out of the report.
+    validations:
+      required: true
+  - type: textarea
+    id: warning-copy
+    attributes:
+      label: Warning text shown
+      description: Paste the Phish Guard warning text. Remove private email details if needed.
