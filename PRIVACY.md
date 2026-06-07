@@ -24,7 +24,7 @@ The extension uses that information only to decide whether to show a local warni
 
 ## Data The Extension Does Not Use
 
-The current prototype does not read, collect, store, or transmit:
+The current version does not read, collect, store, or transmit:
 
 - Email message bodies
 - Attachments
