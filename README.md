@@ -35,7 +35,7 @@ The warning is intentionally plain. It tells you what looks wrong and what to do
 
 ## Install
 
-Phish Guard is being prepared for Chrome Web Store review. The public install link will live here after the unlisted listing is approved.
+Chrome Web Store link coming soon.
 
 For local development and private testing, see [docs/development/local-install.md](docs/development/local-install.md).
 

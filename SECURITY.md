@@ -4,7 +4,7 @@ Phish Guard is a security-adjacent browser extension, so reports should be usefu
 
 ## Supported Version
 
-This repository is currently an alpha prototype. Security reports should target the latest code on `main` or the latest GitHub prerelease.
+Security reports should target the latest code on `main` or the latest GitHub release.
 
 ## Reporting A Vulnerability
 
