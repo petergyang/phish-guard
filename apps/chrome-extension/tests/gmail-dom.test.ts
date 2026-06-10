@@ -80,6 +80,27 @@ describe("Gmail DOM metadata adapter", () => {
     expect(extraction.anchor?.className).toContain("gE");
   });
 
+  it("does not extract sender metadata from the Gmail inbox list view", () => {
+    document.body.innerHTML = `
+      <div role="main">
+        <div class="Cp">
+          <table>
+            <tbody>
+              <tr>
+                <td>
+                  <span class="gD" email="niverbertina9473@outlook.com" name="H.B.O">H.B.O</span>
+                  <span>Re: Your subscription could not be renewed</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `;
+
+    expect(extractVisibleGmailMetadata(document)).toEqual({ metadata: null, anchor: null });
+  });
+
   it("returns empty metadata when the sender row is missing", () => {
     document.body.innerHTML = `
       <div class="adn ads">

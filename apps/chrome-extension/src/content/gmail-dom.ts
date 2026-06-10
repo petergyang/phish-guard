@@ -30,26 +30,35 @@ const visibleSenderHeaderSelectors = [
 const angleBracketSenderPattern = /(.+?)\s*<([^<>\s@]+@[^<>\s@]+\.[^<>\s@]+)>/;
 
 export function extractVisibleGmailMetadata(root: ParentNode = document): GmailDomExtraction {
-  const senderElement = findFirst(root, senderSelectors);
+  const subject = readSubject(root);
+  if (!subject) {
+    return { metadata: null, anchor: null };
+  }
+
+  const senderElement = findFirstOpenMessageSender(root);
   if (senderElement) {
     const senderAddress = readAttribute(senderElement, "email") ?? readAttribute(senderElement, "data-hovercard-id") ?? "";
     const senderDisplayName = readAttribute(senderElement, "name") ?? senderElement.textContent?.trim() ?? "";
-    return extractionFromSender(senderElement, senderDisplayName, senderAddress);
+    return extractionFromSender(senderElement, senderDisplayName, senderAddress, subject);
   }
 
   const visibleHeaderSender = findVisibleHeaderSender(root);
   if (visibleHeaderSender) {
-    return extractionFromSender(visibleHeaderSender.element, visibleHeaderSender.displayName, visibleHeaderSender.address);
+    return extractionFromSender(visibleHeaderSender.element, visibleHeaderSender.displayName, visibleHeaderSender.address, subject);
   }
 
   return { metadata: null, anchor: null };
 }
 
-function extractionFromSender(senderElement: Element, senderDisplayName: string, senderAddress: string): GmailDomExtraction {
+function extractionFromSender(
+  senderElement: Element,
+  senderDisplayName: string,
+  senderAddress: string,
+  subject: string
+): GmailDomExtraction {
   const header = senderElement.closest(messageHeaderSelectors.join(","));
   const messageContent = header?.matches(".gs") ? header : header?.querySelector(".gs");
   const topOfMessageContent = messageContent?.firstElementChild;
-  const subject = readSubject(senderElement.ownerDocument);
   const bodyText = readBodyText(messageContent ?? header);
   const links = readBodyLinks(messageContent ?? header);
 
@@ -63,6 +72,18 @@ function extractionFromSender(senderElement: Element, senderDisplayName: string,
     },
     anchor: topOfMessageContent ?? header ?? senderElement
   };
+}
+
+function findFirstOpenMessageSender(root: ParentNode): Element | null {
+  for (const selector of senderSelectors) {
+    const matches = Array.from(root.querySelectorAll(selector));
+    for (const match of matches) {
+      if (!isProbablyVisible(match)) continue;
+      if (match.closest(messageHeaderSelectors.join(","))) return match;
+    }
+  }
+
+  return null;
 }
 
 function findVisibleHeaderSender(root: ParentNode): { element: Element; displayName: string; address: string } | null {

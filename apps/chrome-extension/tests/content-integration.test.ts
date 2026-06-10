@@ -62,6 +62,38 @@ describe("Gmail content integration", () => {
     expect(document.querySelector(`#${warningBannerId}`)).toBeNull();
   });
 
+  it("removes an old warning when Gmail navigates back to the inbox list", () => {
+    document.body.innerHTML = `
+      <main id="gmail-root">
+        <h2 class="hP">Security alert</h2>
+        <div class="adn ads">
+          <span class="gD" email="random@gmail.com" name="YouTube Account Recovery">YouTube Account Recovery</span>
+        </div>
+      </main>
+    `;
+
+    checkOpenGmailMessage(document);
+    expect(document.querySelector(`#${warningBannerId}`)).not.toBeNull();
+
+    document.querySelector("#gmail-root")!.innerHTML = `
+      <div role="main">
+        <table>
+          <tbody>
+            <tr>
+              <td>
+                <span class="gD" email="niverbertina9473@outlook.com" name="H.B.O">H.B.O</span>
+                <span>Re: Your subscription could not be renewed</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    `;
+
+    checkOpenGmailMessage(document);
+    expect(document.querySelector(`#${warningBannerId}`)).toBeNull();
+  });
+
   it("warns for a Costco rewards sender in Gmail spam", () => {
     document.body.innerHTML = `
       <h2 class="hP">TODAY'S WINNER!</h2>
