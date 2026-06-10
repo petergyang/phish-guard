@@ -69,13 +69,16 @@ describe("Chrome extension store readiness", () => {
     expect(existsSync(screenshotPath), `${screenshotPath} should exist`).toBe(true);
   });
 
-  it("keeps public README free of developer-install friction", () => {
+  it("keeps public README install steps clear for private testers", () => {
     const readme = readFileSync("README.md", "utf8");
 
     expect(readme).not.toContain("Install The Alpha");
-    expect(readme).not.toContain("Developer mode");
-    expect(readme).not.toContain("Load unpacked");
     expect(readme).toContain("Chrome Web Store");
+    expect(readme).toContain("phish-guard-chrome-extension.zip");
+    expect(readme).toContain("chrome://extensions");
+    expect(readme).toContain("Developer mode");
+    expect(readme).toContain("Load unpacked");
+    expect(readme).toContain("turn on Gmail warnings");
     expect(readme).toContain("docs/development/local-install.md");
   });
 
