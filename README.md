@@ -2,15 +2,19 @@
 
 ![Phish Guard warning for a Costco impersonation email](docs/assets/readme/costco-warning.png)
 
-Phish Guard is a Chrome extension that warns you inside Gmail when an email looks like it is pretending to be a trusted brand.
-
-It is built for the moment that matters: before you click a link in a suspicious message.
+Phish Guard is a Chrome extension that warns you inside Gmail when an email is pretending to be a company you trust.
 
 ## Why Use It
 
-- It shows a plain warning when the sender looks wrong.
-- It explains the problem in normal language.
-- It helps you pause before clicking links in fake reward, account, payment, or subscription emails.
+Scam emails look real now. They copy the names and logos of companies you know — Amazon, Netflix, PayPal, Costco, your bank — and say a payment failed, a package is stuck, or you won a reward. The goal is to rush you into clicking a link before you think.
+
+Some of these land in your inbox even with Gmail's spam filter. Phish Guard is a second pair of eyes for exactly that moment:
+
+- When the sender does not match the company the email claims to be, a plain warning appears right above the message.
+- The warning tells you what is wrong in normal language: who the email pretends to be, and what the real sender address is.
+- It stays quiet for normal email. A friend mentioning YouTube, a newsletter talking about Apple, or a small business emailing from its own Gmail address will not set it off.
+
+It is free, runs entirely on your computer, and needs no account or signup.
 
 ![Phish Guard warning for an HBO impersonation email](docs/assets/readme/hbo-warning.png)
 
@@ -23,7 +27,7 @@ Phish Guard checks only the email you have open. It looks at:
 - The visible words and links in that open email.
 - Whether a brand name and sender address look like they belong together.
 
-It should not warn just because a friend mentions YouTube, a newsletter talks about Apple, or a normal email has social links in the footer.
+It recognizes more than 25 commonly impersonated brands, including Amazon, Netflix, PayPal, Apple, Microsoft, Google, USPS, FedEx, and major banks, and it also catches impersonation of companies it has never heard of by comparing the sender name to the sender address.
 
 ## Privacy
 
@@ -49,7 +53,7 @@ Read the full policy in [PRIVACY.md](PRIVACY.md).
 
 Chrome Web Store link coming soon.
 
-For now, install it manually from GitHub:
+For now, install it manually from GitHub. It takes about two minutes. Turning on "Developer mode" is just how Chrome lets you install extensions outside the store — it does not change anything else about your browser:
 
 ![Chrome extension setup screen](docs/assets/readme/chrome-extension-setup.svg)
 
