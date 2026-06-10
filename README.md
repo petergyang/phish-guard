@@ -49,19 +49,19 @@ Read the full policy in [PRIVACY.md](PRIVACY.md).
 
 Chrome Web Store link coming soon.
 
-For now, private testing takes a few manual Chrome steps:
+For now, install it manually from GitHub:
 
 ![Chrome extension setup screen](docs/assets/readme/chrome-extension-setup.svg)
 
-1. Download `phish-guard-chrome-extension.zip` from the latest GitHub release.
-2. Unzip it.
-3. Open `chrome://extensions`.
-4. Turn on **Developer mode**.
-5. Click **Load unpacked**.
+1. Go to [Phish Guard releases](https://github.com/petergyang/phish-guard/releases) and open the newest release.
+2. Download `phish-guard-chrome-extension.zip`.
+3. Unzip the file.
+4. Open Chrome and go to `chrome://extensions`.
+5. Turn on **Developer mode**, then click **Load unpacked**.
 6. Select the unzipped folder that contains `manifest.json`.
 7. Open Gmail, click the Phish Guard toolbar icon, and turn on Gmail warnings.
 
-For local development, see [docs/development/local-install.md](docs/development/local-install.md).
+If Chrome shows extension errors later, go back to `chrome://extensions`, click **Reload** on Phish Guard, and refresh Gmail.
 
 ## Technical Notes
 
@@ -73,5 +73,7 @@ npm run package:chrome-extension
 ```
 
 `npm run eval:detector` runs a synthetic phishing/safe-message test set. It is a regression check, not a real-world accuracy claim.
+
+For a local source build, run `npm install`, `npm test`, and `npm run build:chrome-extension`, then load `dist/chrome-extension` from `chrome://extensions`.
 
 Report bugs and false positives with GitHub issues, but do not post full email bodies, attachments, private links, or private inbox screenshots. Sender display names and domains are usually enough.

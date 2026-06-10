@@ -81,7 +81,8 @@ describe("Chrome extension store readiness", () => {
     expect(readme).toContain("Developer mode");
     expect(readme).toContain("Load unpacked");
     expect(readme).toContain("turn on Gmail warnings");
-    expect(readme).toContain("docs/development/local-install.md");
+    expect(readme).toContain("contains `manifest.json`");
+    expect(readme).toContain("For a local source build");
   });
 
   it("keeps store and extension image assets available", () => {
