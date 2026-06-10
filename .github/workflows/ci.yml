@@ -27,6 +27,9 @@ jobs:
       - name: Run tests
         run: npm test
 
+      - name: Evaluate detector corpus
+        run: npm run eval:detector
+
       - name: Build all packages
         run: npm run build
 

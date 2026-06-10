@@ -23,6 +23,7 @@ Use this checklist before submitting to Chrome Web Store, publishing a GitHub re
 ```bash
 npm ci
 npm test
+npm run eval:detector
 npm run build
 npm audit --audit-level=moderate
 npm run package:chrome-extension
@@ -66,8 +67,8 @@ Use a test Gmail account when possible.
 - Attach `dist/phish-guard-chrome-extension.zip`.
 - Include the short privacy boundary:
   - Runs locally.
-  - Reads the visible Gmail sender row.
-  - Does not read message bodies.
+  - Reads the open Gmail message.
+  - Does not read attachments or inbox history.
   - Does not upload email data.
 
 ## Chrome Web Store Prep

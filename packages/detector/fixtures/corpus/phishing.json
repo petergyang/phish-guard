@@ -1,0 +1,182 @@
+[
+  {
+    "id": "hbo-expired-subscription-outlook",
+    "label": "phishing",
+    "from": "\"H.B.O\" <niverbertina9473@outlook.com>",
+    "subject": "Re: Your subscription could not be renewed",
+    "bodyText": "HBOmax Hurry! This offer will expire soon. Your membership has expired!",
+    "links": [
+      {
+        "href": "https://hbo-renewal.example/login",
+        "text": "Renew membership"
+      }
+    ],
+    "expectedBrand": "HBO",
+    "notes": "Brand-like dotted acronym sender, public mailbox, urgency, suspicious link."
+  },
+  {
+    "id": "hbo-vague-sender-body-claim",
+    "label": "phishing",
+    "from": "\"Subscription Center\" <niverbertina9473@outlook.com>",
+    "subject": "Your subscription could not be renewed",
+    "bodyText": "HBOmax Hurry! Your membership has expired. Renew now to avoid losing access.",
+    "links": [
+      {
+        "href": "https://hbo-renewal.example/login",
+        "text": "Renew now"
+      }
+    ],
+    "expectedBrand": "HBO Max",
+    "notes": "Brand only appears in visible body text and link context."
+  },
+  {
+    "id": "costco-reward-hotmail",
+    "label": "phishing",
+    "from": "\"Costco Rewards Connection\" <heidmaureen9558@hotmail.com>",
+    "subject": "TODAY'S WINNER!",
+    "bodyText": "Costco Wholesale Congratulations! You have been selected to receive an exclusive reward.",
+    "links": [
+      {
+        "href": "https://costco-rewards.example/claim",
+        "text": "Claim reward"
+      }
+    ],
+    "expectedBrand": "Costco",
+    "notes": "Reward/prize scam from a personal mailbox."
+  },
+  {
+    "id": "costco-acronym-hotmail",
+    "label": "phishing",
+    "from": "\"Costco WMU\" <sanceslaman948@hotmail.com>",
+    "subject": "Tell us your view",
+    "bodyText": "Costco Wholesale Congratulations! Your reward expires soon.",
+    "links": [
+      {
+        "href": "https://costco-survey.example/offer",
+        "text": "Start survey"
+      }
+    ],
+    "expectedBrand": "Costco",
+    "notes": "Brand plus acronym display name."
+  },
+  {
+    "id": "paypal-verified-sender-bad-link",
+    "label": "phishing",
+    "from": "\"PayPal\" <security@paypal.com>",
+    "subject": "Security alert",
+    "bodyText": "PayPal security alert. Verify your account.",
+    "links": [
+      {
+        "href": "https://paypal-security.example/login",
+        "text": "Verify account"
+      }
+    ],
+    "expectedBrand": "PayPal",
+    "notes": "Trusted-looking sender but link domain mismatch."
+  },
+  {
+    "id": "paypal-google-redirect",
+    "label": "phishing",
+    "from": "\"PayPal\" <service@paypal.com>",
+    "subject": "Account verification needed",
+    "bodyText": "PayPal security alert. Verify your account today.",
+    "links": [
+      {
+        "href": "https://www.google.com/url?q=https%3A%2F%2Fpaypal-login.example%2Fverify",
+        "text": "Verify"
+      }
+    ],
+    "expectedBrand": "PayPal",
+    "notes": "Visible redirect URL points to unrelated destination."
+  },
+  {
+    "id": "netflix-shortener",
+    "label": "phishing",
+    "from": "\"Netflix Account Support\" <alerts@example.net>",
+    "subject": "Payment failed",
+    "bodyText": "Netflix billing notice. Your account will be suspended unless payment is updated.",
+    "links": [
+      {
+        "href": "https://bit.ly/netflix-update",
+        "text": "Update payment"
+      }
+    ],
+    "expectedBrand": "Netflix",
+    "notes": "Brand-like sender plus URL shortener."
+  },
+  {
+    "id": "youtube-recovery-gmail",
+    "label": "phishing",
+    "from": "\"YouTube Account Recovery\" <random.gmail.sender@gmail.com>",
+    "subject": "Recover your YouTube channel",
+    "bodyText": "YouTube recovery request. Verify ownership now.",
+    "links": [
+      {
+        "href": "https://youtube-appeal.example/recover",
+        "text": "Recover account"
+      }
+    ],
+    "expectedBrand": "YouTube",
+    "notes": "Protected brand from a public Gmail account."
+  },
+  {
+    "id": "apple-id-icloud-public-mailbox",
+    "label": "phishing",
+    "from": "\"Apple ID Support\" <appleid.notice@outlook.com>",
+    "subject": "Your Apple ID has been locked",
+    "bodyText": "Apple ID security notice. Verify your account to restore access.",
+    "links": [
+      {
+        "href": "https://appleid-restore.example/session",
+        "text": "Restore access"
+      }
+    ],
+    "expectedBrand": "Apple",
+    "notes": "Apple account-lock scam from unrelated public mailbox."
+  },
+  {
+    "id": "microsoft-security-unrelated",
+    "label": "phishing",
+    "from": "\"Microsoft Security\" <secure-notice@example.net>",
+    "subject": "Unusual sign-in activity",
+    "bodyText": "Microsoft account security alert. Verify recent sign-in activity.",
+    "links": [
+      {
+        "href": "https://microsoft-secure.example/check",
+        "text": "Review activity"
+      }
+    ],
+    "expectedBrand": "Microsoft",
+    "notes": "Microsoft account scam from unrelated domain."
+  },
+  {
+    "id": "generic-acme-invoice",
+    "label": "phishing",
+    "from": "\"Acme Invoice Team\" <billing-alert@example.net>",
+    "subject": "Invoice overdue",
+    "bodyText": "Acme billing invoice notice. Payment is overdue.",
+    "links": [
+      {
+        "href": "https://acme-payments.example/invoice",
+        "text": "Pay invoice"
+      }
+    ],
+    "expectedBrand": "Acme",
+    "notes": "Generic organization-style sender with billing language."
+  },
+  {
+    "id": "google-drive-storage-gmail",
+    "label": "phishing",
+    "from": "\"Google Storage\" <drive-alert@gmail.com>",
+    "subject": "Your storage payment failed",
+    "bodyText": "Google Drive payment failed. Verify billing to keep access.",
+    "links": [
+      {
+        "href": "https://google-storage.example/billing",
+        "text": "Update billing"
+      }
+    ],
+    "expectedBrand": "Google",
+    "notes": "Google-branded billing scam from public Gmail."
+  }
+]

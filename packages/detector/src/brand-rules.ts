@@ -49,6 +49,12 @@ export const defaultBrandRules: BrandRule[] = [
     brandName: "Microsoft",
     displayNames: ["microsoft", "microsoft account", "microsoft security"],
     trustedDomains: ["microsoft.com", "account.microsoft.com"]
+  },
+  {
+    id: "hbo-max",
+    brandName: "HBO Max",
+    displayNames: ["hbo", "hbo max", "hbomax"],
+    trustedDomains: ["hbo.com", "max.com", "hbomax.com"]
   }
 ];
 

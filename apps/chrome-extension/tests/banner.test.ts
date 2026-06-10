@@ -24,6 +24,18 @@ describe("inline warning banner", () => {
     expect(buildInlineWarningModel(result)).toBeNull();
   });
 
+  it("includes suspicious link domains in the warning copy", () => {
+    const result = analyzeMessage({
+      from: "\"PayPal\" <security@paypal.com>",
+      bodyText: "PayPal security alert. Verify your account.",
+      links: [{ href: "https://paypal-security.example/login", text: "Verify" }]
+    });
+
+    expect(buildInlineWarningModel(result)?.subtitle).toBe(
+      "Sender email: security@paypal.com. Suspicious link: paypal-security.example. Avoid links. Use Gmail's Report spam button or delete the email."
+    );
+  });
+
   it("renders one banner and updates without duplicates", () => {
     document.body.innerHTML = `
       <div id="host">

@@ -1,5 +1,5 @@
 import {
-  activateCurrentGmailTab,
+  activateOpenGmailTabs,
   hasGmailPermission,
   registerGmailProtection,
   requestGmailPermission,
@@ -60,7 +60,7 @@ export async function enableGmailProtection(api: ExtensionChromeApi): Promise<Po
   }
 
   await registerGmailProtection(api.scripting);
-  await activateCurrentGmailTab(api);
+  await activateOpenGmailTabs(api);
   return "ready";
 }
 
@@ -80,7 +80,7 @@ async function init(): Promise<void> {
   const hasPermission = await hasGmailPermission(chrome.permissions);
   if (hasPermission) {
     await registerGmailProtection(chrome.scripting);
-    await activateCurrentGmailTab(chrome);
+    await activateOpenGmailTabs(chrome);
   }
   const initialState: PopupState = hasPermission ? "ready" : "needs-permission";
   render(popupViewForState(initialState));

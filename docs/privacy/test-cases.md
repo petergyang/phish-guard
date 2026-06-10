@@ -6,11 +6,12 @@
 - A generic organization-style sender name, such as "Costco Rewards Connection", warns when the claimed name is absent from the sender address.
 - A legitimate YouTube sender fixture stays quiet.
 - A malformed sender produces limited evidence, not a safe result.
-- Body-like fields are ignored before metadata reaches the detector.
+- Body text with a suspicious brand claim can trigger a warning.
+- Link URLs that point away from the claimed brand can trigger a warning.
 - A friend mentioning a brand in the subject does not trigger a warning.
 - A normal personal display name does not warn just because it has multiple words.
 - The Chrome extension manifest uses optional `mail.google.com` access and no broad host permissions.
-- The Chrome extension DOM adapter ignores body, link, and attachment nodes.
+- The Chrome extension DOM adapter ignores attachment nodes and unopened messages.
 - Lookalike domains such as `youtube.com.attacker.example` do not match trusted-domain rules.
 
 ## Required Manual Checks
@@ -31,4 +32,4 @@
 
 ## Regression Rule
 
-If any test begins passing message body, snippet, link, or attachment fields to the detector, treat it as a privacy regression.
+If any test begins passing attachments, inbox history, unopened messages, or private real-email fixtures to the detector, treat it as a privacy regression.

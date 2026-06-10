@@ -1,0 +1,172 @@
+[
+  {
+    "id": "friend-mentioned-youtube",
+    "label": "safe",
+    "from": "\"A friend\" <friend@example.com>",
+    "subject": "your YouTube is really great",
+    "bodyText": "I liked your YouTube video. Lunch this week?",
+    "links": [],
+    "expectedBrand": null,
+    "notes": "Casual brand mention from a personal contact."
+  },
+  {
+    "id": "strava-comment",
+    "label": "safe",
+    "from": "\"Rosalyn Yang\" <no-reply@strava.com>",
+    "subject": "Rosalyn commented on Morning Run",
+    "bodyText": "Rosalyn left a comment on your activity.",
+    "links": [
+      {
+        "href": "https://www.strava.com/activities/123",
+        "text": "View activity"
+      }
+    ],
+    "expectedBrand": null,
+    "notes": "Normal app notification from a brand not claimed in sender display name."
+  },
+  {
+    "id": "youtube-legit-update",
+    "label": "safe",
+    "from": "\"YouTube\" <updates@youtube.com>",
+    "subject": "Your weekly channel update",
+    "bodyText": "YouTube Studio update for your channel.",
+    "links": [
+      {
+        "href": "https://studio.youtube.com/channel/example",
+        "text": "Open Studio"
+      }
+    ],
+    "expectedBrand": "YouTube",
+    "notes": "Trusted sender and trusted link domain."
+  },
+  {
+    "id": "paypal-legit-receipt",
+    "label": "safe",
+    "from": "\"PayPal\" <service@paypal.com>",
+    "subject": "Receipt for your payment",
+    "bodyText": "PayPal receipt for your recent transaction.",
+    "links": [
+      {
+        "href": "https://www.paypal.com/activity",
+        "text": "View activity"
+      }
+    ],
+    "expectedBrand": "PayPal",
+    "notes": "Legitimate PayPal sender and link."
+  },
+  {
+    "id": "hbo-max-legit",
+    "label": "safe",
+    "from": "\"HBO Max\" <hello@max.com>",
+    "subject": "Your membership renewal reminder",
+    "bodyText": "HBO Max membership renewal reminder.",
+    "links": [
+      {
+        "href": "https://help.max.com/billing",
+        "text": "Manage account"
+      }
+    ],
+    "expectedBrand": "HBO Max",
+    "notes": "Trusted HBO Max domain and trusted link."
+  },
+  {
+    "id": "work-aws-kickoff",
+    "label": "safe",
+    "from": "\"Benjamin Smid\" <benjamin@freemanandforrest.com>",
+    "subject": "Time Sensitive Briefing Opportunity with AWS / Kiro",
+    "bodyText": "Hi Peter, please find your brief attached. Thanks, Ben.",
+    "links": [],
+    "expectedBrand": null,
+    "notes": "Work email mentions a brand in subject but does not claim to be that brand."
+  },
+  {
+    "id": "google-calendar-calcom",
+    "label": "safe",
+    "from": "\"Cal.com\" <hello@cal.com>",
+    "subject": "Podcast between Peter and Sue Khim",
+    "bodyText": "A new event has been scheduled. Google Calendar status is connected.",
+    "links": [
+      {
+        "href": "https://app.cal.com/booking/example",
+        "text": "Manage booking"
+      }
+    ],
+    "expectedBrand": null,
+    "notes": "Calendar tool mentions Google Calendar but does not pretend to be Google."
+  },
+  {
+    "id": "newsletter-mentions-apple",
+    "label": "safe",
+    "from": "\"Tech Weekly\" <newsletter@techweekly.example>",
+    "subject": "Apple, Google, and Microsoft earnings recap",
+    "bodyText": "This newsletter summarizes Apple, Google, and Microsoft earnings.",
+    "links": [
+      {
+        "href": "https://techweekly.example/archive",
+        "text": "Read more"
+      }
+    ],
+    "expectedBrand": null,
+    "notes": "Editorial brand mentions without account/payment/urgency context."
+  },
+  {
+    "id": "personal-public-mailbox",
+    "label": "safe",
+    "from": "\"Rosalyn Yang Photography\" <hello@gmail.com>",
+    "subject": "Photo gallery",
+    "bodyText": "Here is the family photo gallery from last weekend.",
+    "links": [
+      {
+        "href": "https://photos.example/gallery",
+        "text": "View photos"
+      }
+    ],
+    "expectedBrand": null,
+    "notes": "Three-word personal display name from public mailbox."
+  },
+  {
+    "id": "acme-real-domain",
+    "label": "safe",
+    "from": "\"Acme Rewards Team\" <rewards@acme.example>",
+    "subject": "Your monthly rewards summary",
+    "bodyText": "Acme rewards summary for your account.",
+    "links": [
+      {
+        "href": "https://rewards.acme.example/summary",
+        "text": "View summary"
+      }
+    ],
+    "expectedBrand": "Acme",
+    "notes": "Generic organization-style name appears in sender address/domain."
+  },
+  {
+    "id": "github-security-legit",
+    "label": "safe",
+    "from": "\"GitHub\" <noreply@github.com>",
+    "subject": "Security alert",
+    "bodyText": "A personal access token was added to your account.",
+    "links": [
+      {
+        "href": "https://github.com/settings/tokens",
+        "text": "View settings"
+      }
+    ],
+    "expectedBrand": null,
+    "notes": "Legitimate security language for a brand not yet in protected rules."
+  },
+  {
+    "id": "bank-newsletter-shortener",
+    "label": "safe",
+    "from": "\"Fintech Reads\" <newsletter@fintechreads.example>",
+    "subject": "This week in banking",
+    "bodyText": "A roundup of banking and payments news.",
+    "links": [
+      {
+        "href": "https://lnkd.in/example",
+        "text": "LinkedIn post"
+      }
+    ],
+    "expectedBrand": null,
+    "notes": "Shortener in a non-brand-claim newsletter should not become phishing by itself."
+  }
+]

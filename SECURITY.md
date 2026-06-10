@@ -40,9 +40,10 @@ Helpful reports include:
 The current Gmail MVP should stay within this boundary:
 
 - Optional host access for `https://mail.google.com/*`
-- Local sender-row analysis
-- No message-body scanning
+- Local analysis of the open message only
+- Visible sender, subject, body-text, and link-URL scanning
 - No attachment scanning
+- No link visits
 - No backend upload
 - No cookies, webRequest, or `<all_urls>` permission
 

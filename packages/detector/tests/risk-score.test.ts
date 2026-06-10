@@ -36,6 +36,16 @@ describe("analyzeMessage", () => {
     expect(result.evidence.map((item) => item.kind)).toContain("display_name_address_mismatch");
   });
 
+  it("flags a brand-like sender name with an acronym from a public mailbox", () => {
+    const result = analyzeMessage({
+      from: "\"Costco WMU\" <sanceslaman948@hotmail.com>"
+    });
+
+    expect(result.riskLevel).toBe("suspicious");
+    expect(result.claimedBrand).toBe("Costco");
+    expect(result.evidence.map((item) => item.kind)).toContain("display_name_address_mismatch");
+  });
+
   it("flags a generic brand claim with organization wording", () => {
     const result = analyzeMessage({
       from: "\"Netflix Account Support\" <alerts@example.net>"
@@ -44,6 +54,91 @@ describe("analyzeMessage", () => {
     expect(result.riskLevel).toBe("suspicious");
     expect(result.claimedBrand).toBe("Netflix");
     expect(result.evidence.map((item) => item.kind)).toContain("display_name_address_mismatch");
+  });
+
+  it("flags a branded subscription warning in the body from an unrelated sender", () => {
+    const result = analyzeMessage({
+      from: "\"H.B.O\" <niverbertina9473@outlook.com>",
+      subject: "Re: Your subscription could not be renewed",
+      bodyText: "HBOmax Hurry! This offer will expire soon. Your membership has expired!"
+    });
+
+    expect(result.riskLevel).toBe("suspicious");
+    expect(result.claimedBrand).toBe("HBO");
+    expect(result.evidence.map((item) => item.kind)).toContain("display_name_address_mismatch");
+  });
+
+  it("flags body brand claims with scam context even when the sender name is vague", () => {
+    const result = analyzeMessage({
+      from: "\"Subscription Center\" <niverbertina9473@outlook.com>",
+      subject: "Re: Your subscription could not be renewed",
+      bodyText: "HBOmax Hurry! This offer will expire soon. Your membership has expired!",
+      links: [{ href: "https://hbo-renewal.example/login", text: "Renew now" }]
+    });
+
+    expect(result.riskLevel).toBe("suspicious");
+    expect(result.claimedBrand).toBe("HBO Max");
+    expect(result.evidence.map((item) => item.kind)).toContain("body_brand_suspicious_context");
+    expect(result.evidence.map((item) => item.kind)).toContain("brand_domain_mismatch");
+    expect(result.evidence.map((item) => item.kind)).toContain("link_domain_mismatch");
+  });
+
+  it("flags a suspicious link even when the sender domain matches the brand", () => {
+    const result = analyzeMessage({
+      from: "\"PayPal\" <security@paypal.com>",
+      bodyText: "PayPal security alert. Verify your account.",
+      links: [{ href: "https://paypal-security.example/login", text: "Verify account" }]
+    });
+
+    expect(result.riskLevel).toBe("suspicious");
+    expect(result.claimedBrand).toBe("PayPal");
+    expect(result.evidence.map((item) => item.kind)).toContain("trusted_domain");
+    expect(result.evidence.map((item) => item.kind)).toContain("link_domain_mismatch");
+  });
+
+  it("does not flag trusted brand links", () => {
+    const result = analyzeMessage({
+      from: "\"HBO Max\" <hello@max.com>",
+      bodyText: "HBO Max membership renewal reminder.",
+      links: [{ href: "https://help.max.com/billing", text: "Manage account" }]
+    });
+
+    expect(result.riskLevel).toBe("safe");
+    expect(result.claimedBrand).toBe("HBO Max");
+    expect(result.evidence.map((item) => item.kind)).not.toContain("link_domain_mismatch");
+  });
+
+  it("flags shortened links in brand-like messages", () => {
+    const result = analyzeMessage({
+      from: "\"Netflix Account Support\" <alerts@example.net>",
+      links: [{ href: "https://bit.ly/example", text: "Renew" }]
+    });
+
+    expect(result.riskLevel).toBe("suspicious");
+    expect(result.evidence.map((item) => item.kind)).toContain("link_shortener");
+  });
+
+  it("unwraps visible redirect URLs before comparing domains", () => {
+    const result = analyzeMessage({
+      from: "\"PayPal\" <service@paypal.com>",
+      bodyText: "PayPal security alert. Verify your account.",
+      links: [{ href: "https://www.google.com/url?q=https%3A%2F%2Fpaypal-login.example%2Fverify", text: "Verify" }]
+    });
+
+    expect(result.riskLevel).toBe("suspicious");
+    expect(result.evidence.map((item) => item.kind)).toContain("link_domain_mismatch");
+    expect(result.evidence.find((item) => item.kind === "link_domain_mismatch")?.data?.linkDomain).toBe("paypal-login.example");
+  });
+
+  it("does not warn when body text casually mentions a brand without scam context", () => {
+    const result = analyzeMessage({
+      from: "\"A friend\" <friend@example.com>",
+      subject: "your YouTube is really great",
+      bodyText: "I liked your YouTube video."
+    });
+
+    expect(result.riskLevel).toBe("safe");
+    expect(result.claimedBrand).toBeNull();
   });
 
   it("does not warn when an organization-like display name appears in the sender address", () => {

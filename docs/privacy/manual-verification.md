@@ -11,6 +11,7 @@ Run these commands from the repo root:
 ```bash
 npm install
 npm test
+npm run eval:detector
 npm run build
 ```
 
@@ -21,7 +22,7 @@ npm run build
 3. Enable Developer mode.
 4. Load `dist/chrome-extension` as an unpacked extension.
 5. Open the extension popup.
-6. Confirm the popup says it uses the sender row only, does not read message bodies, and does not upload email.
+6. Confirm the popup says it checks the open message locally and does not upload email.
 7. Confirm the popup explains that Chrome says "change" because the extension adds a warning banner, not because it edits email.
 8. Click `Turn on Gmail warnings`.
 9. Confirm Chrome asks for access only to `mail.google.com`.
@@ -53,7 +54,7 @@ After the push, open the linked Apps Script project and create a test deployment
 - Confirm the card stays quiet or safe.
 - Open a message with malformed sender metadata.
 - Confirm the card shows limited evidence rather than safe.
-- Confirm no body, link, attachment, or snippet data appears in logs, screenshots, fixtures, or detector inputs.
+- Confirm no private body, link, attachment, or snippet data appears in logs, screenshots, or fixtures.
 
 ## Demo Evidence
 
@@ -69,5 +70,5 @@ Unsafe demo artifacts include:
 
 - real inbox screenshots
 - raw private email headers from personal mail
-- message bodies or snippets
+- real message bodies or snippets
 - attachment names from real mail

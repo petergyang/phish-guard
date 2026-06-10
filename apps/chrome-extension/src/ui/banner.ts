@@ -15,11 +15,15 @@ export function buildInlineWarningModel(result: DetectionResult): InlineWarningM
 
   const brand = result.claimedBrand ?? "a trusted brand";
   const sender = result.senderAddress || result.senderDomain || "an unknown sender";
+  const suspiciousLink = result.evidence.find((item) => {
+    return item.kind === "link_domain_mismatch" || item.kind === "link_shortener";
+  })?.data?.linkDomain;
+  const linkContext = suspiciousLink ? ` Suspicious link: ${suspiciousLink}.` : "";
 
   return {
     state: "warning",
     title: `Phish Guard warning: This is likely not from ${brand}.`,
-    subtitle: `Sender email: ${sender}. Avoid links. Use Gmail's Report spam button or delete the email.`
+    subtitle: `Sender email: ${sender}.${linkContext} Avoid links. Use Gmail's Report spam button or delete the email.`
   };
 }
 

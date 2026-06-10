@@ -10,7 +10,7 @@ The Gmail add-on remains a strong long-term path after Google Workspace Marketpl
 
 | Option | Use When | Why Not First |
 |---|---|---|
-| Chrome extension | Normal users need an inline warning and a no-OAuth install path. | DOM access can expose rendered message content, so implementation must constrain itself to the sender row. |
+| Chrome extension | Normal users need an inline warning and a no-OAuth install path. | DOM access can expose rendered message content, so implementation must constrain itself to the open message and stay local. |
 | Gmail add-on | The product needs a Google-native verified add-on with narrow current-message access. | Side-panel UI is easy to miss, and unverified test deployments are not normie-friendly. |
 | Gmail API/backend scanner | The product needs labels, background scans, or org-level workflows. | Broader scopes, server data handling, and restricted-scope review add heavy trust burden. |
 | Enterprise gateway | Selling to organizations that control mail routing. | Wrong shape for a consumer Gmail MVP. |

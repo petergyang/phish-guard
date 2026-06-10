@@ -15,22 +15,23 @@ describe("Gmail DOM metadata adapter", () => {
 
     const result = extractVisibleGmailMetadata(document);
 
-    expect(result.metadata).toEqual({
+    expect(result.metadata).toMatchObject({
       from: "\"YouTube Account Recovery\" <random@gmail.com>",
+      subject: "Account recovery",
+      bodyText: "Body text should not matter.",
       provider: "gmail-chrome-extension"
     });
     expect(result.anchor?.className).toContain("adn");
   });
 
-  it("does not use message body text as brand evidence", () => {
+  it("does not warn when body text casually mentions a brand", () => {
     document.body.innerHTML = `
       <h2 class="hP">your YouTube is really great</h2>
       <div class="adn ads">
         <span class="gD" email="friend@example.com" name="A friend">A friend</span>
         <div class="a3s">
-          YouTube Account Recovery
-          <a href="https://evil.example">click me</a>
-          invoice.pdf
+          Your YouTube video was fun.
+          <a href="https://youtube.com/watch?v=test">watch</a>
         </div>
       </div>
     `;
@@ -38,8 +39,45 @@ describe("Gmail DOM metadata adapter", () => {
     const extraction = extractVisibleGmailMetadata(document);
     const detection = analyzeMessage(extraction.metadata!);
 
+    expect(extraction.metadata?.bodyText).toBe("Your YouTube video was fun.");
+    expect(extraction.metadata?.links).toEqual([{ href: "https://youtube.com/watch?v=test", text: "watch" }]);
     expect(detection.riskLevel).toBe("safe");
     expect(detection.claimedBrand).toBeNull();
+  });
+
+  it("extracts visible sender text when Gmail does not expose sender attributes", () => {
+    document.body.innerHTML = `
+      <h2 class="hP">Tell us your view Tell us your view | 08 June 2026 FCZ</h2>
+      <div class="adn ads">
+        <div class="gs">
+          <div class="gE iv gt">
+            <h3>
+              <span>Costco WMU &lt;sanceslaman948@hotmail.com&gt;</span>
+            </h3>
+            <span>to me</span>
+          </div>
+          <div class="a3s">
+            <img alt="Costco Wholesale">
+            Congratulations reward body text should not be inspected.
+            <a href="https://costco-rewards.example/claim">Claim reward</a>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const extraction = extractVisibleGmailMetadata(document);
+    const detection = analyzeMessage(extraction.metadata!);
+
+    expect(extraction.metadata).toMatchObject({
+      from: "\"Costco WMU\" <sanceslaman948@hotmail.com>",
+      subject: "Tell us your view Tell us your view | 08 June 2026 FCZ",
+      bodyText: "Congratulations reward body text should not be inspected. Costco Wholesale",
+      links: [{ href: "https://costco-rewards.example/claim", text: "Claim reward" }],
+      provider: "gmail-chrome-extension"
+    });
+    expect(detection.riskLevel).toBe("suspicious");
+    expect(detection.claimedBrand).toBe("Costco");
+    expect(extraction.anchor?.className).toContain("gE");
   });
 
   it("returns empty metadata when the sender row is missing", () => {

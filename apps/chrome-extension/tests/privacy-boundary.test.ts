@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { extractVisibleGmailMetadata } from "../src/content/gmail-dom.js";
 
 describe("Chrome extension privacy boundary", () => {
-  it("does not place body, links, or attachment text in detector metadata", () => {
+  it("places visible body text and links in metadata without attachment text", () => {
     document.body.innerHTML = `
       <h2 class="hP">Security alert</h2>
       <div class="adn ads">
@@ -21,8 +21,9 @@ describe("Chrome extension privacy boundary", () => {
 
     expect(serialized).toContain("Google Support");
     expect(serialized).toContain("random@gmail.com");
-    expect(serialized).not.toContain("private body text");
-    expect(serialized).not.toContain("phish.example");
+    expect(serialized).toContain("private body text");
+    expect(metadata?.links).toEqual([{ href: "https://phish.example/login", text: "reset link" }]);
+    expect(metadata?.bodyText).not.toContain("reset link");
     expect(serialized).not.toContain("tax-document.pdf");
   });
 });

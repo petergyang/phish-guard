@@ -1,4 +1,5 @@
 import { defaultBrandRules, findClaimedBrand, isTrustedSenderDomain, publicMailboxDomains, type BrandRule } from "./brand-rules.js";
+import { domainMatchesAny, normalizeDomain } from "./domain-match.js";
 import { evidence, type EvidenceItem } from "./evidence.js";
 import { parseEmailAddress } from "./email-address.js";
 
@@ -8,8 +9,15 @@ export interface MessageMetadata {
   from: string;
   replyTo?: string;
   subject?: string;
+  bodyText?: string;
+  links?: MessageLinkMetadata[];
   headers?: Record<string, string | undefined>;
   provider?: string;
+}
+
+export interface MessageLinkMetadata {
+  href: string;
+  text?: string;
 }
 
 export interface DetectionResult {
@@ -66,8 +74,9 @@ export function analyzeMessage(
       }
 
       if (genericClaim.claimAppearsInAddress) {
+        const linkAssessment = assessLinks(message.links, parsedFrom.domain);
         return {
-          riskLevel: "safe",
+          riskLevel: linkAssessment.suspicious ? "suspicious" : "safe",
           claimedBrand: genericClaim.claimName,
           senderDisplayName: parsedFrom.displayName,
           senderAddress: parsedFrom.address,
@@ -79,7 +88,8 @@ export function analyzeMessage(
               "info",
               `The sender address includes ${genericClaim.claimName}.`,
               { brand: genericClaim.claimName, senderAddress: parsedFrom.address, senderDomain: parsedFrom.domain }
-            )
+            ),
+            ...linkAssessment.evidence
           ]
         };
       }
@@ -97,7 +107,82 @@ export function analyzeMessage(
             "error",
             `The sender name says ${genericClaim.claimName}, but the actual email is ${parsedFrom.address}.`,
             { brand: genericClaim.claimName, senderAddress: parsedFrom.address, senderDomain: parsedFrom.domain }
-          )
+          ),
+          ...assessLinks(message.links, parsedFrom.domain).evidence
+        ]
+      };
+    }
+
+    const bodyClaim = inferBodyBrandClaim(message, rules);
+    if (bodyClaim) {
+      evidenceItems.push(evidence(
+        "brand_claim",
+        "info",
+        `The message body presents itself as ${bodyClaim.brandName}.`,
+        { brand: bodyClaim.brandName, source: bodyClaim.source }
+      ));
+      evidenceItems.push(evidence(
+        "body_brand_suspicious_context",
+        "warning",
+        `The message mentions ${bodyClaim.brandName} with subscription, payment, urgency, or account language.`,
+        { brand: bodyClaim.brandName }
+      ));
+
+      if (!parsedFrom.domain) {
+        return {
+          riskLevel: "limited_evidence",
+          claimedBrand: bodyClaim.brandName,
+          senderDisplayName: parsedFrom.displayName,
+          senderAddress: parsedFrom.address,
+          senderDomain: parsedFrom.domain,
+          evidence: [
+            ...evidenceItems,
+            evidence("limited_headers", "warning", "The sender domain is unavailable, so the body claim cannot be verified.")
+          ]
+        };
+      }
+
+      const trusted = isTrustedSenderDomain(parsedFrom.domain, bodyClaim);
+      const linkAssessment = assessLinks(message.links, parsedFrom.domain, bodyClaim);
+      const senderEvidence = trusted
+        ? evidence(
+          "trusted_domain",
+          "info",
+          `The sender domain matches a trusted ${bodyClaim.brandName} domain.`,
+          { senderDomain: parsedFrom.domain }
+        )
+        : evidence(
+          "brand_domain_mismatch",
+          "error",
+          `The message body claims ${bodyClaim.brandName}, but the actual email is ${parsedFrom.address}.`,
+          { brand: bodyClaim.brandName, senderAddress: parsedFrom.address, senderDomain: parsedFrom.domain }
+        );
+
+      if (trusted && !linkAssessment.suspicious) {
+        return {
+          riskLevel: "safe",
+          claimedBrand: bodyClaim.brandName,
+          senderDisplayName: parsedFrom.displayName,
+          senderAddress: parsedFrom.address,
+          senderDomain: parsedFrom.domain,
+          evidence: [
+            ...evidenceItems,
+            senderEvidence,
+            ...linkAssessment.evidence
+          ]
+        };
+      }
+
+      return {
+        riskLevel: "suspicious",
+        claimedBrand: bodyClaim.brandName,
+        senderDisplayName: parsedFrom.displayName,
+        senderAddress: parsedFrom.address,
+        senderDomain: parsedFrom.domain,
+        evidence: [
+          ...evidenceItems,
+          senderEvidence,
+          ...linkAssessment.evidence
         ]
       };
     }
@@ -137,6 +222,7 @@ export function analyzeMessage(
   }
 
   const trusted = isTrustedSenderDomain(parsedFrom.domain, claimedBrand);
+  const linkAssessment = assessLinks(message.links, parsedFrom.domain, claimedBrand);
   if (trusted) {
     evidenceItems.push(evidence(
       "trusted_domain",
@@ -172,12 +258,12 @@ export function analyzeMessage(
   }
 
   return {
-    riskLevel: trusted ? "safe" : "suspicious",
+    riskLevel: trusted && !linkAssessment.suspicious ? "safe" : "suspicious",
     claimedBrand: claimedBrand.brandName,
     senderDisplayName: parsedFrom.displayName,
     senderAddress: parsedFrom.address,
     senderDomain: parsedFrom.domain,
-    evidence: evidenceItems
+    evidence: [...evidenceItems, ...linkAssessment.evidence]
   };
 }
 
@@ -185,6 +271,49 @@ interface DisplayNameClaim {
   claimName: string;
   claimAppearsInAddress: boolean;
 }
+
+interface BodyBrandClaim extends BrandRule {
+  source: "subject" | "body";
+}
+
+const suspiciousBodyContextWords = new Set([
+  "account",
+  "billing",
+  "cancel",
+  "canceled",
+  "cancelled",
+  "click",
+  "expire",
+  "expired",
+  "expires",
+  "hurry",
+  "membership",
+  "offer",
+  "payment",
+  "renew",
+  "renewed",
+  "security",
+  "subscription",
+  "suspended",
+  "urgent",
+  "verify"
+]);
+
+const urlShortenerDomains = new Set([
+  "bit.ly",
+  "buff.ly",
+  "cutt.ly",
+  "goo.gl",
+  "is.gd",
+  "lnkd.in",
+  "ow.ly",
+  "rebrand.ly",
+  "s.id",
+  "t.co",
+  "tiny.cc",
+  "tinyurl.com",
+  "trib.al"
+]);
 
 const organizationSignalWords = new Set([
   "account",
@@ -269,9 +398,15 @@ const nonIdentityWords = new Set([
 ]);
 
 function inferDisplayNameClaim(displayName: string, address: string, domain: string | null): DisplayNameClaim | null {
+  const acronymClaim = inferDottedAcronymClaim(displayName, address, domain);
+  if (acronymClaim) {
+    return acronymClaim;
+  }
+
   const words = displayName.match(/[a-z0-9]+/gi) ?? [];
   const normalizedWords = words.map((word) => word.toLowerCase());
-  const hasOrganizationSignal = normalizedWords.some((word) => organizationSignalWords.has(word));
+  const hasOrganizationSignal = normalizedWords.some((word) => organizationSignalWords.has(word))
+    || words.some((word, index) => index > 0 && isAcronymSignal(word));
 
   if (!hasOrganizationSignal) {
     return null;
@@ -294,6 +429,127 @@ function inferDisplayNameClaim(displayName: string, address: string, domain: str
   };
 }
 
+function inferDottedAcronymClaim(displayName: string, address: string, domain: string | null): DisplayNameClaim | null {
+  const match = displayName.match(/\b(?:[A-Z]\.){2,}[A-Z]?\b/);
+  if (!match) {
+    return null;
+  }
+
+  const claimName = match[0]!.replace(/\./g, "");
+  if (!isAcronymSignal(claimName)) {
+    return null;
+  }
+
+  const addressText = normalizeForIdentityMatch(`${address} ${domain ?? ""}`);
+  const claimToken = normalizeForIdentityMatch(claimName);
+
+  return {
+    claimName,
+    claimAppearsInAddress: addressText.includes(claimToken)
+  };
+}
+
+function inferBodyBrandClaim(message: MessageMetadata, rules: BrandRule[]): BodyBrandClaim | null {
+  const subject = message.subject?.trim() ?? "";
+  const bodyText = message.bodyText?.trim() ?? "";
+  const combinedText = `${subject} ${bodyText}`.trim();
+  if (!combinedText || !hasSuspiciousBodyContext(combinedText)) {
+    return null;
+  }
+
+  const bodyBrand = findClaimedBrand(bodyText, rules);
+  if (bodyBrand) {
+    return { ...bodyBrand, source: "body" };
+  }
+
+  const subjectBrand = findClaimedBrand(subject, rules);
+  return subjectBrand ? { ...subjectBrand, source: "subject" } : null;
+}
+
+function hasSuspiciousBodyContext(value: string): boolean {
+  const words = value.match(/[a-z0-9]+/gi) ?? [];
+  return words.some((word) => suspiciousBodyContextWords.has(word.toLowerCase()));
+}
+
+interface LinkAssessment {
+  suspicious: boolean;
+  evidence: EvidenceItem[];
+}
+
+function assessLinks(
+  links: MessageLinkMetadata[] | undefined,
+  senderDomain: string | null,
+  brand?: BrandRule
+): LinkAssessment {
+  const evidenceItems: EvidenceItem[] = [];
+  const seen = new Set<string>();
+
+  for (const link of links ?? []) {
+    const linkDomain = parseLinkDomain(link.href);
+    if (!linkDomain || seen.has(linkDomain)) continue;
+    seen.add(linkDomain);
+
+    if (urlShortenerDomains.has(linkDomain)) {
+      evidenceItems.push(evidence(
+        "link_shortener",
+        "warning",
+        `The message uses a shortened link at ${linkDomain}.`,
+        { linkDomain }
+      ));
+      continue;
+    }
+
+    if (!brand) continue;
+
+    const trustedForBrand = isTrustedSenderDomain(linkDomain, brand);
+    const matchesSender = senderDomain ? domainMatchesAny(linkDomain, [senderDomain]) : false;
+    if (!trustedForBrand && !matchesSender) {
+      evidenceItems.push(evidence(
+        "link_domain_mismatch",
+        "error",
+        `A link goes to ${linkDomain}, which does not match ${brand.brandName}.`,
+        { brand: brand.brandName, linkDomain }
+      ));
+    }
+  }
+
+  return {
+    suspicious: evidenceItems.some((item) => item.severity !== "info"),
+    evidence: evidenceItems.slice(0, 3)
+  };
+}
+
+function parseLinkDomain(href: string): string | null {
+  const destination = unwrapVisibleRedirect(href);
+  try {
+    const url = new URL(destination);
+    if (url.protocol !== "http:" && url.protocol !== "https:") return null;
+    return normalizeDomain(url.hostname).replace(/^www\./, "") || null;
+  } catch {
+    return null;
+  }
+}
+
+function unwrapVisibleRedirect(href: string): string {
+  try {
+    const url = new URL(href);
+    const domain = normalizeDomain(url.hostname).replace(/^www\./, "");
+    if (domain === "google.com" && url.pathname === "/url") {
+      return url.searchParams.get("q") ?? href;
+    }
+    if (domain.endsWith("safelinks.protection.outlook.com")) {
+      return url.searchParams.get("url") ?? href;
+    }
+    return href;
+  } catch {
+    return href;
+  }
+}
+
 function normalizeForIdentityMatch(value: string): string {
   return value.toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
+function isAcronymSignal(value: string): boolean {
+  return /^[A-Z0-9]{3,}$/.test(value);
 }

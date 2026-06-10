@@ -18,25 +18,25 @@ Used to register and inject the Gmail content script after the user grants Gmail
 
 ### `storage`
 
-Reserved for local extension state, such as whether Gmail warnings are enabled. It is not used for email bodies or inbox history.
+Reserved for local extension state, such as whether Gmail warnings are enabled. It is not used for inbox history.
 
 ### `https://mail.google.com/*`
 
-Used to read the visible sender row in the Gmail message the user is viewing and to add a warning banner to the Gmail page. Phish Guard does not edit, delete, send, archive, label, or report emails.
+Used to read the visible sender row, subject, body text, and link URLs in the Gmail message the user is viewing and to add a warning banner to the Gmail page. Phish Guard does not edit, delete, send, archive, label, or report emails.
 
 ## Data Use
 
-Phish Guard processes the visible Gmail sender row locally in the browser. It does not collect, transmit, sell, or share user data.
+Phish Guard processes the open Gmail message locally in the browser. It does not collect, transmit, sell, or share user data.
 
 Current Gmail protection does not read:
 
-- Message bodies
 - Attachments
-- Links inside messages
 - Inbox history
 - Contacts
 - Cookies
 - Passwords
+
+It does not visit links or upload link URLs.
 
 ## Privacy Policy URL
 
