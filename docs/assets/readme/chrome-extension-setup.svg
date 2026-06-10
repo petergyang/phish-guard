@@ -1,0 +1,29 @@
+<svg width="1200" height="420" viewBox="0 0 1200 420" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="420" fill="#202124"/>
+  <rect x="0" y="0" width="1200" height="420" fill="#202124"/>
+  <text x="92" y="70" fill="#f1f3f4" font-family="Arial, sans-serif" font-size="38" font-weight="700">Extensions</text>
+  <rect x="34" y="34" width="28" height="4" rx="2" fill="#bdc1c6"/>
+  <rect x="34" y="48" width="28" height="4" rx="2" fill="#bdc1c6"/>
+  <rect x="34" y="62" width="28" height="4" rx="2" fill="#bdc1c6"/>
+  <circle cx="876" cy="50" r="13" stroke="#bdc1c6" stroke-width="4"/>
+  <path d="M886 60L902 76" stroke="#bdc1c6" stroke-width="4" stroke-linecap="round"/>
+  <text x="944" y="62" fill="#e8eaed" font-family="Arial, sans-serif" font-size="25" font-weight="600">Developer mode</text>
+  <rect x="1120" y="28" width="54" height="30" rx="15" fill="#8ab4f8"/>
+  <circle cx="1158" cy="43" r="20" fill="#174ea6"/>
+
+  <rect x="40" y="116" width="230" height="62" rx="31" stroke="#03a9f4" stroke-width="2"/>
+  <text x="72" y="155" fill="#aecbfa" font-family="Arial, sans-serif" font-size="25" font-weight="700">Load unpacked</text>
+  <rect x="306" y="116" width="250" height="62" rx="31" stroke="#03a9f4" stroke-width="2"/>
+  <text x="340" y="155" fill="#aecbfa" font-family="Arial, sans-serif" font-size="25" font-weight="700">Pack extension</text>
+  <rect x="588" y="116" width="145" height="62" rx="31" stroke="#03a9f4" stroke-width="2"/>
+  <text x="620" y="155" fill="#aecbfa" font-family="Arial, sans-serif" font-size="25" font-weight="700">Update</text>
+
+  <rect x="240" y="245" width="720" height="120" rx="14" fill="#2b2c30"/>
+  <rect x="288" y="280" width="70" height="70" rx="16" fill="#f8fafd"/>
+  <path d="M323 295L346 304V323C346 339 335 348 323 352C311 348 300 339 300 323V304L323 295Z" fill="#3b78ff"/>
+  <path d="M323 303L339 309V323C339 335 332 342 323 346C314 342 307 335 307 323V309L323 303Z" fill="#5ea1ff"/>
+  <text x="390" y="292" fill="#f1f3f4" font-family="Arial, sans-serif" font-size="28" font-weight="700">Phish Guard</text>
+  <text x="390" y="330" fill="#bdc1c6" font-family="Arial, sans-serif" font-size="24">Shows local phishing warnings inside Gmail.</text>
+  <rect x="805" y="286" width="96" height="40" rx="20" fill="#8ab4f8"/>
+  <circle cx="876" cy="306" r="24" fill="#174ea6"/>
+</svg>

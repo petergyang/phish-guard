@@ -29,13 +29,13 @@ function readLowercase(path: string): string {
 }
 
 describe("Chrome extension store readiness", () => {
-  it("documents the local-only Gmail sender warning promise", () => {
+  it("documents the local-only Gmail phishing warning promise", () => {
     const combinedDocs = requiredDocs.map(readLowercase).join("\n");
 
     expect(combinedDocs).toContain("local");
     expect(combinedDocs).toContain("mail.google.com");
-    expect(combinedDocs).toContain("sender row");
-    expect(combinedDocs).toContain("does not read message bodies");
+    expect(combinedDocs).toContain("open message");
+    expect(combinedDocs).toContain("does not read attachments");
     expect(combinedDocs).toContain("does not upload email");
     expect(combinedDocs).not.toContain("no email access");
   });
@@ -62,21 +62,27 @@ describe("Chrome extension store readiness", () => {
 
   it("keeps the README product screenshot available", () => {
     const readme = readFileSync("README.md", "utf8");
-    const screenshotPath = "docs/assets/phish-guard-gmail-warning.svg";
+    const screenshotPath = "docs/assets/readme/costco-warning.png";
 
     expect(readme).toContain(screenshotPath);
     expect(readme.indexOf(screenshotPath)).toBeLessThan(readme.indexOf("Phish Guard is a Chrome extension"));
     expect(existsSync(screenshotPath), `${screenshotPath} should exist`).toBe(true);
+    expect(readme).toContain("docs/assets/readme/hbo-warning.png");
+    expect(readme).toContain("docs/assets/readme/chrome-extension-setup.svg");
   });
 
-  it("keeps public README free of developer-install friction", () => {
+  it("keeps public README install steps clear for private testers", () => {
     const readme = readFileSync("README.md", "utf8");
 
     expect(readme).not.toContain("Install The Alpha");
-    expect(readme).not.toContain("Developer mode");
-    expect(readme).not.toContain("Load unpacked");
     expect(readme).toContain("Chrome Web Store");
-    expect(readme).toContain("docs/development/local-install.md");
+    expect(readme).toContain("phish-guard-chrome-extension.zip");
+    expect(readme).toContain("chrome://extensions");
+    expect(readme).toContain("Developer mode");
+    expect(readme).toContain("Load unpacked");
+    expect(readme).toContain("turn on Gmail warnings");
+    expect(readme).toContain("contains `manifest.json`");
+    expect(readme).toContain("For a local source build");
   });
 
   it("keeps store and extension image assets available", () => {
@@ -88,8 +94,8 @@ describe("Chrome extension store readiness", () => {
   it("keeps popup privacy copy aligned with the README", () => {
     const popupHtml = readLowercase("apps/chrome-extension/src/popup/popup.html");
 
-    expect(popupHtml).toContain("sender row");
-    expect(popupHtml).toContain("no message bodies");
+    expect(popupHtml).toContain("open message");
+    expect(popupHtml).toContain("no attachments");
     expect(popupHtml).toContain("email upload");
     expect(popupHtml).toContain("does not edit, delete, send, or report emails");
   });
@@ -107,8 +113,10 @@ describe("Chrome extension store readiness", () => {
     const workflow = readFileSync(".github/workflows/ci.yml", "utf8");
     const rootPackage = readFileSync("package.json", "utf8");
 
+    expect(rootPackage).toContain("\"eval:detector\"");
     expect(rootPackage).toContain("\"package:chrome-extension\"");
     expect(workflow).toContain("npm test");
+    expect(workflow).toContain("npm run eval:detector");
     expect(workflow).toContain("npm run build");
     expect(workflow).toContain("npm audit --audit-level=moderate");
     expect(workflow).toContain("npm run package:chrome-extension");

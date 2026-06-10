@@ -11,13 +11,13 @@
   <circle cx="470" cy="179" r="2" fill="#ffffff"/>
   <text x="526" y="154" fill="#111827" font-family="Arial, sans-serif" font-size="30" font-weight="800">Phish Guard</text>
   <text x="526" y="186" fill="#4b5563" font-family="Arial, sans-serif" font-size="18">Gmail sender warnings</text>
-  <text x="438" y="254" fill="#111827" font-family="Arial, sans-serif" font-size="26" font-weight="800">Spot suspicious senders</text>
-  <text x="438" y="294" fill="#374151" font-family="Arial, sans-serif" font-size="20">Checks the sender row in the Gmail message you are viewing.</text>
-  <text x="438" y="324" fill="#374151" font-family="Arial, sans-serif" font-size="20">Warns when a sender may be pretending to be a brand.</text>
+  <text x="438" y="254" fill="#111827" font-family="Arial, sans-serif" font-size="26" font-weight="800">Spot suspicious messages</text>
+  <text x="438" y="294" fill="#374151" font-family="Arial, sans-serif" font-size="20">Checks the open Gmail message locally.</text>
+  <text x="438" y="324" fill="#374151" font-family="Arial, sans-serif" font-size="20">Warns when it may be pretending to be a brand.</text>
   <rect x="438" y="350" width="408" height="92" rx="14" fill="#f8fafc" stroke="#d8dee9"/>
   <text x="468" y="386" fill="#111827" font-family="Arial, sans-serif" font-size="19" font-weight="700">Private by default</text>
-  <text x="468" y="416" fill="#4b5563" font-family="Arial, sans-serif" font-size="18">No message bodies, attachments, inbox</text>
-  <text x="468" y="438" fill="#4b5563" font-family="Arial, sans-serif" font-size="18">history, or email upload.</text>
+  <text x="468" y="416" fill="#4b5563" font-family="Arial, sans-serif" font-size="18">No attachments, inbox history,</text>
+  <text x="468" y="438" fill="#4b5563" font-family="Arial, sans-serif" font-size="18">or email upload.</text>
   <rect x="438" y="486" width="408" height="54" rx="12" fill="#155EEF"/>
   <text x="578" y="521" fill="#ffffff" font-family="Arial, sans-serif" font-size="19" font-weight="800">Turn on Gmail warnings</text>
   <text x="438" y="586" fill="#6b7280" font-family="Arial, sans-serif" font-size="16">Chrome will ask for Gmail access so Phish Guard</text>

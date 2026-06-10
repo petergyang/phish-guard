@@ -4,7 +4,7 @@ import manifest from "../manifest.json" with { type: "json" };
 describe("Chrome extension manifest permissions", () => {
   it("uses a narrow optional Gmail host permission", () => {
     expect(manifest.optional_host_permissions).toEqual(["https://mail.google.com/*"]);
-    expect(manifest.permissions).toEqual(expect.arrayContaining(["activeTab", "scripting", "storage"]));
+    expect(manifest.permissions).toEqual(["scripting"]);
   });
 
   it("declares store-ready extension icons", () => {

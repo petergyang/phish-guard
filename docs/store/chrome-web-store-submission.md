@@ -26,11 +26,11 @@ Shows local sender warnings in Gmail when a message may be impersonating a brand
 Long description:
 
 ```text
-Phish Guard helps you notice suspicious sender mismatches in Gmail before you click.
+Phish Guard helps you notice suspicious Gmail messages before you click.
 
-If a message says it is from a familiar brand, but the sender email address looks unrelated, Phish Guard shows a clear warning inside the open Gmail message.
+If a message appears to be from a familiar brand, but the sender email address or message content looks suspicious, Phish Guard shows a clear warning inside the open Gmail message.
 
-The extension is intentionally narrow. It checks the visible sender row locally in your browser. It does not read email bodies, attachments, links, inbox history, cookies, or passwords, and it does not upload email data.
+The extension checks the open message locally in your browser, including sender details, subject/body text, and link URLs. It does not read attachments, inbox history, cookies, or passwords, and it does not visit links or upload email data.
 ```
 
 ## Permission Justification
@@ -43,7 +43,7 @@ https://mail.google.com/*
 
 Why it is needed:
 
-Phish Guard needs Gmail page access to read the visible sender row and add a warning banner inside the open message. Chrome describes this as "read and change" access because the extension both reads the sender row and changes the page by inserting the warning. It does not edit, delete, send, archive, label, or report emails.
+Phish Guard needs Gmail page access to read the visible sender row, subject, body text, and link URLs for the open message, then add a warning banner inside that message. Chrome describes this as "read and change" access because the extension both reads the open message and changes the page by inserting the warning. It does not edit, delete, send, archive, label, or report emails.
 
 Least privilege posture:
 
@@ -83,8 +83,9 @@ Use `PRIVACY.md` as the source of truth. Before submitting to the store, publish
 The policy must keep these statements true:
 
 - Sender checks run locally.
-- The current feature reads the visible sender row only.
-- The extension does not read message bodies, attachments, links, or inbox history.
+- The current feature reads the visible sender row, subject, body text, and link URLs for the open message.
+- The extension does not read attachments or inbox history.
+- The extension does not visit links.
 - The extension does not upload email data.
 - User data is not sold, used for ads, or shared with third parties.
 
@@ -98,7 +99,7 @@ Recommended dashboard posture for the current MVP:
 - Email content: not collected.
 - Authentication information: not collected.
 - User activity: not collected.
-- Website content: only the visible Gmail sender row is processed locally and not collected.
+- Website content: only the open Gmail message is processed locally and not collected.
 
 If the dashboard treats local page processing as "website content" access, explain that it is used only for the user-facing sender warning and is not transmitted or stored.
 
@@ -123,6 +124,7 @@ Any additional screenshots must use test accounts and fake messages only. Do not
 ## Submission Checklist
 
 - `npm test` passes.
+- `npm run eval:detector` passes.
 - `npm run build` passes.
 - `npm audit --audit-level=moderate` passes.
 - `npm run package:chrome-extension` creates the package ZIP.

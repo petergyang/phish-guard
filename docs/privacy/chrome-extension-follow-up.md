@@ -6,14 +6,15 @@ A Chrome extension can place an inline banner near Gmail's sender row, which is 
 
 ## Trust Trade-Off
 
-The extension asks Chrome for access to `https://mail.google.com/*`. That is broader than the Gmail add-on metadata scope because a content script can technically read rendered Gmail page content. The MVP constrains itself in code and tests to the sender row only.
+The extension asks Chrome for access to `https://mail.google.com/*`. That is broader than the Gmail add-on metadata scope because a content script can technically read rendered Gmail page content. The MVP constrains itself in code and tests to the open message only, with local checks for sender details, subject/body text, and link URLs.
 
 ## Required Constraints
 
 - Limit host permissions to `https://mail.google.com/*`.
 - Do not request `<all_urls>`.
-- Do not inspect message bodies, attachments, or links by default.
-- Do not upload email or sender metadata by default.
+- Do not inspect attachments, unopened messages, or inbox history.
+- Do not visit links.
+- Do not upload email data by default.
 - Explain Gmail access before Chrome shows the permission prompt.
 - Keep scoring local.
 - Reuse `packages/detector`.
