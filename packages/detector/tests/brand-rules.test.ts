@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import fixtureRules from "../fixtures/brand-rules.json" with { type: "json" };
-import { findClaimedBrand, validateBrandRules, type BrandRule } from "../src/brand-rules.js";
+import { defaultBrandRules, findClaimedBrand, validateBrandRules, type BrandRule } from "../src/brand-rules.js";
 import { domainMatchesAny } from "../src/domain-match.js";
 
 describe("brand rules", () => {
@@ -8,6 +8,23 @@ describe("brand rules", () => {
     const brand = findClaimedBrand("YouTube Account Recovery");
 
     expect(brand?.brandName).toBe("YouTube");
+  });
+
+  it("allows benign organization modifiers around the brand", () => {
+    expect(findClaimedBrand("Apple ID Support")?.brandName).toBe("Apple");
+    expect(findClaimedBrand("Microsoft 365 Security Alerts")?.brandName).toBe("Microsoft");
+    expect(findClaimedBrand("Amazon.com")?.brandName).toBe("Amazon");
+  });
+
+  it("does not treat organizations that merely contain a brand word as brand claims", () => {
+    expect(findClaimedBrand("Apple Federal Credit Union")).toBeNull();
+    expect(findClaimedBrand("Apple Pie Recipes Weekly")).toBeNull();
+    expect(findClaimedBrand("Google Developer Group SF")).toBeNull();
+    expect(findClaimedBrand("Maria Garcia via DocuSign")).toBeNull();
+  });
+
+  it("validates the default brand rules", () => {
+    expect(validateBrandRules(defaultBrandRules)).toEqual([]);
   });
 
   it("matches exact domains and trusted subdomains", () => {

@@ -1,4 +1,12 @@
-import { defaultBrandRules, findClaimedBrand, isTrustedSenderDomain, publicMailboxDomains, type BrandRule } from "./brand-rules.js";
+import {
+  defaultBrandRules,
+  findClaimedBrand,
+  isTrustedSenderDomain,
+  nonIdentityWords,
+  organizationSignalWords,
+  publicMailboxDomains,
+  type BrandRule
+} from "./brand-rules.js";
 import { domainMatchesAny, normalizeDomain } from "./domain-match.js";
 import { evidence, type EvidenceItem } from "./evidence.js";
 import { parseEmailAddress } from "./email-address.js";
@@ -73,10 +81,61 @@ export function analyzeMessage(
         };
       }
 
-      if (genericClaim.claimAppearsInAddress) {
+      if (genericClaim.addressMatch === "domain" || genericClaim.addressMatch === "local_part") {
         const linkAssessment = assessLinks(message.links, parsedFrom.domain);
         return {
           riskLevel: linkAssessment.suspicious ? "suspicious" : "safe",
+          claimedBrand: genericClaim.claimName,
+          senderDisplayName: parsedFrom.displayName,
+          senderAddress: parsedFrom.address,
+          senderDomain: parsedFrom.domain,
+          evidence: [
+            ...evidenceItems,
+            evidence(
+              "display_name_matches_address",
+              "info",
+              `The sender address includes ${genericClaim.claimName}.`,
+              { brand: genericClaim.claimName, senderAddress: parsedFrom.address, senderDomain: parsedFrom.domain }
+            ),
+            ...linkAssessment.evidence
+          ]
+        };
+      }
+
+      if (genericClaim.addressMatch === "local_part_public_mailbox") {
+        // The brand word only appears in the attacker-controllable part of a
+        // personal mailbox address. Warn only with corroborating scam signals,
+        // so small businesses on Gmail with their name in the address stay quiet.
+        const linkAssessment = assessLinks(message.links, parsedFrom.domain);
+        const contextWordCount = countSuspiciousContextWords(`${message.subject ?? ""} ${message.bodyText ?? ""}`);
+        if (linkAssessment.suspicious || contextWordCount >= 2) {
+          return {
+            riskLevel: "suspicious",
+            claimedBrand: genericClaim.claimName,
+            senderDisplayName: parsedFrom.displayName,
+            senderAddress: parsedFrom.address,
+            senderDomain: parsedFrom.domain,
+            evidence: [
+              ...evidenceItems,
+              evidence(
+                "display_name_address_mismatch",
+                "error",
+                `The sender name says ${genericClaim.claimName}, but the actual email is a personal ${parsedFrom.domain} address.`,
+                { brand: genericClaim.claimName, senderAddress: parsedFrom.address, senderDomain: parsedFrom.domain }
+              ),
+              evidence(
+                "public_mailbox_sender",
+                "warning",
+                `${genericClaim.claimName} messages should not come from a personal mailbox domain.`,
+                { senderDomain: parsedFrom.domain }
+              ),
+              ...linkAssessment.evidence
+            ]
+          };
+        }
+
+        return {
+          riskLevel: "safe",
           claimedBrand: genericClaim.claimName,
           senderDisplayName: parsedFrom.displayName,
           senderAddress: parsedFrom.address,
@@ -267,9 +326,11 @@ export function analyzeMessage(
   };
 }
 
+type ClaimAddressMatch = "domain" | "local_part" | "local_part_public_mailbox" | "none";
+
 interface DisplayNameClaim {
   claimName: string;
-  claimAppearsInAddress: boolean;
+  addressMatch: ClaimAddressMatch;
 }
 
 interface BodyBrandClaim extends BrandRule {
@@ -281,21 +342,69 @@ const suspiciousBodyContextWords = new Set([
   "cancel",
   "canceled",
   "cancelled",
+  "claim",
+  "congratulations",
   "expire",
   "expired",
   "expires",
   "hurry",
+  "immediately",
+  "locked",
   "membership",
   "offer",
   "payment",
+  "prize",
+  "refund",
+  "refunds",
   "renew",
   "renewed",
+  "reward",
+  "rewards",
   "security",
   "subscription",
   "suspended",
+  "unauthorized",
+  "unusual",
   "urgent",
+  "verify",
+  "winner"
+]);
+
+// Words that, combined with a brand name inside one hyphenated domain label,
+// signal a lookalike domain (e.g. netflix-account-billing.com).
+const lookalikeDomainCompanionWords = new Set([
+  "account",
+  "accounts",
+  "alert",
+  "alerts",
+  "auth",
+  "billing",
+  "center",
+  "confirm",
+  "customer",
+  "help",
+  "id",
+  "login",
+  "pay",
+  "payment",
+  "payments",
+  "recover",
+  "recovery",
+  "secure",
+  "security",
+  "service",
+  "services",
+  "signin",
+  "support",
+  "team",
+  "update",
+  "updates",
+  "verification",
   "verify"
 ]);
+
+// Approximation of common second-level public suffixes (e.g. co.uk, com.au).
+const secondLevelTldLabels = new Set(["ac", "co", "com", "edu", "gov", "net", "org"]);
 
 const urlShortenerDomains = new Set([
   "bit.ly",
@@ -349,88 +458,6 @@ const emailTrackingDomains = [
   "sfmc-content.com"
 ];
 
-const organizationSignalWords = new Set([
-  "account",
-  "accounts",
-  "alerts",
-  "billing",
-  "claim",
-  "connection",
-  "customer",
-  "delivery",
-  "deal",
-  "deals",
-  "gift",
-  "invoice",
-  "member",
-  "membership",
-  "notice",
-  "official",
-  "offer",
-  "offers",
-  "order",
-  "orders",
-  "prize",
-  "promo",
-  "promotion",
-  "recovery",
-  "reward",
-  "rewards",
-  "security",
-  "service",
-  "services",
-  "support",
-  "team",
-  "verification",
-  "verify",
-  "winner",
-  "wholesale"
-]);
-
-const nonIdentityWords = new Set([
-  "account",
-  "accounts",
-  "alert",
-  "alerts",
-  "billing",
-  "claim",
-  "connection",
-  "customer",
-  "delivery",
-  "deal",
-  "deals",
-  "email",
-  "gift",
-  "hello",
-  "invoice",
-  "mail",
-  "member",
-  "membership",
-  "notice",
-  "notification",
-  "notifications",
-  "official",
-  "offer",
-  "offers",
-  "order",
-  "orders",
-  "prize",
-  "promo",
-  "promotion",
-  "recovery",
-  "reward",
-  "rewards",
-  "security",
-  "service",
-  "services",
-  "support",
-  "team",
-  "verification",
-  "verify",
-  "winner",
-  "wholesale"
-]);
-
 const delegatedPlatformDomains = [
   "eventbrite.com",
   "lu.ma",
@@ -466,12 +493,60 @@ function inferDisplayNameClaim(displayName: string, address: string, domain: str
 
   const claimToken = normalizedWords[claimIndex]!;
   const claimName = words[claimIndex]!;
-  const addressText = normalizeForIdentityMatch(`${address} ${domain ?? ""}`);
 
   return {
     claimName,
-    claimAppearsInAddress: addressText.includes(claimToken)
+    addressMatch: assessClaimAddressMatch(claimToken, normalizedWords, address, domain)
   };
+}
+
+function assessClaimAddressMatch(
+  claimToken: string,
+  displayTokens: string[],
+  address: string,
+  domain: string | null
+): ClaimAddressMatch {
+  if (domain && claimMatchesSenderDomain(claimToken, displayTokens, domain)) {
+    return "domain";
+  }
+
+  const localPart = address.includes("@") ? address.slice(0, address.lastIndexOf("@")) : "";
+  if (claimToken && normalizeForIdentityMatch(localPart).includes(claimToken)) {
+    return domain && publicMailboxDomains.has(domain) ? "local_part_public_mailbox" : "local_part";
+  }
+
+  return "none";
+}
+
+function claimMatchesSenderDomain(claimToken: string, displayTokens: string[], domain: string): boolean {
+  const registrable = approximateRegistrableDomain(normalizeDomain(domain));
+  const mainLabel = registrable.split(".")[0] ?? "";
+  const segments = mainLabel.split("-").filter(Boolean);
+
+  if (segments.length > 1 && segments.includes(claimToken)) {
+    const lookalikeCompanions = segments.some((segment) => {
+      return segment !== claimToken
+        && lookalikeDomainCompanionWords.has(segment)
+        && !displayTokens.includes(segment);
+    });
+    if (lookalikeCompanions) {
+      return false;
+    }
+  }
+
+  return normalizeForIdentityMatch(registrable).includes(claimToken);
+}
+
+function approximateRegistrableDomain(domain: string): string {
+  const labels = domain.split(".").filter(Boolean);
+  if (labels.length <= 2) {
+    return domain;
+  }
+
+  const lastLabel = labels[labels.length - 1]!;
+  const secondLastLabel = labels[labels.length - 2]!;
+  const take = lastLabel.length === 2 && secondLevelTldLabels.has(secondLastLabel) ? 3 : 2;
+  return labels.slice(-take).join(".");
 }
 
 function isExplicitPlatformDelegation(displayName: string, domain: string | null): boolean {
@@ -501,12 +576,11 @@ function inferDottedAcronymClaim(displayName: string, address: string, domain: s
     return null;
   }
 
-  const addressText = normalizeForIdentityMatch(`${address} ${domain ?? ""}`);
   const claimToken = normalizeForIdentityMatch(claimName);
 
   return {
     claimName,
-    claimAppearsInAddress: addressText.includes(claimToken)
+    addressMatch: assessClaimAddressMatch(claimToken, tokenizeWords(displayName), address, domain)
   };
 }
 
@@ -544,7 +618,7 @@ function findBrandWithSuspiciousContext(value: string, rules: BrandRule[]): Bran
         const contextStart = Math.max(0, index - 6);
         const contextEnd = Math.min(words.length, index + brandWords.length + 6);
         const context = words.slice(contextStart, contextEnd);
-        if (hasSuspiciousBodyContext(context)) {
+        if (hasStrongSuspiciousBodyContext(context)) {
           return rule;
         }
       }
@@ -562,8 +636,22 @@ function matchesAt(words: string[], expected: string[], index: number): boolean 
   return expected.every((word, offset) => words[index + offset] === word);
 }
 
-function hasSuspiciousBodyContext(words: string[]): boolean {
-  return words.some((word) => suspiciousBodyContextWords.has(word));
+// One scam-context word near a brand is common in normal mail ("PayPal ...
+// subscription revenue grew"); require either two distinct context words or
+// one context word plus direct second-person language.
+function hasStrongSuspiciousBodyContext(words: string[]): boolean {
+  const contextWords = new Set(words.filter((word) => suspiciousBodyContextWords.has(word)));
+  if (contextWords.size >= 2) {
+    return true;
+  }
+
+  const secondPerson = words.some((word) => word === "you" || word === "your");
+  return contextWords.size >= 1 && secondPerson;
+}
+
+function countSuspiciousContextWords(text: string): number {
+  const distinct = new Set(tokenizeWords(text).filter((word) => suspiciousBodyContextWords.has(word)));
+  return distinct.size;
 }
 
 interface LinkAssessment {

@@ -8,17 +8,9 @@ Phish Guard shows local sender warnings inside Gmail when an opened message may 
 
 ## Permission Justification
 
-### `activeTab`
-
-Used only after the user enables Gmail warnings so Phish Guard can activate the current Gmail tab without scanning unrelated pages.
-
 ### `scripting`
 
 Used to register and inject the Gmail content script after the user grants Gmail access.
-
-### `storage`
-
-Reserved for local extension state, such as whether Gmail warnings are enabled. It is not used for inbox history.
 
 ### `https://mail.google.com/*`
 

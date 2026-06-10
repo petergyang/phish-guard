@@ -23,7 +23,7 @@ describe("analyzeMessage", () => {
     expect(result.riskLevel).toBe("suspicious");
     expect(result.claimedBrand).toBe("Costco");
     expect(result.senderDomain).toBe("example.net");
-    expect(result.evidence.map((item) => item.kind)).toContain("display_name_address_mismatch");
+    expect(result.evidence.map((item) => item.kind)).toContain("brand_domain_mismatch");
   });
 
   it("does not require a hardcoded brand rule to flag organization-name mismatch", () => {
@@ -48,11 +48,11 @@ describe("analyzeMessage", () => {
 
   it("flags a generic brand claim with organization wording", () => {
     const result = analyzeMessage({
-      from: "\"Netflix Account Support\" <alerts@example.net>"
+      from: "\"Hulu Account Support\" <alerts@example.net>"
     });
 
     expect(result.riskLevel).toBe("suspicious");
-    expect(result.claimedBrand).toBe("Netflix");
+    expect(result.claimedBrand).toBe("Hulu");
     expect(result.evidence.map((item) => item.kind)).toContain("display_name_address_mismatch");
   });
 
@@ -200,6 +200,84 @@ describe("analyzeMessage", () => {
 
     expect(result.riskLevel).toBe("suspicious");
     expect(result.claimedBrand).toBe("YouTube");
+  });
+
+  it("flags a brand word in a public mailbox local part when scam context is present", () => {
+    const result = analyzeMessage({
+      from: "\"Acme Rewards\" <acme.rewards.winner77@gmail.com>",
+      subject: "Congratulations!",
+      bodyText: "Congratulations! Your exclusive reward expires soon. Claim it now."
+    });
+
+    expect(result.riskLevel).toBe("suspicious");
+    expect(result.claimedBrand).toBe("Acme");
+    expect(result.evidence.map((item) => item.kind)).toContain("display_name_address_mismatch");
+    expect(result.evidence.map((item) => item.kind)).toContain("public_mailbox_sender");
+  });
+
+  it("does not flag a small business with its name in its own public mailbox address", () => {
+    const result = analyzeMessage({
+      from: "\"Joe's Plumbing Service\" <joesplumbingsf@gmail.com>",
+      subject: "Invoice for last week",
+      bodyText: "Hi Peter, attached is the invoice for the water heater repair. Thanks, Joe."
+    });
+
+    expect(result.riskLevel).toBe("safe");
+    expect(result.evidence.map((item) => item.kind)).toContain("display_name_matches_address");
+  });
+
+  it("flags hyphenated lookalike domains that pad the brand with security words", () => {
+    const result = analyzeMessage({
+      from: "\"Acme Billing\" <alerts@acme-account-billing.com>"
+    });
+
+    expect(result.riskLevel).toBe("suspicious");
+    expect(result.claimedBrand).toBe("Acme");
+    expect(result.evidence.map((item) => item.kind)).toContain("display_name_address_mismatch");
+  });
+
+  it("does not credit a brand name that only appears in the subdomain", () => {
+    const result = analyzeMessage({
+      from: "\"Acme Billing\" <no-reply@acme.secure-check.net>"
+    });
+
+    expect(result.riskLevel).toBe("suspicious");
+    expect(result.claimedBrand).toBe("Acme");
+    expect(result.evidence.map((item) => item.kind)).toContain("display_name_address_mismatch");
+  });
+
+  it("does not flag a newsletter mentioning a brand with a single business word nearby", () => {
+    const result = analyzeMessage({
+      from: "\"Fintech Digest\" <digest@fintechdigest.example>",
+      subject: "PayPal earnings beat expectations",
+      bodyText: "PayPal reported strong quarterly earnings. Subscription revenue grew 12%."
+    });
+
+    expect(result.riskLevel).toBe("safe");
+    expect(result.claimedBrand).toBeNull();
+  });
+
+  it("does not flag organizations whose name merely contains a protected brand word", () => {
+    const result = analyzeMessage({
+      from: "\"Apple Federal Credit Union\" <alerts@applefcu.org>",
+      subject: "Your monthly statement is ready",
+      bodyText: "Your account statement is ready to view in online banking."
+    });
+
+    expect(result.riskLevel).toBe("safe");
+    expect(result.claimedBrand).toBeNull();
+  });
+
+  it("flags newly protected brands sent from a public mailbox", () => {
+    const result = analyzeMessage({
+      from: "\"Netflix\" <no.reply.netflix.alerts@gmail.com>",
+      subject: "Payment declined",
+      bodyText: "Netflix payment declined. Update your payment method."
+    });
+
+    expect(result.riskLevel).toBe("suspicious");
+    expect(result.claimedBrand).toBe("Netflix");
+    expect(result.evidence.map((item) => item.kind)).toContain("brand_domain_mismatch");
   });
 
   it("flags shortened links in brand-like messages", () => {

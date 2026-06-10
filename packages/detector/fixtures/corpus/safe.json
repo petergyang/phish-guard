@@ -273,5 +273,270 @@
     ],
     "expectedBrand": null,
     "notes": "Shortener in a non-brand-claim newsletter should not become phishing by itself."
+  },
+  {
+    "id": "apple-credit-union-statement",
+    "label": "safe",
+    "from": "\"Apple Federal Credit Union\" <alerts@applefcu.org>",
+    "subject": "Your monthly statement is ready",
+    "bodyText": "Your account statement is ready to view in online banking.",
+    "links": [
+      {
+        "href": "https://www.applefcu.org/statements",
+        "text": "View statement"
+      }
+    ],
+    "expectedBrand": null,
+    "notes": "Real organization whose name contains a protected brand word."
+  },
+  {
+    "id": "apple-pie-recipe-newsletter",
+    "label": "safe",
+    "from": "\"Apple Pie Recipes Weekly\" <hello@bakingblog.example>",
+    "subject": "This week's recipe",
+    "bodyText": "A cozy apple pie recipe for fall baking.",
+    "links": [
+      {
+        "href": "https://bakingblog.example/recipes",
+        "text": "Read recipe"
+      }
+    ],
+    "expectedBrand": null,
+    "notes": "Brand word used in an unrelated sense."
+  },
+  {
+    "id": "google-developer-group-meetup",
+    "label": "safe",
+    "from": "\"Google Developer Group SF\" <organizers@gdgsf.example>",
+    "subject": "Meetup next Tuesday",
+    "bodyText": "Join us for a talk on Android development next week.",
+    "links": [
+      {
+        "href": "https://gdgsf.example/events",
+        "text": "RSVP"
+      }
+    ],
+    "expectedBrand": null,
+    "notes": "Community group named after a brand."
+  },
+  {
+    "id": "small-business-gmail-appointment",
+    "label": "safe",
+    "from": "\"Sunrise Cleaning Service\" <sunrisecleaningsf@gmail.com>",
+    "subject": "Confirming Thursday appointment",
+    "bodyText": "Hi, confirming our cleaning appointment for Thursday at 10am. See you then!",
+    "links": [],
+    "notes": "Small business with its name in its own Gmail address."
+  },
+  {
+    "id": "small-business-gmail-invoice",
+    "label": "safe",
+    "from": "\"Joe's Plumbing Service\" <joesplumbingsf@gmail.com>",
+    "subject": "Invoice for last week",
+    "bodyText": "Hi Peter, attached is the invoice for the water heater repair. Thanks, Joe.",
+    "links": [],
+    "notes": "Small business invoice from its own Gmail address."
+  },
+  {
+    "id": "aws-billing-statement",
+    "label": "safe",
+    "from": "\"Amazon Web Services\" <aws-marketing-email-replies@amazon.com>",
+    "subject": "Your AWS bill is available",
+    "bodyText": "Your AWS billing statement for May is now available in the console.",
+    "links": [
+      {
+        "href": "https://console.aws.amazon.com/billing",
+        "text": "View bill"
+      }
+    ],
+    "notes": "Brand product line sent from the trusted parent domain."
+  },
+  {
+    "id": "microsoft-store-receipt",
+    "label": "safe",
+    "from": "\"Microsoft Store\" <microsoft-noreply@microsoft.com>",
+    "subject": "Thanks for your order",
+    "bodyText": "Your Microsoft Store order has shipped.",
+    "links": [
+      {
+        "href": "https://www.microsoft.com/orders",
+        "text": "Track order"
+      }
+    ],
+    "expectedBrand": "Microsoft",
+    "notes": "Trusted brand store receipt."
+  },
+  {
+    "id": "fintech-newsletter-paypal-mention",
+    "label": "safe",
+    "from": "\"Fintech Digest\" <digest@fintechdigest.example>",
+    "subject": "PayPal earnings beat expectations",
+    "bodyText": "PayPal reported strong quarterly earnings. Subscription revenue grew 12%.",
+    "links": [
+      {
+        "href": "https://fintechdigest.example/article",
+        "text": "Read more"
+      }
+    ],
+    "expectedBrand": null,
+    "notes": "Editorial brand mention with one nearby business word."
+  },
+  {
+    "id": "school-pta-rewards-program",
+    "label": "safe",
+    "from": "\"Lincoln Elementary PTA\" <pta@lincolnelementary.example>",
+    "subject": "Box Tops rewards program",
+    "bodyText": "Our school rewards program earned $500 this semester. Thank you!",
+    "links": [],
+    "notes": "Organization name matches its own concatenated domain."
+  },
+  {
+    "id": "airline-loyalty-from-brand-subdomain",
+    "label": "safe",
+    "from": "\"United MileagePlus\" <MileagePlus@news.united.com>",
+    "subject": "Your miles statement",
+    "bodyText": "Your MileagePlus account balance is 45,000 miles.",
+    "links": [
+      {
+        "href": "https://www.united.com/account",
+        "text": "View account"
+      }
+    ],
+    "expectedBrand": null,
+    "notes": "Loyalty program from the airline's own sending subdomain."
+  },
+  {
+    "id": "coffee-shop-order-confirmation",
+    "label": "safe",
+    "from": "\"Peak Coffee Roasters\" <orders@peakcoffee.example>",
+    "subject": "Order #1042 confirmed",
+    "bodyText": "Thanks for your order! Your coffee ships Monday. Payment of $24 received.",
+    "links": [
+      {
+        "href": "https://peakcoffee.example/orders/1042",
+        "text": "View order"
+      }
+    ],
+    "expectedBrand": null,
+    "notes": "Normal store order email with payment language."
+  },
+  {
+    "id": "newsletter-via-substack",
+    "label": "safe",
+    "from": "\"Lenny's Newsletter via Substack\" <lenny@substack.com>",
+    "subject": "How to ship faster",
+    "bodyText": "This week we cover shipping speed and product reviews. Manage your subscription anytime.",
+    "links": [
+      {
+        "href": "https://substack.com/redirect/abc",
+        "text": "Read online"
+      }
+    ],
+    "expectedBrand": null,
+    "notes": "Known platform delegation."
+  },
+  {
+    "id": "payroll-team-workday",
+    "label": "safe",
+    "from": "\"Payroll Team\" <payroll@workday-mail.example>",
+    "subject": "Your payslip is ready",
+    "bodyText": "Your June payslip is available in Workday.",
+    "links": [
+      {
+        "href": "https://workday-mail.example/payslip",
+        "text": "View payslip"
+      }
+    ],
+    "expectedBrand": null,
+    "notes": "Generic department name with no organization identity."
+  },
+  {
+    "id": "youtube-studio-processing",
+    "label": "safe",
+    "from": "\"YouTube\" <noreply@youtube.com>",
+    "subject": "Your video is processing",
+    "bodyText": "Your upload is processing. Check YouTube Studio for status.",
+    "links": [
+      {
+        "href": "https://studio.youtube.com",
+        "text": "Open Studio"
+      }
+    ],
+    "expectedBrand": "YouTube",
+    "notes": "Trusted brand notification."
+  },
+  {
+    "id": "google-workspace-invoice",
+    "label": "safe",
+    "from": "\"Google Payments\" <payments-noreply@google.com>",
+    "subject": "Your Google Workspace invoice",
+    "bodyText": "Your monthly Google Workspace invoice is available. Payment processed automatically.",
+    "links": [
+      {
+        "href": "https://admin.google.com/billing",
+        "text": "View invoice"
+      }
+    ],
+    "notes": "Trusted Google billing email full of payment language."
+  },
+  {
+    "id": "facebook-notification-facebookmail",
+    "label": "safe",
+    "from": "\"Facebook\" <notification@facebookmail.com>",
+    "subject": "You have 3 new notifications",
+    "bodyText": "You have new notifications waiting on Facebook.",
+    "links": [
+      {
+        "href": "https://www.facebook.com/notifications",
+        "text": "View notifications"
+      }
+    ],
+    "expectedBrand": "Facebook",
+    "notes": "Facebook's real sending domain differs from facebook.com."
+  },
+  {
+    "id": "docusign-envelope-via-person",
+    "label": "safe",
+    "from": "\"Maria Garcia via DocuSign\" <dse@docusign.net>",
+    "subject": "Please sign: Lease agreement",
+    "bodyText": "Maria Garcia sent you a document to review and sign.",
+    "links": [
+      {
+        "href": "https://app.docusign.com/sign/abc",
+        "text": "Review document"
+      }
+    ],
+    "expectedBrand": null,
+    "notes": "Real DocuSign envelope sent on behalf of a person."
+  },
+  {
+    "id": "amazon-order-ccTLD",
+    "label": "safe",
+    "from": "\"Amazon.co.uk\" <order-update@amazon.co.uk>",
+    "subject": "Your order has dispatched",
+    "bodyText": "Your order has dispatched and is on its way.",
+    "links": [
+      {
+        "href": "https://www.amazon.co.uk/orders",
+        "text": "Track package"
+      }
+    ],
+    "expectedBrand": "Amazon",
+    "notes": "International brand storefront on a country TLD."
+  },
+  {
+    "id": "linkedin-job-alert",
+    "label": "safe",
+    "from": "\"LinkedIn\" <jobs-noreply@linkedin.com>",
+    "subject": "New jobs for product managers",
+    "bodyText": "We found 8 new jobs that match your profile.",
+    "links": [
+      {
+        "href": "https://www.linkedin.com/jobs",
+        "text": "View jobs"
+      }
+    ],
+    "expectedBrand": "LinkedIn",
+    "notes": "Trusted LinkedIn notification."
   }
 ]
