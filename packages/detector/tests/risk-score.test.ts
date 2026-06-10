@@ -108,6 +108,46 @@ describe("analyzeMessage", () => {
     expect(result.evidence.map((item) => item.kind)).not.toContain("link_domain_mismatch");
   });
 
+  it("does not flag social footer links in trusted brand emails", () => {
+    const result = analyzeMessage({
+      from: "\"PayPal\" <service@paypal.com>",
+      subject: "Receipt for your payment",
+      bodyText: "PayPal receipt for your recent transaction.",
+      links: [
+        { href: "https://www.paypal.com/activity", text: "View activity" },
+        { href: "https://www.youtube.com/paypal", text: "YouTube" },
+        { href: "https://www.instagram.com/paypal", text: "Instagram" }
+      ]
+    });
+
+    expect(result.riskLevel).toBe("safe");
+    expect(result.claimedBrand).toBe("PayPal");
+    expect(result.evidence.map((item) => item.kind)).not.toContain("link_domain_mismatch");
+  });
+
+  it("does not combine subject brand mentions with footer account-preference text", () => {
+    const result = analyzeMessage({
+      from: "\"A friend\" <friend@example.com>",
+      subject: "YouTube",
+      bodyText: "Great video. Manage your account preferences or unsubscribe here."
+    });
+
+    expect(result.riskLevel).toBe("safe");
+    expect(result.claimedBrand).toBeNull();
+  });
+
+  it("does not treat product integration mentions as brand impersonation", () => {
+    const result = analyzeMessage({
+      from: "\"Cal.com\" <hello@cal.com>",
+      subject: "Podcast between Peter and Sue Khim",
+      bodyText: "A new event has been scheduled. Google Calendar status is connected. Manage your account preferences.",
+      links: [{ href: "https://app.cal.com/booking/example", text: "Manage booking" }]
+    });
+
+    expect(result.riskLevel).toBe("safe");
+    expect(result.claimedBrand).toBeNull();
+  });
+
   it("flags shortened links in brand-like messages", () => {
     const result = analyzeMessage({
       from: "\"Netflix Account Support\" <alerts@example.net>",
@@ -135,6 +175,26 @@ describe("analyzeMessage", () => {
       from: "\"A friend\" <friend@example.com>",
       subject: "your YouTube is really great",
       bodyText: "I liked your YouTube video."
+    });
+
+    expect(result.riskLevel).toBe("safe");
+    expect(result.claimedBrand).toBeNull();
+  });
+
+  it("does not treat footer social links as a brand claim", () => {
+    const result = analyzeMessage({
+      from: "\"GoFundMe\" <support@messages.gofundme.com>",
+      subject: "Xiaoming posted an update to Support Healing for Ayden's Family and Community",
+      bodyText: [
+        "GoFundMe Fundraiser Update.",
+        "A new update was added to Support Healing for Ayden's Family and Community.",
+        "Click here to manage your email preferences.",
+        "Facebook Instagram YouTube"
+      ].join(" "),
+      links: [
+        { href: "https://www.gofundme.com/f/support-healing", text: "View update" },
+        { href: "https://www.youtube.com/gofundme", text: "YouTube" }
+      ]
     });
 
     expect(result.riskLevel).toBe("safe");

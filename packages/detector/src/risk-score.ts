@@ -277,12 +277,10 @@ interface BodyBrandClaim extends BrandRule {
 }
 
 const suspiciousBodyContextWords = new Set([
-  "account",
   "billing",
   "cancel",
   "canceled",
   "cancelled",
-  "click",
   "expire",
   "expired",
   "expires",
@@ -313,6 +311,26 @@ const urlShortenerDomains = new Set([
   "tiny.cc",
   "tinyurl.com",
   "trib.al"
+]);
+
+const socialFooterDomains = [
+  "facebook.com",
+  "instagram.com",
+  "linkedin.com",
+  "tiktok.com",
+  "twitter.com",
+  "x.com",
+  "youtube.com"
+];
+
+const socialFooterWords = new Set([
+  "facebook",
+  "instagram",
+  "linkedin",
+  "tiktok",
+  "twitter",
+  "x",
+  "youtube"
 ]);
 
 const organizationSignalWords = new Set([
@@ -453,22 +471,56 @@ function inferBodyBrandClaim(message: MessageMetadata, rules: BrandRule[]): Body
   const subject = message.subject?.trim() ?? "";
   const bodyText = message.bodyText?.trim() ?? "";
   const combinedText = `${subject} ${bodyText}`.trim();
-  if (!combinedText || !hasSuspiciousBodyContext(combinedText)) {
+  if (!combinedText) {
     return null;
   }
 
-  const bodyBrand = findClaimedBrand(bodyText, rules);
+  const bodyBrand = findBrandWithSuspiciousContext(bodyText, rules);
   if (bodyBrand) {
     return { ...bodyBrand, source: "body" };
   }
 
-  const subjectBrand = findClaimedBrand(subject, rules);
+  const subjectBrand = findBrandWithSuspiciousContext(combinedText, rules);
   return subjectBrand ? { ...subjectBrand, source: "subject" } : null;
 }
 
-function hasSuspiciousBodyContext(value: string): boolean {
-  const words = value.match(/[a-z0-9]+/gi) ?? [];
-  return words.some((word) => suspiciousBodyContextWords.has(word.toLowerCase()));
+function findBrandWithSuspiciousContext(value: string, rules: BrandRule[]): BrandRule | null {
+  const words = tokenizeWords(value);
+  if (words.length === 0) {
+    return null;
+  }
+
+  for (const rule of rules) {
+    for (const displayName of rule.displayNames) {
+      const brandWords = tokenizeWords(displayName);
+      if (brandWords.length === 0) continue;
+
+      for (let index = 0; index <= words.length - brandWords.length; index += 1) {
+        if (!matchesAt(words, brandWords, index)) continue;
+
+        const contextStart = Math.max(0, index - 6);
+        const contextEnd = Math.min(words.length, index + brandWords.length + 6);
+        const context = words.slice(contextStart, contextEnd);
+        if (hasSuspiciousBodyContext(context)) {
+          return rule;
+        }
+      }
+    }
+  }
+
+  return null;
+}
+
+function tokenizeWords(value: string): string[] {
+  return (value.match(/[a-z0-9]+/gi) ?? []).map((word) => word.toLowerCase());
+}
+
+function matchesAt(words: string[], expected: string[], index: number): boolean {
+  return expected.every((word, offset) => words[index + offset] === word);
+}
+
+function hasSuspiciousBodyContext(words: string[]): boolean {
+  return words.some((word) => suspiciousBodyContextWords.has(word));
 }
 
 interface LinkAssessment {
@@ -488,6 +540,10 @@ function assessLinks(
     const linkDomain = parseLinkDomain(link.href);
     if (!linkDomain || seen.has(linkDomain)) continue;
     seen.add(linkDomain);
+
+    if (isSocialFooterLink(linkDomain, link.text)) {
+      continue;
+    }
 
     if (urlShortenerDomains.has(linkDomain)) {
       evidenceItems.push(evidence(
@@ -517,6 +573,15 @@ function assessLinks(
     suspicious: evidenceItems.some((item) => item.severity !== "info"),
     evidence: evidenceItems.slice(0, 3)
   };
+}
+
+function isSocialFooterLink(linkDomain: string, text: string | undefined): boolean {
+  if (!domainMatchesAny(linkDomain, socialFooterDomains)) {
+    return false;
+  }
+
+  const words = tokenizeWords(text ?? "");
+  return words.some((word) => socialFooterWords.has(word));
 }
 
 function parseLinkDomain(href: string): string | null {

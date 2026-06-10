@@ -25,6 +25,25 @@
     "notes": "Normal app notification from a brand not claimed in sender display name."
   },
   {
+    "id": "gofundme-update-with-youtube-footer",
+    "label": "safe",
+    "from": "\"GoFundMe\" <support@messages.gofundme.com>",
+    "subject": "Xiaoming posted an update to Support Healing for Ayden's Family and Community",
+    "bodyText": "GoFundMe Fundraiser Update. A new update was added to Support Healing for Ayden's Family and Community. Click here to manage your email preferences. Facebook Instagram YouTube",
+    "links": [
+      {
+        "href": "https://www.gofundme.com/f/support-healing",
+        "text": "View update"
+      },
+      {
+        "href": "https://www.youtube.com/gofundme",
+        "text": "YouTube"
+      }
+    ],
+    "expectedBrand": null,
+    "notes": "Legitimate sender with social footer links should not become a YouTube claim."
+  },
+  {
     "id": "youtube-legit-update",
     "label": "safe",
     "from": "\"YouTube\" <updates@youtube.com>",
@@ -53,6 +72,39 @@
     ],
     "expectedBrand": "PayPal",
     "notes": "Legitimate PayPal sender and link."
+  },
+  {
+    "id": "paypal-legit-with-social-footer",
+    "label": "safe",
+    "from": "\"PayPal\" <service@paypal.com>",
+    "subject": "Receipt for your payment",
+    "bodyText": "PayPal receipt for your recent transaction. Follow PayPal on social channels.",
+    "links": [
+      {
+        "href": "https://www.paypal.com/activity",
+        "text": "View activity"
+      },
+      {
+        "href": "https://www.youtube.com/paypal",
+        "text": "YouTube"
+      },
+      {
+        "href": "https://www.instagram.com/paypal",
+        "text": "Instagram"
+      }
+    ],
+    "expectedBrand": "PayPal",
+    "notes": "Trusted brand email with social footer links should not become a link mismatch."
+  },
+  {
+    "id": "subject-brand-with-account-preferences",
+    "label": "safe",
+    "from": "\"A friend\" <friend@example.com>",
+    "subject": "YouTube",
+    "bodyText": "Great video. Manage your account preferences or unsubscribe here.",
+    "links": [],
+    "expectedBrand": null,
+    "notes": "A short brand mention plus footer account-preference text is not impersonation."
   },
   {
     "id": "hbo-max-legit",
