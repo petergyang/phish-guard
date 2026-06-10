@@ -97,6 +97,44 @@
     "notes": "Trusted brand email with social footer links should not become a link mismatch."
   },
   {
+    "id": "paypal-legit-with-email-tracking",
+    "label": "safe",
+    "from": "\"PayPal\" <service@paypal.com>",
+    "subject": "Receipt for your payment",
+    "bodyText": "PayPal receipt for your recent transaction.",
+    "links": [
+      {
+        "href": "https://links.customer.io/click/abc123",
+        "text": "View activity"
+      },
+      {
+        "href": "https://www.paypal.com/activity",
+        "text": "PayPal activity"
+      }
+    ],
+    "expectedBrand": "PayPal",
+    "notes": "Trusted brand email with a common email-service tracking link should not become a link mismatch."
+  },
+  {
+    "id": "paypal-legit-with-tco-social-footer",
+    "label": "safe",
+    "from": "\"PayPal\" <service@paypal.com>",
+    "subject": "Receipt for your payment",
+    "bodyText": "PayPal receipt for your recent transaction. Follow us on social channels.",
+    "links": [
+      {
+        "href": "https://www.paypal.com/activity",
+        "text": "View activity"
+      },
+      {
+        "href": "https://t.co/paypal-social",
+        "text": "Twitter"
+      }
+    ],
+    "expectedBrand": "PayPal",
+    "notes": "Trusted brand email with a social t.co link should not become a shortener warning."
+  },
+  {
     "id": "subject-brand-with-account-preferences",
     "label": "safe",
     "from": "\"A friend\" <friend@example.com>",
@@ -145,6 +183,21 @@
     ],
     "expectedBrand": null,
     "notes": "Calendar tool mentions Google Calendar but does not pretend to be Google."
+  },
+  {
+    "id": "known-platform-delegation",
+    "label": "safe",
+    "from": "\"OpenAI Team via Luma\" <notifications@lu.ma>",
+    "subject": "Event reminder",
+    "bodyText": "Your event starts soon.",
+    "links": [
+      {
+        "href": "https://lu.ma/example",
+        "text": "View event"
+      }
+    ],
+    "expectedBrand": null,
+    "notes": "Explicit delegation through a known event platform should not be treated as brand impersonation."
   },
   {
     "id": "newsletter-mentions-apple",

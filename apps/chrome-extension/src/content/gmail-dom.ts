@@ -28,6 +28,14 @@ const visibleSenderHeaderSelectors = [
 ];
 
 const angleBracketSenderPattern = /(.+?)\s*<([^<>\s@]+@[^<>\s@]+\.[^<>\s@]+)>/;
+const ignoredBodyContentSelectors = [
+  "blockquote",
+  ".gmail_attr",
+  ".gmail_extra",
+  ".gmail_quote",
+  ".gmail_signature",
+  "[class*='gmail_quote']"
+];
 
 export function extractVisibleGmailMetadata(root: ParentNode = document): GmailDomExtraction {
   const subject = readSubject(root);
@@ -129,12 +137,21 @@ function readBodyText(root: Element | null | undefined): string | null {
   if (!body) return null;
 
   const bodyTextSource = body.cloneNode(true) as Element;
-  for (const element of Array.from(bodyTextSource.querySelectorAll("a, [href], .aZo, .aQH, .aV3"))) {
+  for (const element of Array.from(bodyTextSource.querySelectorAll([
+    "a",
+    "[href]",
+    ".aZo",
+    ".aQH",
+    ".aV3",
+    ...ignoredBodyContentSelectors
+  ].join(",")))) {
     element.remove();
   }
 
   const textParts = [bodyTextSource.textContent ?? ""];
   for (const image of Array.from(body.querySelectorAll("img"))) {
+    if (isInsideIgnoredBodyContent(image)) continue;
+
     textParts.push(
       image.getAttribute("alt") ?? "",
       image.getAttribute("title") ?? "",
@@ -151,6 +168,7 @@ function readBodyLinks(root: Element | null | undefined): MessageLinkMetadata[] 
   if (!body) return [];
 
   return Array.from(body.querySelectorAll<HTMLAnchorElement>("a[href]"))
+    .filter((link) => !isInsideIgnoredBodyContent(link))
     .map((link) => {
       return {
         href: link.href || link.getAttribute("href") || "",
@@ -159,6 +177,10 @@ function readBodyLinks(root: Element | null | undefined): MessageLinkMetadata[] 
     })
     .filter((link) => /^https?:\/\//i.test(link.href))
     .slice(0, 20);
+}
+
+function isInsideIgnoredBodyContent(element: Element): boolean {
+  return ignoredBodyContentSelectors.some((selector) => element.closest(selector));
 }
 
 function formatFrom(displayName: string, address: string): string {

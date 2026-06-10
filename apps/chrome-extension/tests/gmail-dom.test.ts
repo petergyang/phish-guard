@@ -45,6 +45,34 @@ describe("Gmail DOM metadata adapter", () => {
     expect(detection.claimedBrand).toBeNull();
   });
 
+  it("ignores quoted and signature content when extracting body signals", () => {
+    document.body.innerHTML = `
+      <h2 class="hP">Lunch?</h2>
+      <div class="adn ads">
+        <span class="gD" email="friend@example.com" name="A friend">A friend</span>
+        <div class="a3s">
+          Lunch tomorrow works for me.
+          <div class="gmail_signature">
+            <a href="https://youtube.com/friend">YouTube</a>
+          </div>
+          <div class="gmail_quote">
+            <img alt="HBOmax">
+            Hurry! Your membership has expired.
+            <a href="https://hbo-renewal.example/login">Renew now</a>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const extraction = extractVisibleGmailMetadata(document);
+    const detection = analyzeMessage(extraction.metadata!);
+
+    expect(extraction.metadata?.bodyText).toBe("Lunch tomorrow works for me.");
+    expect(extraction.metadata?.links).toBeUndefined();
+    expect(detection.riskLevel).toBe("safe");
+    expect(detection.claimedBrand).toBeNull();
+  });
+
   it("extracts visible sender text when Gmail does not expose sender attributes", () => {
     document.body.innerHTML = `
       <h2 class="hP">Tell us your view Tell us your view | 08 June 2026 FCZ</h2>

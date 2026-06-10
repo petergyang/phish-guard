@@ -125,6 +125,38 @@ describe("analyzeMessage", () => {
     expect(result.evidence.map((item) => item.kind)).not.toContain("link_domain_mismatch");
   });
 
+  it("does not flag common email tracking links in trusted brand emails", () => {
+    const result = analyzeMessage({
+      from: "\"PayPal\" <service@paypal.com>",
+      subject: "Receipt for your payment",
+      bodyText: "PayPal receipt for your recent transaction.",
+      links: [
+        { href: "https://links.customer.io/click/abc123", text: "View activity" },
+        { href: "https://www.paypal.com/activity", text: "PayPal activity" }
+      ]
+    });
+
+    expect(result.riskLevel).toBe("safe");
+    expect(result.claimedBrand).toBe("PayPal");
+    expect(result.evidence.map((item) => item.kind)).not.toContain("link_domain_mismatch");
+  });
+
+  it("does not flag t.co social footer links in trusted brand emails", () => {
+    const result = analyzeMessage({
+      from: "\"PayPal\" <service@paypal.com>",
+      subject: "Receipt for your payment",
+      bodyText: "PayPal receipt for your recent transaction.",
+      links: [
+        { href: "https://www.paypal.com/activity", text: "View activity" },
+        { href: "https://t.co/paypal-social", text: "Twitter" }
+      ]
+    });
+
+    expect(result.riskLevel).toBe("safe");
+    expect(result.claimedBrand).toBe("PayPal");
+    expect(result.evidence.map((item) => item.kind)).not.toContain("link_shortener");
+  });
+
   it("does not combine subject brand mentions with footer account-preference text", () => {
     const result = analyzeMessage({
       from: "\"A friend\" <friend@example.com>",
@@ -146,6 +178,28 @@ describe("analyzeMessage", () => {
 
     expect(result.riskLevel).toBe("safe");
     expect(result.claimedBrand).toBeNull();
+  });
+
+  it("does not flag explicit known-platform delegation", () => {
+    const result = analyzeMessage({
+      from: "\"OpenAI Team via Luma\" <notifications@lu.ma>",
+      subject: "Event reminder",
+      bodyText: "Your event starts soon."
+    });
+
+    expect(result.riskLevel).toBe("safe");
+    expect(result.claimedBrand).toBeNull();
+  });
+
+  it("still flags platform-looking delegation from a public mailbox", () => {
+    const result = analyzeMessage({
+      from: "\"YouTube Account Recovery via Gmail\" <random@gmail.com>",
+      subject: "Recover your channel",
+      bodyText: "YouTube recovery request. Verify ownership now."
+    });
+
+    expect(result.riskLevel).toBe("suspicious");
+    expect(result.claimedBrand).toBe("YouTube");
   });
 
   it("flags shortened links in brand-like messages", () => {

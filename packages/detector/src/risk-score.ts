@@ -317,6 +317,7 @@ const socialFooterDomains = [
   "facebook.com",
   "instagram.com",
   "linkedin.com",
+  "t.co",
   "tiktok.com",
   "twitter.com",
   "x.com",
@@ -332,6 +333,21 @@ const socialFooterWords = new Set([
   "x",
   "youtube"
 ]);
+
+const emailTrackingDomains = [
+  "braze.com",
+  "customer.io",
+  "e.customeriomail.com",
+  "exacttarget.com",
+  "hubspotemail.net",
+  "iterable.com",
+  "list-manage.com",
+  "mailchimp.com",
+  "mailchi.mp",
+  "mandrillapp.com",
+  "sendgrid.net",
+  "sfmc-content.com"
+];
 
 const organizationSignalWords = new Set([
   "account",
@@ -415,7 +431,18 @@ const nonIdentityWords = new Set([
   "wholesale"
 ]);
 
+const delegatedPlatformDomains = [
+  "eventbrite.com",
+  "lu.ma",
+  "luma.com",
+  "substack.com"
+];
+
 function inferDisplayNameClaim(displayName: string, address: string, domain: string | null): DisplayNameClaim | null {
+  if (isExplicitPlatformDelegation(displayName, domain)) {
+    return null;
+  }
+
   const acronymClaim = inferDottedAcronymClaim(displayName, address, domain);
   if (acronymClaim) {
     return acronymClaim;
@@ -445,6 +472,22 @@ function inferDisplayNameClaim(displayName: string, address: string, domain: str
     claimName,
     claimAppearsInAddress: addressText.includes(claimToken)
   };
+}
+
+function isExplicitPlatformDelegation(displayName: string, domain: string | null): boolean {
+  if (!domain || publicMailboxDomains.has(domain) || !domainMatchesAny(domain, delegatedPlatformDomains)) {
+    return false;
+  }
+
+  const words = tokenizeWords(displayName);
+  const delegationIndex = words.findIndex((word) => word === "via");
+  if (delegationIndex < 0 || delegationIndex === words.length - 1) {
+    return false;
+  }
+
+  const delegatedPlatformName = normalizeForIdentityMatch(words.slice(delegationIndex + 1).join(""));
+  const senderDomainName = normalizeForIdentityMatch(domain);
+  return delegatedPlatformName.length >= 3 && senderDomainName.includes(delegatedPlatformName);
 }
 
 function inferDottedAcronymClaim(displayName: string, address: string, domain: string | null): DisplayNameClaim | null {
@@ -535,6 +578,7 @@ function assessLinks(
 ): LinkAssessment {
   const evidenceItems: EvidenceItem[] = [];
   const seen = new Set<string>();
+  const trustedSenderForBrand = brand ? isTrustedSenderDomain(senderDomain, brand) : false;
 
   for (const link of links ?? []) {
     const linkDomain = parseLinkDomain(link.href);
@@ -542,6 +586,10 @@ function assessLinks(
     seen.add(linkDomain);
 
     if (isSocialFooterLink(linkDomain, link.text)) {
+      continue;
+    }
+
+    if (trustedSenderForBrand && isEmailTrackingLink(linkDomain)) {
       continue;
     }
 
@@ -582,6 +630,10 @@ function isSocialFooterLink(linkDomain: string, text: string | undefined): boole
 
   const words = tokenizeWords(text ?? "");
   return words.some((word) => socialFooterWords.has(word));
+}
+
+function isEmailTrackingLink(linkDomain: string): boolean {
+  return domainMatchesAny(linkDomain, emailTrackingDomains);
 }
 
 function parseLinkDomain(href: string): string | null {
