@@ -1,116 +1,77 @@
 # Phish Guard
 
-![Phish Guard warning inside Gmail](docs/assets/phish-guard-gmail-warning.svg)
+![Phish Guard warning for a Costco impersonation email](docs/assets/readme/costco-warning.png)
 
-Phish Guard is a Chrome extension that warns you when an open Gmail message looks like brand impersonation.
+Phish Guard is a Chrome extension that warns you inside Gmail when an email looks like it is pretending to be a trusted brand.
 
-If an email says it is from Costco, YouTube, PayPal, or another recognizable organization, but the sender address, message text, or links do not line up, Phish Guard shows a warning inside the message before you click.
+It is built for the moment that matters: before you click a link in a suspicious message.
 
-## How It Works
+## Why Use It
 
-1. You open a message in Gmail.
-2. Phish Guard checks the visible sender row, subject, body text, and links for that open email.
-3. If the evidence points to brand impersonation, Phish Guard shows a warning above the message header.
+- It shows a plain warning when the sender looks wrong.
+- It explains the problem in normal language.
+- It helps you pause before clicking links in fake reward, account, payment, or subscription emails.
 
-Phish Guard runs locally in your browser and does not upload email data.
+![Phish Guard warning for an HBO impersonation email](docs/assets/readme/hbo-warning.png)
 
 ## What It Checks
 
-- Sender display name
-- Sender email address and domain
-- Subject and visible body text in the open message
-- Link URLs and visible link text in the open message
-- Obvious brand mismatch signals
-- Link domains that do not match the claimed brand
-- URL shorteners in brand-like messages
-- Subscription, payment, account, and urgency language
-- Known high-confidence brands like Google, YouTube, PayPal, Apple, Microsoft, and HBO Max
-- Generic organization-style names, such as `Costco Rewards Connection`
+Phish Guard checks only the email you have open. It looks at:
 
-## What It Tries Not To Flag
+- Who the email says it is from.
+- The actual sender email address.
+- The visible words and links in that open email.
+- Whether a brand name and sender address look like they belong together.
 
-Phish Guard should not warn just because:
+It should not warn just because a friend mentions YouTube, a newsletter talks about Apple, or a normal email has social links in the footer.
 
-- A friend casually mentions a brand.
-- A newsletter discusses Apple, Google, Microsoft, or another company.
-- A legitimate email has YouTube, Instagram, Facebook, or `t.co` social-footer links.
-- A trusted sender uses common email-service tracking links.
-- A reply includes quoted text from an older suspicious email.
-- A platform email explicitly says it was sent through a known service, such as `via Luma`.
+## Privacy
 
-Body checks look for brand claims near scam-like context, such as subscription, payment, verification, renewal, or urgency language. That keeps normal brand mentions from turning into warnings.
+Phish Guard runs locally in your browser.
 
-## Warning Copy
+It does **not**:
 
-```text
-Phish Guard warning: This is likely not from Costco.
-Sender email: random@hotmail.com. Avoid links. Use Gmail's Report spam button or delete the email.
-```
+- Upload your email.
+- Scan your inbox history.
+- Read attachments.
+- Access your contacts, cookies, or passwords.
+- Visit links for you.
+- Edit, delete, send, archive, label, or report emails.
 
-The warning is intentionally plain. It tells you what looks wrong and what to do next.
+Chrome may say the extension can "read and change" data on Gmail. That sounds scary, but here it means:
+
+- **Read:** check the open message locally.
+- **Change:** add the warning banner inside Gmail.
+
+Read the full policy in [PRIVACY.md](PRIVACY.md).
 
 ## Install
 
 Chrome Web Store link coming soon.
 
-For private testing:
+For now, private testing takes a few manual Chrome steps:
+
+![Chrome extension setup screen](docs/assets/readme/chrome-extension-setup.svg)
 
 1. Download `phish-guard-chrome-extension.zip` from the latest GitHub release.
 2. Unzip it.
 3. Open `chrome://extensions`.
 4. Turn on **Developer mode**.
 5. Click **Load unpacked**.
-6. Select the unzipped `chrome-extension` folder.
+6. Select the unzipped folder that contains `manifest.json`.
 7. Open Gmail, click the Phish Guard toolbar icon, and turn on Gmail warnings.
 
 For local development, see [docs/development/local-install.md](docs/development/local-install.md).
 
-## Privacy
-
-Phish Guard reads the visible sender row, subject, body text, and link URLs for the open Gmail message. It uses that data locally to decide whether to show a warning.
-
-It does not read:
-
-- Attachments
-- Inbox history
-- Contacts
-- Cookies
-- Passwords
-
-It does not visit links or upload link URLs.
-
-Chrome may say Phish Guard can "read and change" data on Gmail. The "read" part is for inspecting the open message locally. The "change" part is for adding the warning banner. Phish Guard does not edit, delete, send, archive, label, or report emails.
-
-Read the full policy in [PRIVACY.md](PRIVACY.md).
-
-## Development
+## Technical Notes
 
 ```bash
 npm test
 npm run eval:detector
 npm run build
-npm audit --audit-level=moderate
 npm run package:chrome-extension
 ```
 
-Project layout:
+`npm run eval:detector` runs a synthetic phishing/safe-message test set. It is a regression check, not a real-world accuracy claim.
 
-- `apps/chrome-extension`: Consumer-facing Chrome extension
-- `packages/detector`: Local sender-risk detector
-- `packages/detector/fixtures/corpus`: Synthetic detector evaluation corpus
-- `apps/gmail-addon`: Earlier Gmail add-on experiment
-- `docs/development`: Local development and private testing notes
-- `docs/privacy`: Privacy and permission notes
-- `docs/store`: Chrome Web Store and release-readiness notes
-
-## Detector Evaluation
-
-`npm run eval:detector` runs a synthetic corpus of phishing and safe messages. The current corpus includes sender spoofing, body-brand claims, suspicious links, social footers, tracking links, quoted replies, newsletters, and platform delegation.
-
-This is a regression gate, not a real-world accuracy claim. Add a safe fixture whenever Phish Guard flags a legitimate email, and add a phishing fixture whenever it misses a real attempt.
-
-## Reporting Issues
-
-Use GitHub issues for bugs and false positives. Do not post full email bodies, attachments, private links, or screenshots that reveal personal messages. Sender display names and sender domains are usually enough.
-
-Security and privacy reports should follow [SECURITY.md](SECURITY.md).
+Report bugs and false positives with GitHub issues, but do not post full email bodies, attachments, private links, or private inbox screenshots. Sender display names and domains are usually enough.

@@ -62,11 +62,13 @@ describe("Chrome extension store readiness", () => {
 
   it("keeps the README product screenshot available", () => {
     const readme = readFileSync("README.md", "utf8");
-    const screenshotPath = "docs/assets/phish-guard-gmail-warning.svg";
+    const screenshotPath = "docs/assets/readme/costco-warning.png";
 
     expect(readme).toContain(screenshotPath);
     expect(readme.indexOf(screenshotPath)).toBeLessThan(readme.indexOf("Phish Guard is a Chrome extension"));
     expect(existsSync(screenshotPath), `${screenshotPath} should exist`).toBe(true);
+    expect(readme).toContain("docs/assets/readme/hbo-warning.png");
+    expect(readme).toContain("docs/assets/readme/chrome-extension-setup.svg");
   });
 
   it("keeps public README install steps clear for private testers", () => {
