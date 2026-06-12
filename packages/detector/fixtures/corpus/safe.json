@@ -560,6 +560,44 @@
     "notes": "Casual antivirus mention without receipt or urgency language."
   },
   {
+    "id": "youtube-promo-redirect-links",
+    "label": "safe",
+    "from": "\"YouTube\" <no-reply@youtube.com>",
+    "subject": "Try FOX One for 3 days and stream the FIFA World Cup 2026. FOX One available with YouTube",
+    "bodyText": "Stream the FIFA World Cup 2026 with FOX One on YouTube. Try it free for 3 days. Offer ends soon. Subscription billed after trial.",
+    "links": [
+      {
+        "href": "https://c.gle/ANq2Zk_abc123",
+        "text": "Start free trial"
+      },
+      {
+        "href": "https://c.gle/ANq2Zk_def456",
+        "text": "Learn more"
+      }
+    ],
+    "expectedBrand": "YouTube",
+    "notes": "Real YouTube promo: trusted sender wrapping every link through Google's c.gle redirect."
+  },
+  {
+    "id": "trusted-sender-partner-link",
+    "label": "safe",
+    "from": "\"Spotify\" <no-reply@spotify.com>",
+    "subject": "Your year in music, presented with Hyundai",
+    "bodyText": "Your Spotify Wrapped is here, presented with our partner Hyundai.",
+    "links": [
+      {
+        "href": "https://www.hyundai.com/spotify-wrapped",
+        "text": "See the partnership"
+      },
+      {
+        "href": "https://www.spotify.com/wrapped",
+        "text": "Open Wrapped"
+      }
+    ],
+    "expectedBrand": "Spotify",
+    "notes": "Trusted brand sender linking to a partner domain must stay safe."
+  },
+  {
     "id": "linkedin-job-alert",
     "label": "safe",
     "from": "\"LinkedIn\" <jobs-noreply@linkedin.com>",
