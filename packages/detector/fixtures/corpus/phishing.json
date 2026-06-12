@@ -331,6 +331,26 @@
     "notes": "Facebook impersonation from a public mailbox."
   },
   {
+    "id": "webroot-invoice-callback-gmail",
+    "label": "phishing",
+    "from": "\"Peter Yang\" <sajansingj9283@gmail.com>",
+    "subject": "Invoice Confirmation for from DRYK2056MTa45",
+    "bodyText": "WEBROOT Order date: Thursday, June 11, 2026 Order Id: 29346-949-BV-278113 Order information confirmed. Call +1 (888) 555-0173 with any questions.",
+    "links": [],
+    "expectedBrand": "Webroot",
+    "notes": "Real-world fake-invoice call-back scam: recipient's own name as sender, receipt language, no links, no urgency words."
+  },
+  {
+    "id": "norton-invoice-callback-outlook",
+    "label": "phishing",
+    "from": "\"Billing Desk\" <billing.desk.8821@outlook.com>",
+    "subject": "Order receipt",
+    "bodyText": "Norton 360 Total Protection. Your order of $349.99 is confirmed. Contact support to make changes.",
+    "links": [],
+    "expectedBrand": "Norton",
+    "notes": "Antivirus invoice scam using receipt language only."
+  },
+  {
     "id": "usps-package-hold",
     "label": "phishing",
     "from": "\"USPS\" <tracking.notice.usa@outlook.com>",

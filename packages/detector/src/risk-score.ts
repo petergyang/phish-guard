@@ -172,7 +172,11 @@ export function analyzeMessage(
       };
     }
 
-    const bodyClaim = inferBodyBrandClaim(message, rules);
+    const bodyClaim = inferBodyBrandClaim(
+      message,
+      rules,
+      parsedFrom.domain !== null && publicMailboxDomains.has(parsedFrom.domain)
+    );
     if (bodyClaim) {
       evidenceItems.push(evidence(
         "brand_claim",
@@ -368,6 +372,26 @@ const suspiciousBodyContextWords = new Set([
   "urgent",
   "verify",
   "winner"
+]);
+
+// Receipt-style wording used by fake-invoice call-back scams. These words are
+// normal in real receipts, so they only count for invoice-scam target brands
+// mentioned in mail sent from a personal mailbox domain.
+const invoiceScamContextWords = new Set([
+  "billing",
+  "charge",
+  "charged",
+  "confirmation",
+  "confirmed",
+  "invoice",
+  "order",
+  "payment",
+  "purchase",
+  "receipt",
+  "refund",
+  "renewal",
+  "renewed",
+  "subscription"
 ]);
 
 // Words that, combined with a brand name inside one hyphenated domain label,
@@ -584,7 +608,7 @@ function inferDottedAcronymClaim(displayName: string, address: string, domain: s
   };
 }
 
-function inferBodyBrandClaim(message: MessageMetadata, rules: BrandRule[]): BodyBrandClaim | null {
+function inferBodyBrandClaim(message: MessageMetadata, rules: BrandRule[], publicMailboxSender: boolean): BodyBrandClaim | null {
   const subject = message.subject?.trim() ?? "";
   const bodyText = message.bodyText?.trim() ?? "";
   const combinedText = `${subject} ${bodyText}`.trim();
@@ -592,22 +616,24 @@ function inferBodyBrandClaim(message: MessageMetadata, rules: BrandRule[]): Body
     return null;
   }
 
-  const bodyBrand = findBrandWithSuspiciousContext(bodyText, rules);
+  const bodyBrand = findBrandWithSuspiciousContext(bodyText, rules, publicMailboxSender);
   if (bodyBrand) {
     return { ...bodyBrand, source: "body" };
   }
 
-  const subjectBrand = findBrandWithSuspiciousContext(combinedText, rules);
+  const subjectBrand = findBrandWithSuspiciousContext(combinedText, rules, publicMailboxSender);
   return subjectBrand ? { ...subjectBrand, source: "subject" } : null;
 }
 
-function findBrandWithSuspiciousContext(value: string, rules: BrandRule[]): BrandRule | null {
+function findBrandWithSuspiciousContext(value: string, rules: BrandRule[], publicMailboxSender: boolean): BrandRule | null {
   const words = tokenizeWords(value);
   if (words.length === 0) {
     return null;
   }
 
   for (const rule of rules) {
+    const allowInvoiceContext = publicMailboxSender && rule.invoiceScamTarget === true;
+
     for (const displayName of rule.displayNames) {
       const brandWords = tokenizeWords(displayName);
       if (brandWords.length === 0) continue;
@@ -619,6 +645,9 @@ function findBrandWithSuspiciousContext(value: string, rules: BrandRule[]): Bran
         const contextEnd = Math.min(words.length, index + brandWords.length + 6);
         const context = words.slice(contextStart, contextEnd);
         if (hasStrongSuspiciousBodyContext(context)) {
+          return rule;
+        }
+        if (allowInvoiceContext && context.some((word) => invoiceScamContextWords.has(word))) {
           return rule;
         }
       }
@@ -637,16 +666,11 @@ function matchesAt(words: string[], expected: string[], index: number): boolean 
 }
 
 // One scam-context word near a brand is common in normal mail ("PayPal ...
-// subscription revenue grew"); require either two distinct context words or
-// one context word plus direct second-person language.
+// subscription revenue grew", "I sent you the PayPal payment"); require two
+// distinct context words before treating a body mention as a brand claim.
 function hasStrongSuspiciousBodyContext(words: string[]): boolean {
   const contextWords = new Set(words.filter((word) => suspiciousBodyContextWords.has(word)));
-  if (contextWords.size >= 2) {
-    return true;
-  }
-
-  const secondPerson = words.some((word) => word === "you" || word === "your");
-  return contextWords.size >= 1 && secondPerson;
+  return contextWords.size >= 2;
 }
 
 function countSuspiciousContextWords(text: string): number {

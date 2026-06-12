@@ -525,6 +525,41 @@
     "notes": "International brand storefront on a country TLD."
   },
   {
+    "id": "webroot-real-receipt",
+    "label": "safe",
+    "from": "\"Webroot\" <noreply@webroot.com>",
+    "subject": "Your Webroot order confirmation",
+    "bodyText": "Webroot order confirmed. Your subscription renews next year.",
+    "links": [
+      {
+        "href": "https://www.webroot.com/account",
+        "text": "Manage account"
+      }
+    ],
+    "expectedBrand": "Webroot",
+    "notes": "Real receipt from the invoice-scam brand's own domain."
+  },
+  {
+    "id": "friend-paypal-payment-mention",
+    "label": "safe",
+    "from": "\"A friend\" <friend@gmail.com>",
+    "subject": "Lunch money",
+    "bodyText": "I sent you the PayPal payment for lunch yesterday.",
+    "links": [],
+    "expectedBrand": null,
+    "notes": "Casual payment-brand mention between people; invoice wording must not extend to payment brands."
+  },
+  {
+    "id": "friend-mentions-antivirus-once",
+    "label": "safe",
+    "from": "\"A friend\" <friend@gmail.com>",
+    "subject": "Computer help",
+    "bodyText": "I installed McAfee on my mom's laptop like you suggested. It seems to work fine.",
+    "links": [],
+    "expectedBrand": null,
+    "notes": "Casual antivirus mention without receipt or urgency language."
+  },
+  {
     "id": "linkedin-job-alert",
     "label": "safe",
     "from": "\"LinkedIn\" <jobs-noreply@linkedin.com>",

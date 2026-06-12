@@ -280,6 +280,42 @@ describe("analyzeMessage", () => {
     expect(result.evidence.map((item) => item.kind)).toContain("brand_domain_mismatch");
   });
 
+  it("flags fake-invoice scams that use receipt language instead of urgency", () => {
+    const result = analyzeMessage({
+      from: "\"Peter Yang\" <sajansingj9283@gmail.com>",
+      subject: "Invoice Confirmation for from DRYK2056MTa45",
+      bodyText: "WEBROOT Order date: Thursday, June 11, 2026 Order Id: 29346-949-BV-278113 Order information confirmed"
+    });
+
+    expect(result.riskLevel).toBe("suspicious");
+    expect(result.claimedBrand).toBe("Webroot");
+    expect(result.evidence.map((item) => item.kind)).toContain("body_brand_suspicious_context");
+    expect(result.evidence.map((item) => item.kind)).toContain("brand_domain_mismatch");
+  });
+
+  it("does not flag real receipts from the invoice-scam brand's own domain", () => {
+    const result = analyzeMessage({
+      from: "\"Webroot\" <noreply@webroot.com>",
+      subject: "Your Webroot order confirmation",
+      bodyText: "Webroot order confirmed. Your subscription renews next year.",
+      links: [{ href: "https://www.webroot.com/account", text: "Manage account" }]
+    });
+
+    expect(result.riskLevel).toBe("safe");
+    expect(result.claimedBrand).toBe("Webroot");
+  });
+
+  it("does not extend invoice-scam wording to non-invoice brands from personal mail", () => {
+    const result = analyzeMessage({
+      from: "\"A friend\" <friend@gmail.com>",
+      subject: "Lunch money",
+      bodyText: "I sent you the PayPal payment for lunch yesterday."
+    });
+
+    expect(result.riskLevel).toBe("safe");
+    expect(result.claimedBrand).toBeNull();
+  });
+
   it("flags shortened links in brand-like messages", () => {
     const result = analyzeMessage({
       from: "\"Netflix Account Support\" <alerts@example.net>",

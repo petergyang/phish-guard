@@ -5,6 +5,12 @@ export interface BrandRule {
   brandName: string;
   displayNames: string[];
   trustedDomains: string[];
+  /**
+   * Brands commonly used in fake-invoice call-back scams. For these, a body
+   * mention near receipt language from a personal mailbox sender is enough to
+   * warn, even without urgency wording.
+   */
+  invoiceScamTarget?: boolean;
 }
 
 export const publicMailboxDomains = new Set([
@@ -339,19 +345,36 @@ export const defaultBrandRules: BrandRule[] = [
     id: "geek-squad",
     brandName: "Geek Squad",
     displayNames: ["geek squad", "geeksquad"],
-    trustedDomains: ["geeksquad.com", "bestbuy.com"]
+    trustedDomains: ["geeksquad.com", "bestbuy.com"],
+    invoiceScamTarget: true
   },
   {
     id: "norton",
     brandName: "Norton",
     displayNames: ["norton", "norton lifelock", "nortonlifelock"],
-    trustedDomains: ["norton.com", "nortonlifelock.com"]
+    trustedDomains: ["norton.com", "nortonlifelock.com"],
+    invoiceScamTarget: true
   },
   {
     id: "mcafee",
     brandName: "McAfee",
     displayNames: ["mcafee"],
-    trustedDomains: ["mcafee.com"]
+    trustedDomains: ["mcafee.com"],
+    invoiceScamTarget: true
+  },
+  {
+    id: "webroot",
+    brandName: "Webroot",
+    displayNames: ["webroot"],
+    trustedDomains: ["webroot.com", "opentext.com"],
+    invoiceScamTarget: true
+  },
+  {
+    id: "avast",
+    brandName: "Avast",
+    displayNames: ["avast"],
+    trustedDomains: ["avast.com"],
+    invoiceScamTarget: true
   }
 ];
 
