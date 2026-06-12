@@ -22,8 +22,8 @@ export function buildInlineWarningModel(result: DetectionResult): InlineWarningM
 
   return {
     state: "warning",
-    title: `Phish Guard warning: This is likely not from ${brand}.`,
-    subtitle: `Sender email: ${sender}.${linkContext} Avoid links. Use Gmail's Report spam button or delete the email.`
+    title: `Phish Guard warning: This might not be from ${brand}.`,
+    subtitle: `Sender email: ${sender}.${linkContext} Be careful with this email and consider marking it as spam.`
   };
 }
 
