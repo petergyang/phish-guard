@@ -13,7 +13,7 @@ describe("Gmail content integration", () => {
     `;
 
     checkOpenGmailMessage(document);
-    expect(document.querySelector(`#${warningBannerId}`)?.textContent).toContain("Phish Guard warning: This is likely not from YouTube.");
+    expect(document.querySelector(`#${warningBannerId}`)?.textContent).toContain("Phish Guard warning: This might not be from YouTube.");
 
     document.body.innerHTML = `
       <h2 class="hP">Channel update</h2>
@@ -112,9 +112,9 @@ describe("Gmail content integration", () => {
 
     const banner = document.querySelector(`#${warningBannerId}`)!;
     const warning = document.querySelector(`#${warningBannerId}`)?.textContent ?? "";
-    expect(warning).toContain("Phish Guard warning: This is likely not from Costco.");
+    expect(warning).toContain("Phish Guard warning: This might not be from Costco.");
     expect(warning).toContain("heidmaureen@example.net");
-    expect(warning).toContain("Avoid links. Use Gmail's Report spam button or delete the email.");
+    expect(warning).toContain("Be careful with this email and consider marking it as spam.");
     expect(warning).not.toContain("Congratulations reward body text");
     expect(banner.querySelector("ul")).toBeNull();
     expect(banner.parentElement?.className).toBe("gs");
@@ -138,9 +138,9 @@ describe("Gmail content integration", () => {
     checkOpenGmailMessage(document);
 
     const warning = document.querySelector(`#${warningBannerId}`)?.textContent ?? "";
-    expect(warning).toContain("Phish Guard warning: This is likely not from Costco.");
+    expect(warning).toContain("Phish Guard warning: This might not be from Costco.");
     expect(warning).toContain("sanceslaman948@hotmail.com");
-    expect(warning).toContain("Avoid links.");
+    expect(warning).toContain("Be careful with this email");
     expect(warning).not.toContain("Congratulations");
   });
 
@@ -165,7 +165,7 @@ describe("Gmail content integration", () => {
     checkOpenGmailMessage(document);
 
     const warning = document.querySelector(`#${warningBannerId}`)?.textContent ?? "";
-    expect(warning).toContain("Phish Guard warning: This is likely not from HBO Max.");
+    expect(warning).toContain("Phish Guard warning: This might not be from HBO Max.");
     expect(warning).toContain("niverbertina9473@outlook.com");
     expect(warning).toContain("hbo-renewal.example");
     expect(warning).not.toContain("membership has expired");

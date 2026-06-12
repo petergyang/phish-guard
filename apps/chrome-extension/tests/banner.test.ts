@@ -11,8 +11,8 @@ describe("inline warning banner", () => {
 
     expect(buildInlineWarningModel(result)).toEqual({
       state: "warning",
-      title: "Phish Guard warning: This is likely not from YouTube.",
-      subtitle: "Sender email: random@gmail.com. Avoid links. Use Gmail's Report spam button or delete the email."
+      title: "Phish Guard warning: This might not be from YouTube.",
+      subtitle: "Sender email: random@gmail.com. Be careful with this email and consider marking it as spam."
     });
   });
 
@@ -32,7 +32,7 @@ describe("inline warning banner", () => {
     });
 
     expect(buildInlineWarningModel(result)?.subtitle).toBe(
-      "Sender email: security@paypal-billing.example. Suspicious link: paypal-security.example. Avoid links. Use Gmail's Report spam button or delete the email."
+      "Sender email: security@paypal-billing.example. Suspicious link: paypal-security.example. Be careful with this email and consider marking it as spam."
     );
   });
 
@@ -52,7 +52,7 @@ describe("inline warning banner", () => {
     renderInlineWarning(header, suspicious);
 
     expect(document.querySelectorAll(`#${warningBannerId}`)).toHaveLength(1);
-    expect(document.querySelector(`#${warningBannerId}`)?.textContent).toContain("Use Gmail's Report spam button or delete the email");
+    expect(document.querySelector(`#${warningBannerId}`)?.textContent).toContain("Be careful with this email and consider marking it as spam");
     expect(document.querySelector(`#${warningBannerId} ul`)).toBeNull();
   });
 
