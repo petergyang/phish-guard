@@ -508,10 +508,10 @@ function inferDisplayNameClaim(displayName: string, address: string, domain: str
 
   const words = displayName.match(/[a-z0-9]+/gi) ?? [];
   const normalizedWords = words.map((word) => word.toLowerCase());
-  const hasOrganizationSignal = normalizedWords.some((word) => organizationSignalWords.has(word))
-    || words.some((word, index) => index > 0 && isAcronymSignal(word));
+  const hasWordSignal = normalizedWords.some((word) => organizationSignalWords.has(word));
+  const hasAcronymSignal = words.some((word, index) => index > 0 && isAcronymSignal(word));
 
-  if (!hasOrganizationSignal) {
+  if (!hasWordSignal && !hasAcronymSignal) {
     return null;
   }
 
@@ -520,6 +520,25 @@ function inferDisplayNameClaim(displayName: string, address: string, domain: str
   });
   if (claimIndex < 0) {
     return null;
+  }
+
+  // An all-caps token alone is a weak signal: department prefixes followed by
+  // a person's name ("PARKS/REC-Molly Kaplan", "HR-Jane Smith") are normal.
+  // Without an organization word, only claim when every other token is
+  // organization wording too, like "Costco WMU".
+  if (!hasWordSignal) {
+    const pureOrganizationName = words.every((word, index) => {
+      if (index === claimIndex) return true;
+      const normalized = normalizedWords[index]!;
+      return normalized.length <= 2
+        || /^\d+$/.test(normalized)
+        || nonIdentityWords.has(normalized)
+        || organizationSignalWords.has(normalized)
+        || isAcronymSignal(word);
+    });
+    if (!pureOrganizationName) {
+      return null;
+    }
   }
 
   const claimToken = normalizedWords[claimIndex]!;
@@ -576,7 +595,9 @@ function approximateRegistrableDomain(domain: string): string {
 
   const lastLabel = labels[labels.length - 1]!;
   const secondLastLabel = labels[labels.length - 2]!;
-  const take = lastLabel.length === 2 && secondLevelTldLabels.has(secondLastLabel) ? 3 : 2;
+  const countryStyleSuffix = lastLabel.length === 2 && secondLevelTldLabels.has(secondLastLabel);
+  const stateStyleSuffix = secondLastLabel.length === 2 && ["gov", "edu", "us"].includes(lastLabel);
+  const take = countryStyleSuffix || stateStyleSuffix ? 3 : 2;
   return labels.slice(-take).join(".");
 }
 
