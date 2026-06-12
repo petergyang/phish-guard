@@ -83,17 +83,33 @@ describe("analyzeMessage", () => {
     expect(result.evidence.map((item) => item.kind)).toContain("link_domain_mismatch");
   });
 
-  it("flags a suspicious link even when the sender domain matches the brand", () => {
+  it("flags suspicious links on lookalike sender domains", () => {
     const result = analyzeMessage({
-      from: "\"PayPal\" <security@paypal.com>",
+      from: "\"PayPal\" <security@paypal-billing.example>",
       bodyText: "PayPal security alert. Verify your account.",
       links: [{ href: "https://paypal-security.example/login", text: "Verify account" }]
     });
 
     expect(result.riskLevel).toBe("suspicious");
     expect(result.claimedBrand).toBe("PayPal");
-    expect(result.evidence.map((item) => item.kind)).toContain("trusted_domain");
+    expect(result.evidence.map((item) => item.kind)).toContain("brand_domain_mismatch");
     expect(result.evidence.map((item) => item.kind)).toContain("link_domain_mismatch");
+  });
+
+  it("does not flag trusted brand senders because of partner or redirect links", () => {
+    const result = analyzeMessage({
+      from: "\"YouTube\" <no-reply@youtube.com>",
+      subject: "Try FOX One and stream the FIFA World Cup",
+      bodyText: "Stream the World Cup with FOX One on YouTube. Subscription billed after trial.",
+      links: [
+        { href: "https://c.gle/ANq2Zk_abc123", text: "Start free trial" },
+        { href: "https://www.fox.com/fox-one", text: "Learn more" }
+      ]
+    });
+
+    expect(result.riskLevel).toBe("safe");
+    expect(result.claimedBrand).toBe("YouTube");
+    expect(result.evidence.map((item) => item.kind)).toContain("trusted_domain");
   });
 
   it("does not flag trusted brand links", () => {
@@ -328,7 +344,7 @@ describe("analyzeMessage", () => {
 
   it("unwraps visible redirect URLs before comparing domains", () => {
     const result = analyzeMessage({
-      from: "\"PayPal\" <service@paypal.com>",
+      from: "\"PayPal\" <service@paypal-notify.example>",
       bodyText: "PayPal security alert. Verify your account.",
       links: [{ href: "https://www.google.com/url?q=https%3A%2F%2Fpaypal-login.example%2Fverify", text: "Verify" }]
     });

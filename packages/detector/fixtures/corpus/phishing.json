@@ -60,9 +60,9 @@
     "notes": "Brand plus acronym display name."
   },
   {
-    "id": "paypal-verified-sender-bad-link",
+    "id": "paypal-cousin-sender-bad-link",
     "label": "phishing",
-    "from": "\"PayPal\" <security@paypal.com>",
+    "from": "\"PayPal\" <security@paypal-billing.example>",
     "subject": "Security alert",
     "bodyText": "PayPal security alert. Verify your account.",
     "links": [
@@ -72,12 +72,12 @@
       }
     ],
     "expectedBrand": "PayPal",
-    "notes": "Trusted-looking sender but link domain mismatch."
+    "notes": "Lookalike sender domain with a credential link."
   },
   {
     "id": "paypal-google-redirect",
     "label": "phishing",
-    "from": "\"PayPal\" <service@paypal.com>",
+    "from": "\"PayPal\" <service@paypal-notify.example>",
     "subject": "Account verification needed",
     "bodyText": "PayPal security alert. Verify your account today.",
     "links": [
@@ -87,7 +87,7 @@
       }
     ],
     "expectedBrand": "PayPal",
-    "notes": "Visible redirect URL points to unrelated destination."
+    "notes": "Lookalike sender hiding the destination behind a visible redirect URL."
   },
   {
     "id": "netflix-shortener",

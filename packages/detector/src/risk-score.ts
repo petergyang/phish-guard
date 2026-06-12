@@ -82,9 +82,12 @@ export function analyzeMessage(
       }
 
       if (genericClaim.addressMatch === "domain" || genericClaim.addressMatch === "local_part") {
+        // The sender address backs up the claimed identity, so odd-looking
+        // links alone should not flip the verdict; brands and small
+        // businesses routinely link to partner and redirect domains.
         const linkAssessment = assessLinks(message.links, parsedFrom.domain);
         return {
-          riskLevel: linkAssessment.suspicious ? "suspicious" : "safe",
+          riskLevel: "safe",
           claimedBrand: genericClaim.claimName,
           senderDisplayName: parsedFrom.displayName,
           senderAddress: parsedFrom.address,
@@ -221,7 +224,7 @@ export function analyzeMessage(
           { brand: bodyClaim.brandName, senderAddress: parsedFrom.address, senderDomain: parsedFrom.domain }
         );
 
-      if (trusted && !linkAssessment.suspicious) {
+      if (trusted) {
         return {
           riskLevel: "safe",
           claimedBrand: bodyClaim.brandName,
@@ -320,8 +323,12 @@ export function analyzeMessage(
     ));
   }
 
+  // A trusted sender domain wins over link heuristics: Gmail enforces DMARC
+  // for major brands, so inbox mail claiming a trusted domain is almost
+  // always genuine, while real brand promos link to partner and redirect
+  // domains all the time.
   return {
-    riskLevel: trusted && !linkAssessment.suspicious ? "safe" : "suspicious",
+    riskLevel: trusted ? "safe" : "suspicious",
     claimedBrand: claimedBrand.brandName,
     senderDisplayName: parsedFrom.displayName,
     senderAddress: parsedFrom.address,

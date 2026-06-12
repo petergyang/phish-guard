@@ -26,13 +26,13 @@ describe("inline warning banner", () => {
 
   it("includes suspicious link domains in the warning copy", () => {
     const result = analyzeMessage({
-      from: "\"PayPal\" <security@paypal.com>",
+      from: "\"PayPal\" <security@paypal-billing.example>",
       bodyText: "PayPal security alert. Verify your account.",
       links: [{ href: "https://paypal-security.example/login", text: "Verify" }]
     });
 
     expect(buildInlineWarningModel(result)?.subtitle).toBe(
-      "Sender email: security@paypal.com. Suspicious link: paypal-security.example. Avoid links. Use Gmail's Report spam button or delete the email."
+      "Sender email: security@paypal-billing.example. Suspicious link: paypal-security.example. Avoid links. Use Gmail's Report spam button or delete the email."
     );
   });
 

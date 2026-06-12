@@ -186,13 +186,13 @@ export const defaultBrandRules: BrandRule[] = [
     id: "youtube",
     brandName: "YouTube",
     displayNames: ["youtube", "youtube account", "youtube recovery", "youtube support"],
-    trustedDomains: ["youtube.com", "google.com", "accounts.google.com"]
+    trustedDomains: ["youtube.com", "youtu.be", "google.com", "accounts.google.com", "c.gle", "g.co"]
   },
   {
     id: "google",
     brandName: "Google",
     displayNames: ["google", "google account", "google support"],
-    trustedDomains: ["google.com", "accounts.google.com"]
+    trustedDomains: ["google.com", "accounts.google.com", "c.gle", "g.co"]
   },
   {
     id: "paypal",
@@ -236,7 +236,9 @@ export const defaultBrandRules: BrandRule[] = [
       "amazon.com.br",
       "amazon.com.mx",
       "amazon.in",
-      "primevideo.com"
+      "primevideo.com",
+      "amzn.to",
+      "a.co"
     ]
   },
   {
