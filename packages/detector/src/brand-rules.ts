@@ -146,6 +146,7 @@ export const nonIdentityWords = new Set([
   "mail",
   "member",
   "membership",
+  "news",
   "notice",
   "notification",
   "notifications",

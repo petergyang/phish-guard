@@ -36,6 +36,37 @@ describe("analyzeMessage", () => {
     expect(result.evidence.map((item) => item.kind)).toContain("display_name_address_mismatch");
   });
 
+  it("does not treat a department prefix plus a person's name as an organization claim", () => {
+    const result = analyzeMessage({
+      from: "\"PARKS/REC-Molly Kaplan\" <mkaplan@burlingame.org>",
+      subject: "Welcome to Camp Burlingame! 6/15-6/19",
+      bodyText: "Here is everything you need to know for camp this week at the Burlingame Community Center."
+    });
+
+    expect(result.riskLevel).toBe("safe");
+    expect(result.claimedBrand).toBeNull();
+  });
+
+  it("does not treat all-caps news sender names as organization claims", () => {
+    const result = analyzeMessage({
+      from: "\"AP NEWS\" <email@ap.org>",
+      subject: "Morning briefing"
+    });
+
+    expect(result.riskLevel).toBe("safe");
+    expect(result.claimedBrand).toBeNull();
+  });
+
+  it("credits brand names in state government domains", () => {
+    const result = analyzeMessage({
+      from: "\"DMV APPOINTMENTS\" <noreply@dmv.ca.gov>",
+      subject: "Your appointment is confirmed"
+    });
+
+    expect(result.riskLevel).toBe("safe");
+    expect(result.claimedBrand).toBe("DMV");
+  });
+
   it("flags a brand-like sender name with an acronym from a public mailbox", () => {
     const result = analyzeMessage({
       from: "\"Costco WMU\" <sanceslaman948@hotmail.com>"

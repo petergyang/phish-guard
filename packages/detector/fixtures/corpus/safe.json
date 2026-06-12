@@ -560,6 +560,16 @@
     "notes": "Casual antivirus mention without receipt or urgency language."
   },
   {
+    "id": "parks-rec-person-display-name",
+    "label": "safe",
+    "from": "\"PARKS/REC-Molly Kaplan\" <mkaplan@burlingame.org>",
+    "subject": "Welcome to Camp Burlingame! 6/15-6/19",
+    "bodyText": "Here is everything you need to know for camp this week, June 15th-June 19th at the Burlingame Community Center.",
+    "links": [],
+    "expectedBrand": null,
+    "notes": "Real city employee email: department prefix plus a person's name must not become an organization claim."
+  },
+  {
     "id": "youtube-promo-redirect-links",
     "label": "safe",
     "from": "\"YouTube\" <no-reply@youtube.com>",
