@@ -32,15 +32,11 @@ It does not visit links or upload link URLs.
 
 ## Privacy Policy URL
 
-Use this after the repository is public:
-
 ```text
 https://github.com/petergyang/phish-guard/blob/main/PRIVACY.md
 ```
 
 ## Support URL
-
-Use this after the repository is public:
 
 ```text
 https://github.com/petergyang/phish-guard/issues

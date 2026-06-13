@@ -71,18 +71,25 @@ describe("Chrome extension store readiness", () => {
     expect(readme).toContain("docs/assets/readme/chrome-extension-setup.svg");
   });
 
-  it("keeps public README install steps clear for private testers", () => {
+  it("keeps public README install steps clear for the GitHub alpha", () => {
     const readme = readFileSync("README.md", "utf8");
+    const localInstall = readFileSync("docs/development/local-install.md", "utf8");
 
     expect(readme).not.toContain("Install The Alpha");
     expect(readme).toContain("Chrome Web Store");
+    expect(readme).toContain("Phish Guard releases");
     expect(readme).toContain("phish-guard-chrome-extension.zip");
     expect(readme).toContain("chrome://extensions");
     expect(readme).toContain("Developer mode");
     expect(readme).toContain("Load unpacked");
-    expect(readme).toContain("turn on Gmail warnings");
+    expect(readme).toContain("Turn on Gmail warnings");
     expect(readme).toContain("contains `manifest.json`");
-    expect(readme).toContain("For a local source build");
+    expect(readme).not.toContain("add the approved listing URL here before public announcement");
+    expect(localInstall).toContain("phish-guard-chrome-extension.zip");
+    expect(localInstall).toContain("chrome://extensions");
+    expect(localInstall).toContain("Developer mode");
+    expect(localInstall).toContain("Load unpacked");
+    expect(localInstall).toContain("contains `manifest.json`");
   });
 
   it("keeps store and extension image assets available", () => {

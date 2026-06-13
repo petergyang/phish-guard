@@ -12,16 +12,15 @@ origin: "User request: fix the caveats so Phish Guard can be a great public rele
 
 Turn Phish Guard from a good private alpha into a public release that feels credible on first contact. The release should not ask normal users to clone a repo, load an unpacked extension, or read a caveat wall. The public path should be: see the warning UI, understand the privacy boundary, install from Chrome Web Store, and know how to report false positives safely.
 
-The repo should stay private until the release bar below is met.
+The repo is now public, so the remaining launch bar is Chrome Web Store approval, public README alignment, and real Gmail QA.
 
 ## Problem Frame
 
 The current product works well enough to test, but the public story still leaks alpha friction:
 
-- The README still says "Install The Alpha" and explains Developer Mode.
-- The extension has no real icon set in the manifest.
-- The screenshot is a useful mock, but there are no store-grade screenshots from a polished release flow.
-- The privacy policy exists, but it does not yet live at a stable public URL for store review.
+- The README must not ask normal users to install through Developer Mode.
+- The Chrome Web Store listing URL still needs to be added before a normal-user announcement.
+- The privacy policy exists at a stable public GitHub URL, but dashboard disclosures must match it exactly.
 - The Chrome Web Store packet is a draft, not a completed submission.
 - The popup/onboarding still feels utilitarian and repeats some permission caveats.
 - Gmail UI testing is mostly unit/fixture based, not a real browser QA pass across common Gmail states.
@@ -75,10 +74,10 @@ Phish Guard is ready to be public when:
 
 ## Key Decisions
 
-- KTD1. Keep the repo private during release prep. Make it public only after the README and install path no longer advertise alpha friction.
+- KTD1. The repo is public. Keep launch copy honest until the Chrome Web Store URL is available, then make the store install the primary path.
 - KTD2. Use Chrome Web Store as the normie install path. GitHub releases can stay as a tester/developer path, but not the main public call to action.
 - KTD3. Submit as unlisted first. This lets testers install normally without making the listing broadly discoverable before confidence is high.
-- KTD4. Keep detection local and metadata-only for this release. Link scanning, DM warnings, backend reputation, and telemetry are future features that need new privacy review.
+- KTD4. Keep detection local to the open Gmail message for this release. Sender, subject, visible body text, and link URL parsing are allowed locally; attachment scanning, DM warnings, backend reputation, and telemetry need new privacy review.
 - KTD5. Treat screenshots and icons as release-blocking product assets. Security tools need polish to earn trust.
 
 ## External References
@@ -212,7 +211,7 @@ Use official Chrome documentation as the source of truth while implementing:
 - `docs/store/review-notes.md`
 - `apps/chrome-extension/tests/store-readiness.test.ts`
 
-**Approach:** Publish the privacy policy to a stable URL, then update store docs with final dashboard answers, reviewer notes, and support URL. Keep the repo private until the public URL and listing story are ready. Submit the extension as unlisted first.
+**Approach:** Use the public `PRIVACY.md` URL, then update store docs with final dashboard answers, reviewer notes, and support URL. Submit the extension as unlisted first.
 
 **Test scenarios:**
 
@@ -246,7 +245,7 @@ Use official Chrome documentation as the source of truth while implementing:
 
 ### U7. Release flow and visibility switch
 
-**Goal:** Avoid making the repo public until the release is ready.
+**Goal:** Avoid announcing the public launch until the store install path is ready.
 
 **Requirements:** R2, R7, R14, R18
 
@@ -256,13 +255,13 @@ Use official Chrome documentation as the source of truth while implementing:
 - `README.md`
 - `docs/store/chrome-web-store-submission.md`
 
-**Approach:** Keep the repo private through asset, QA, and store submission work. Once the unlisted Chrome Web Store listing is approved, update README with the store install link, make a tagged release, then make the repo public. If store review rejects the extension, keep the repo private and use the reviewer feedback to revise the package before public launch.
+**Approach:** Keep the public repo honest while asset, QA, and store submission work continues. Once the unlisted Chrome Web Store listing is approved, update README with the store install link, make a tagged release, and then announce the public launch. If store review rejects the extension, keep the README in pre-launch posture and use the reviewer feedback to revise the package before announcing.
 
 **Test scenarios:**
 
-- Manual checklist requires approved unlisted listing or explicit decision to publish without store.
-- README has a working install link before public visibility is restored.
-- `gh repo view --json visibility` confirms visibility during release steps.
+- Manual checklist requires approved unlisted listing or explicit decision to announce without store.
+- README has a working install link before the public launch is announced.
+- `gh repo view --json visibility` confirms the repository visibility is intentional during release steps.
 
 ## Sequencing
 
