@@ -62,13 +62,13 @@ describe("Chrome extension store readiness", () => {
 
   it("keeps the README product screenshot available", () => {
     const readme = readFileSync("README.md", "utf8");
-    const screenshotPath = "docs/assets/readme/costco-warning.png";
+    const screenshotPath = "docs/assets/readme/phish-guard-example.png";
 
     expect(readme).toContain(screenshotPath);
-    expect(readme.indexOf(screenshotPath)).toBeLessThan(readme.indexOf("Phish Guard is a Chrome extension"));
+    expect(readme.indexOf(screenshotPath)).toBeLessThan(readme.indexOf("Phish Guard is a free Chrome extension"));
     expect(existsSync(screenshotPath), `${screenshotPath} should exist`).toBe(true);
-    expect(readme).toContain("docs/assets/readme/hbo-warning.png");
-    expect(readme).toContain("docs/assets/readme/chrome-extension-setup.svg");
+    expect(readme).not.toContain("docs/assets/readme/costco-warning.png");
+    expect(readme).not.toContain("docs/assets/readme/hbo-warning.png");
   });
 
   it("keeps public README install steps clear for the GitHub alpha", () => {
@@ -77,7 +77,8 @@ describe("Chrome extension store readiness", () => {
 
     expect(readme).not.toContain("Install The Alpha");
     expect(readme).toContain("Chrome Web Store");
-    expect(readme).toContain("Phish Guard releases");
+    expect(readme).toContain("https://github.com/petergyang/phish-guard/releases/download/v0.2.5-alpha/phish-guard-chrome-extension.zip");
+    expect(readme).toContain("docs/assets/readme/chrome-extension-setup.svg");
     expect(readme).toContain("phish-guard-chrome-extension.zip");
     expect(readme).toContain("chrome://extensions");
     expect(readme).toContain("Developer mode");
