@@ -24,6 +24,12 @@ for (const file of requiredFiles) {
   }
 }
 
+for (const file of listing) {
+  if (file === "README.md" || file.endsWith(".map") || file.endsWith(".ts")) {
+    throw new Error(`Chrome extension package contains an unexpected development artifact: ${file}`);
+  }
+}
+
 const manifestText = run("unzip", ["-p", zipPath, "manifest.json"]).stdout;
 const manifest = JSON.parse(manifestText);
 const manifestString = JSON.stringify(manifest);

@@ -1,13 +1,14 @@
 # Release Checklist
 
-Use this checklist before submitting to Chrome Web Store, publishing a GitHub release, or making the repo public.
+Use this checklist before submitting to Chrome Web Store, publishing a GitHub prerelease, or announcing Phish Guard publicly.
 
 ## Visibility
 
-- Keep the repository private while release assets, screenshots, and store answers are still changing.
-- Submit the first Chrome Web Store listing as unlisted.
-- Make the repository public only after the unlisted listing is approved or after an explicit decision to publish source before store approval.
-- After making the repo public, confirm `https://github.com/petergyang/phish-guard/blob/main/PRIVACY.md` is reachable as the privacy policy URL.
+- Confirm the public repository is intentional: `https://github.com/petergyang/phish-guard`.
+- Confirm `https://github.com/petergyang/phish-guard/blob/main/PRIVACY.md` is reachable as the privacy policy URL.
+- For public alpha, confirm `README.md` explains the GitHub ZIP install path clearly.
+- For the later normal-user launch, submit the first Chrome Web Store listing as unlisted.
+- After Chrome Web Store approval, replace the GitHub ZIP install path in `README.md` with the store listing URL.
 
 ## Before Packaging
 
@@ -60,20 +61,22 @@ Use a test Gmail account when possible.
 - Upload `dist/phish-guard-chrome-extension.zip`.
 - Use fake/test screenshots only.
 - Submit as unlisted first.
+- After approval, replace the GitHub ZIP install path in `README.md` with the listing URL.
 
 ## GitHub Prerelease
 
-- Create a prerelease tag, such as `v0.1.1-alpha`.
+- Create a prerelease tag, such as `v0.2.5-alpha`.
 - Attach `dist/phish-guard-chrome-extension.zip`.
 - Include the short privacy boundary:
   - Runs locally.
   - Reads the open Gmail message.
   - Does not read attachments or inbox history.
   - Does not upload email data.
+- Treat GitHub prereleases as the public alpha distribution path until Chrome Web Store approval.
 
 ## Chrome Web Store Prep
 
-- Publish `PRIVACY.md` at a stable public URL.
+- Use the stable public privacy URL: `https://github.com/petergyang/phish-guard/blob/main/PRIVACY.md`.
 - Capture screenshots with fake/test emails.
 - Fill the store dashboard using `docs/store/chrome-web-store-submission.md`.
 - Recheck that the dashboard disclosures, README, privacy policy, and extension behavior all say the same thing.

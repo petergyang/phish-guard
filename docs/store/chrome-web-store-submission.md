@@ -56,25 +56,25 @@ Least privilege posture:
 
 ## Public URLs
 
-Repository URL after public release:
+Repository URL:
 
 ```text
 https://github.com/petergyang/phish-guard
 ```
 
-Privacy policy URL after public release:
+Privacy policy URL:
 
 ```text
 https://github.com/petergyang/phish-guard/blob/main/PRIVACY.md
 ```
 
-Support URL after public release:
+Support URL:
 
 ```text
 https://github.com/petergyang/phish-guard/issues
 ```
 
-Keep the repo private until the Chrome Web Store submission package is ready.
+The public alpha can use the GitHub ZIP install path. After Chrome Web Store approval, update `README.md` so the store listing becomes the primary install path.
 
 ## Privacy Policy Requirements
 
@@ -136,3 +136,4 @@ Any additional screenshots must use test accounts and fake messages only. Do not
 - Extension ZIP has been loaded unpacked and tested in Gmail.
 - Chrome Web Store dashboard answers have been copied from `docs/store/dashboard-answers.md`.
 - Reviewer notes have been copied from `docs/store/review-notes.md`.
+- Approved Chrome Web Store listing URL has replaced the GitHub ZIP install path in `README.md` before the store launch announcement.
