@@ -1,20 +1,22 @@
 # Phish Guard
 
-![Phish Guard warning for an HBO impersonation email](docs/assets/readme/phish-guard-example.png)
+<video src="docs/assets/readme/phish-guard-launch-v5.mp4" controls muted playsinline width="100%"></video>
 
 Phish Guard is a free Chrome extension that warns you inside Gmail when an email may be pretending to be a company you trust.
 
 It runs locally on your computer, does not upload your email, and does not require an account.
 
-## Why Install It
+## Enough with the phishing emails
+
+![Phish Guard warning for an HBO impersonation email](docs/assets/readme/phish-guard-example.png)
 
 Spam emails often copy the names and logos of companies you know. They say a payment failed, a package is stuck, or your subscription needs attention. The goal is to make you click before you think.
 
 Phish Guard gives you a second pair of eyes. If the sender does not match the company the email claims to be from, it shows a plain warning above the message. It stays quiet for normal email.
 
-## Install
+## How to install
 
-The current alpha uses Chrome's manual extension install flow. It is a little clunky, but it takes about two minutes.
+Currently, Phish Guard uses Chrome's manual extension install flow. It is a little clunky, but it takes about two minutes.
 
 ![Chrome extension setup screen](docs/assets/readme/chrome-extension-setup.svg)
 
@@ -30,7 +32,15 @@ Chrome asks for `mail.google.com` access so Phish Guard can check the open messa
 
 If Chrome shows extension errors later, go back to `chrome://extensions`, click **Reload** on Phish Guard, and refresh Gmail.
 
-## Privacy
+## How Phish Guard works
+
+When you turn on Gmail warnings, Chrome gives Phish Guard permission to run on `mail.google.com`. The extension watches the Gmail message view and reads only the message you have open.
+
+Phish Guard checks the sender name, sender email address, subject, visible message text, and links. It compares what the email claims to be with where it actually came from.
+
+If the evidence looks suspicious, Phish Guard adds a warning banner inside Gmail. Everything runs locally in your browser; there is no server, account, analytics, or email upload.
+
+## Private and local first
 
 Phish Guard checks only the Gmail message you have open. It looks at the sender, subject, visible words, and links in that message.
 
@@ -45,19 +55,10 @@ It does **not**:
 
 Read the full policy in [PRIVACY.md](PRIVACY.md).
 
-## Contribute
+## How to contribute
 
-Contributions are welcome. Open an issue or pull request if you spot a bug, a false positive, or a way to make Phish Guard better.
+Eventually I want this extension to work across other phishing attempts. Contributions are welcome.
+
+Open an issue or pull request if you spot a bug, a false positive, or a way to make Phish Guard better.
 
 Please do not post full email bodies, attachments, private links, or private inbox screenshots. Sender names and domains are usually enough.
-
-## Technical Notes
-
-```bash
-npm test
-npm run eval:detector
-npm run build
-npm run package:chrome-extension
-```
-
-`npm run eval:detector` runs a synthetic phishing/safe-message test set. It is a regression check, not a real-world accuracy claim.
