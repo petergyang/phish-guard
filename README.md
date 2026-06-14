@@ -1,7 +1,5 @@
 # Phish Guard
 
-<video src="docs/assets/readme/phish-guard-launch-v5.mp4" controls muted playsinline width="100%"></video>
-
 Phish Guard is a free Chrome extension that warns you inside Gmail when an email may be pretending to be a company you trust.
 
 It runs locally on your computer, does not upload your email, and does not require an account.
