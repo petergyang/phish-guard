@@ -17,7 +17,7 @@ Use this checklist before submitting to Chrome Web Store, publishing a GitHub pr
 - Confirm `apps/chrome-extension/manifest.json` has the intended name, version, description, and permissions.
 - Confirm `apps/chrome-extension/manifest.json` includes 16, 32, 48, and 128 pixel icons.
 - Confirm no broad permissions were added, especially `<all_urls>`, `cookies`, `webRequest`, or Gmail API OAuth scopes.
-- Confirm store screenshots exist under `docs/assets/store/`.
+- Confirm Chrome Web Store screenshots exist under `docs/assets/store/chrome-web-store/`.
 
 ## Build And Test
 
@@ -59,6 +59,7 @@ Use a test Gmail account when possible.
 - Use `docs/store/review-notes.md` for reviewer-facing notes.
 - Use `docs/store/chrome-web-store-submission.md` for listing copy and permission justification.
 - Upload `dist/phish-guard-chrome-extension.zip`.
+- Use the `1280x800` JPEG screenshots in `docs/assets/store/chrome-web-store/`.
 - Use fake/test screenshots only.
 - Submit as unlisted first.
 - After approval, replace the GitHub ZIP install path in `README.md` with the listing URL.
