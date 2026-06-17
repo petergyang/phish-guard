@@ -21,7 +21,10 @@ const requiredAssets = [
   "apps/chrome-extension/assets/icon-128.png",
   "docs/assets/store/gmail-warning.png",
   "docs/assets/store/popup-before-permission.png",
-  "docs/assets/store/gmail-normal-message.png"
+  "docs/assets/store/gmail-normal-message.png",
+  "docs/assets/store/chrome-web-store/gmail-warning-1280x800.jpg",
+  "docs/assets/store/chrome-web-store/popup-before-permission-1280x800.jpg",
+  "docs/assets/store/chrome-web-store/gmail-normal-message-1280x800.jpg"
 ];
 
 function readLowercase(path: string): string {

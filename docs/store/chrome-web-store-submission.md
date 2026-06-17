@@ -107,9 +107,12 @@ If the dashboard treats local page processing as "website content" access, expla
 
 Prepared assets:
 
-- `docs/assets/store/popup-before-permission.png`
-- `docs/assets/store/gmail-warning.png`
-- `docs/assets/store/gmail-normal-message.png`
+- `docs/assets/store/chrome-web-store/popup-before-permission-1280x800.jpg`
+- `docs/assets/store/chrome-web-store/gmail-warning-1280x800.jpg`
+- `docs/assets/store/chrome-web-store/gmail-normal-message-1280x800.jpg`
+
+These are Chrome Web Store-safe `1280x800` JPEGs. The PNG files in
+`docs/assets/store/` are source assets for repo/docs reuse.
 
 Any additional screenshots must use test accounts and fake messages only. Do not include real private email.
 
